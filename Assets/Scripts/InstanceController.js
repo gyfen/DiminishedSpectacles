@@ -95,7 +95,6 @@ function calibrate() {
 }
 
 function onDetectionsUpdated(result) {
-    print("updated");
     // Delete all existing instances
     const sceneObj = script.getSceneObject();
     for (let i = 0; i < sceneObj.getChildrenCount(); i++) {
@@ -103,6 +102,7 @@ function onDetectionsUpdated(result) {
         instance.destroy();
     }
 
+    print(result);
     parseDetections(result);
 
     calibrate();

@@ -74,7 +74,7 @@
     "":
       mlSettings: true
       model: !<reference.MLAsset> 64cad88c-e6f3-42a5-bfc0-ee8c586c90eb
-      inputTexture: !<reference.Texture> 996c6f4e-b2ad-4117-9e3e-3db82e6e97f5
+      inputTexture: !<reference.Texture> ea911dec-7cfa-407d-9e57-43a5c5b22dd8
       processingSettings: true
       scoreThreshold: 0.500000
       iouThreshold: 0.500000
@@ -165,8 +165,6 @@
   Enabled: true
   ScriptAsset: !<reference> 48e5c1f6-f787-4966-9221-e96663802d34
   ScriptInputsDefault:
-    screenScalingX: true
-    screenScalingY: true
     debug: true
     testingImage: true
   ScriptTypesDefault:
@@ -176,8 +174,8 @@
       mlController: !<reference.ScriptComponent> 314815c0-16ca-408d-a7c8-956e8cade03e
       deviceTracking: !<reference.DeviceTracking> bfeea0bb-0fff-4c93-bc74-bfee48e8964c
       prefab: !<reference.ObjectPrefab> 822264c2-86a5-4afa-a5dc-c2696f2823b0
-      screenScalingX: !<float> 1.000000
-      screenScalingY: !<float> 1.000000
+      screenScalingX: !<float> 2.000000
+      screenScalingY: 1.500000
       debug: false
       testingImage: !<reference.Texture> 00000000-0000-0000-0000-000000000000
   ScriptTypes:

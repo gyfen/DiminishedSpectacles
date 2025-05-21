@@ -162,7 +162,6 @@ function onLoadingFinished() {
 }
 
 function onRunningFinished() {
-    print("fin");
     parseYolo7Outputs(outputs);
 
     var result = DetectionHelpers.nms(boxes, scores, scoreThreshold, iouThreshold).sort(
