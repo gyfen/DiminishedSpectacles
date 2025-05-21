@@ -1,6 +1,3 @@
-// MLOutputDecoder.js
-// Version: 2.0.0
-// Event: OnAwake
 // Description: Configures MLComponent and decodes output
 
 // Public api:
@@ -14,47 +11,41 @@
 // get class name by index
 // script.getClassLabel(index)
 
-// CUSTOM VARS
-
-//const labels = ["Blackberry", "Blueberry", "Raspberry", "Strawberry"];
-const labels = [
-    "haverdrink ah terra",
-    "haverdrink alpro",
-    "haverdrink ekoplaza",
-    "haverdrink natrue",
-    "haverdrink oatly",
-    "haverdrink rude health",
-    "koffie cafe gondoliere",
-    "koffie douwe egberts",
-    "koffie ekoplaza",
-    "koffie fairtrade original",
-    "koffie kanis gunnink",
-    "koffie perla bio",
-    "pasta ah bio",
-    "pasta de cecco",
-    "pasta grand italia",
-    "pasta la bio idea",
-    "pasta la molisana",
-    "pasta rummo",
-    "pastasaus ah bio",
-    "pastasaus ekoplaza",
-    "pastasaus fertilia",
-    "pastasaus heinz",
-    "pastasaus jumbo",
-    "pastasaus spagheroni",
-    "pindakaas ah bio",
-    "pindakaas calve",
-    "pindakaas jumbo",
-    "pindakaas luna e terra",
-    "pindakaas skippy",
-    "pindakaas whole earth",
-];
-
-// END CUSTOM
+// const labels = [
+//     "haverdrink ah terra",
+//     "haverdrink alpro",
+//     "haverdrink ekoplaza",
+//     "haverdrink natrue",
+//     "haverdrink oatly",
+//     "haverdrink rude health",
+//     "koffie cafe gondoliere",
+//     "koffie douwe egberts",
+//     "koffie ekoplaza",
+//     "koffie fairtrade original",
+//     "koffie kanis gunnink",
+//     "koffie perla bio",
+//     "pasta ah bio",
+//     "pasta de cecco",
+//     "pasta grand italia",
+//     "pasta la bio idea",
+//     "pasta la molisana",
+//     "pasta rummo",
+//     "pastasaus ah bio",
+//     "pastasaus ekoplaza",
+//     "pastasaus fertilia",
+//     "pastasaus heinz",
+//     "pastasaus jumbo",
+//     "pastasaus spagheroni",
+//     "pindakaas ah bio",
+//     "pindakaas calve",
+//     "pindakaas jumbo",
+//     "pindakaas luna e terra",
+//     "pindakaas skippy",
+//     "pindakaas whole earth",
+// ];
 
 //inputs
-//@input bool mlSettings {"label": "ML Settings"}
-//@input Asset.MLAsset model {"label": "ML Model", "showIf" : "mlSettings", "hint": "Object Detection ML Model"}
+//@input Asset.MLAsset model {"label": "ML Model", "hint": "Object Detection ML Model"}
 /** @type {MLAsset} */
 var model = script.model;
 
@@ -63,15 +54,23 @@ var model = script.model;
 var inputTexture = script.inputTexture;
 
 //@ui {"widget" : "separator"}
-//@input bool processingSettings = false {"label" : "NMS Settings"}
-
-//@input float scoreThreshold = 0.4 {"widget" : "slider", "min" : 0, "max" : 1, "step" : 0.05, "showIf": "processingSettings"}
+//@input float scoreThreshold = 0.4 {"widget" : "slider", "min" : 0, "max" : 1, "step" : 0.05}
 /** @type {number} */
 var scoreThreshold = script.scoreThreshold;
 
-//@input float iouThreshold = 0.65 {"widget" : "slider", "min" : 0, "max" : 1, "step" : 0.05,  "showIf": "processingSettings"}
+//@input float iouThreshold = 0.65 {"widget" : "slider", "min" : 0, "max" : 1, "step" : 0.05}
 /** @type {number} */
 var iouThreshold = script.iouThreshold;
+
+/*
+@typedef ClassSettings
+@property {string} label
+@property {int} nutriScore {"widget":"combobox", "values":[{"label":"A", "value":5}, {"label":"B", "value":4}, {"label":"C", "value":3}, {"label":"D", "value":2}, {"label":"E", "value":1}]}
+*/
+//@ui {"widget" : "separator"}
+// @input ClassSettings[] classSettings
+/** @type {[string, int]} */
+var classSettings = script.classSettings;
 
 var DetectionHelpers = require("Modules/DetectionHelpersModule");
 var Events = require("Modules/EventModule");
@@ -97,14 +96,6 @@ const anchors = [
 ];
 
 const strides = [16, 32, 8];
-
-//CUSTOM VARS
-var classSettings = [];
-for (let i = 0; i < labels.length; i++) {
-    classSettings.push({ label: labels[i], nutriScore: 0 });
-}
-
-//END CUSTOM VARS
 
 /**
  * @typedef {[number, number]} GridEntry

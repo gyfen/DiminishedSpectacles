@@ -64,7 +64,7 @@
   InstanceCount: 1
   Defines:
     []
-  BlendMode: Disabled
+  BlendMode: PremultipliedAlphaAuto
   Properties:
     Port_FinalColor_N004:
       typeIdx: 5

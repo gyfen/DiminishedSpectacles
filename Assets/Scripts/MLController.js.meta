@@ -26,21 +26,20 @@
   CurrentVisibility: Editable
   MaxVisibility: Editable
   ScriptInputsHidden:
+    classSettings: false
     inputTexture: false
     iouThreshold: false
-    mlSettings: false
     model: false
-    processingSettings: false
     scoreThreshold: false
   ScriptTypesHidden:
     {}
   DefaultScriptInputs:
-    - mlSettings: false
-      model: !<reference.MLAsset> 00000000-0000-0000-0000-000000000000
+    - model: !<reference.MLAsset> 00000000-0000-0000-0000-000000000000
       inputTexture: !<reference.Texture> 00000000-0000-0000-0000-000000000000
-      processingSettings: false
       scoreThreshold: 0.400000
       iouThreshold: 0.650000
+      classSettings:
+        []
   ScriptTypes:
     -
       {}
