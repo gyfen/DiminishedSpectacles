@@ -1,8 +1,8 @@
-- !<Material/e7eda618-6dda-45f7-838d-4f6c92947c5e>
+- !<Material/b8ef08d8-ea31-4507-ab13-6d8079d23818>
   PackagePath: ""
   PassesInfo:
-    - !<own> 73890843-6e03-4bd4-9be2-4b98c758f4cb
-- !<PassInfo/73890843-6e03-4bd4-9be2-4b98c758f4cb>
+    - !<own> 97f377ac-db06-4c38-84b2-914e0eacfb8f
+- !<PassInfo/97f377ac-db06-4c38-84b2-914e0eacfb8f>
   CachedProperties:
     - Port_Depth_N004:
         typeIdx: 1
@@ -52,6 +52,18 @@
     - Port_WorldTangent_N004:
         typeIdx: 4
         value: {x: 0.000000, y: 0.000000, z: 1.000000}
+    - opacityTex:
+        typeIdx: 9
+        value:
+          id: 00000000-0000-0000-0000-000000000000
+          sampler:
+            filteringMode: Trilinear
+            wrapModeU: Repeat
+            wrapModeV: Repeat
+            wrapModeW: Repeat
+            borderColor: {x: 0.000000, y: 0.000000, z: 0.000000, w: 0.000000}
+            mipmaps: false
+          type: Texture2D
   DepthWrite: true
   DepthTest: true
   DepthFunction: LessEqual
@@ -80,5 +92,5 @@
       value: 0
     baseColor:
       typeIdx: 5
-      value: {x: 0.082353, y: 0.000000, z: 1.000000, w: 1.000000}
-  Pass: !<reference> 094f81d5-f603-434b-b88a-5f766aa2efb2
+      value: {x: 0.000000, y: 1.000000, z: 0.066667, w: 1.000000}
+  Pass: !<reference> eb3647cb-d136-43e9-b716-8b6d01ec3c9f
