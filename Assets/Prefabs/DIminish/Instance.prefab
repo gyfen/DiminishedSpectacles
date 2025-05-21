@@ -36,7 +36,9 @@
     {}
   ScriptInputs:
     "":
-      {}
+      materials: !<reference.Material[]>
+        - !<reference> e7eda618-6dda-45f7-838d-4f6c92947c5e
+        - !<reference> b8ef08d8-ea31-4507-ab13-6d8079d23818
   ScriptTypes:
     "":
       {}
