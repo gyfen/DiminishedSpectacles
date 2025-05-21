@@ -15,15 +15,7 @@ Detection Controller
 // @input float screenScalingX = 1.0
 // @input float screenScalingY = 1.0
 
-// @ui {"widget" : "separator"}
-// TODO: remove debug
-// @input bool debug
-// @input Asset.Texture testingImage { "showIf" : "debug"}
-
-/* Variables */
-let cameraModule;
-let imageRequest;
-
+// Register callback
 script.mlController.onDetectionsUpdated.add(onDetectionsUpdated);
 
 if (!script.debug) {
@@ -102,10 +94,10 @@ function onDetectionsUpdated(result) {
         instance.destroy();
     }
 
-    print(result);
     parseDetections(result);
 
-    calibrate();
+    // TODO: remove
+    // calibrate();
 }
 
 function updateInstances() {

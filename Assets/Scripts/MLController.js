@@ -169,13 +169,14 @@ function onRunningFinished() {
     );
 
     for (var i = 0; i < result.length; i++) {
+        const idx = result[i].index;
         if (
-            classSettings.length > result[i].index &&
-            classSettings[result[i].index].label &&
-            classSettings[result[i].index].nutriScore
+            classSettings.length > idx &&
+            classSettings[idx].label &&
+            classSettings[idx].nutriScore
         ) {
-            result[i].label = classSettings[result[i].index].label;
-            result[i].nutriScore = classSettings[result[i].index].nutriScore;
+            result[i].label = classSettings[idx].label;
+            result[i].nutriScore = classSettings[idx].nutriScore;
         }
     }
 
