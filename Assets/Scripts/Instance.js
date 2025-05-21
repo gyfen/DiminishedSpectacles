@@ -1,15 +1,12 @@
+// assigned by instance controller
 let nutriScore;
 
+const store = global.persistentStorageSystem.store;
+
 function updateMaterial() {
-    //    pull settings from persistent storage
-    //
-    print("testing");
+    if (nutriScore < store.getInt("nutriScore")) {
+        // diminish
+    }
 }
-
-// function onAwake() {
-// updateMaterial();
-// }
-
-// onAwake();
 
 script.updateMaterial = updateMaterial;

@@ -165,8 +165,7 @@
   Enabled: true
   ScriptAsset: !<reference> 48e5c1f6-f787-4966-9221-e96663802d34
   ScriptInputsDefault:
-    debug: true
-    testingImage: true
+    {}
   ScriptTypesDefault:
     {}
   ScriptInputs:
@@ -176,8 +175,6 @@
       prefab: !<reference.ObjectPrefab> 822264c2-86a5-4afa-a5dc-c2696f2823b0
       screenScalingX: !<float> 2.000000
       screenScalingY: 1.500000
-      debug: false
-      testingImage: !<reference.Texture> 00000000-0000-0000-0000-000000000000
   ScriptTypes:
     "":
       {}
