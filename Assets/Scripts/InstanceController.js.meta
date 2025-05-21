@@ -1,0 +1,52 @@
+- !<AssetImportMetadata/75db0b31-8682-470d-b0af-6bbd97bd8fed>
+  ImportedAssetIds:
+    JavaScriptAsset: !<reference> 48e5c1f6-f787-4966-9221-e96663802d34
+  ImporterName: JavaScriptAssetImporter
+  PrimaryAsset: !<reference> 48e5c1f6-f787-4966-9221-e96663802d34
+  PackageType: NotAPackage
+  PackagePolicy: CannotBeUnpacked
+  ExtraData:
+    {}
+  AssetDataMap:
+    JavaScriptAsset: !<own> a7d351e8-7170-4ff2-8b20-6d591ceb7056
+  DependentFiles:
+    []
+  ImporterSettings: !<AssetImporterSettings>
+    {}
+  CompressionSettings: !<own> 00000000-0000-0000-0000-000000000000
+- !<ScriptAssetData/a7d351e8-7170-4ff2-8b20-6d591ceb7056>
+  SvgIcon: ""
+  SetupScript:
+    code: ""
+  Description: ""
+  InternalVersion: 0
+  VersionMajor: 0
+  VersionMinor: 0
+  VersionPatch: 0
+  ComponentUid: f30b134b-68fb-4df6-b99f-30fbf09948d5
+  ExportUid: 00000000-0000-0000-0000-000000000000
+  CurrentVisibility: Editable
+  MaxVisibility: Editable
+  ScriptInputsHidden:
+    MLController: false
+    debug: false
+    deviceTracking: false
+    prefab: false
+    screenScalingX: false
+    screenScalingY: false
+    testingImage: false
+  ScriptTypesHidden:
+    {}
+  ReadMe: !<reference> 00000000-0000-0000-0000-000000000000
+  DeclarationFile: !<reference> 00000000-0000-0000-0000-000000000000
+  DefaultScriptInputs:
+    - MLController: !<reference.ScriptComponent> 00000000-0000-0000-0000-000000000000
+      deviceTracking: !<reference.DeviceTracking> 00000000-0000-0000-0000-000000000000
+      prefab: !<reference.ObjectPrefab> 00000000-0000-0000-0000-000000000000
+      screenScalingX: !<float> 1.000000
+      screenScalingY: !<float> 1.000000
+      debug: false
+      testingImage: !<reference.Texture> 00000000-0000-0000-0000-000000000000
+  ScriptTypes:
+    -
+      {}
