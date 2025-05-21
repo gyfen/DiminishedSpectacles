@@ -73,10 +73,6 @@ var scoreThreshold = script.scoreThreshold;
 /** @type {number} */
 var iouThreshold = script.iouThreshold;
 
-//@ui {"widget" : "separator"}
-//@input bool modelInfo {"label": "Print Debug"}
-//@input Component.Text text {"label" : "Debug Text", "showIf" : "modelInfo"}
-
 var DetectionHelpers = require("Modules/DetectionHelpersModule");
 var Events = require("Modules/EventModule");
 
@@ -105,7 +101,7 @@ const strides = [16, 32, 8];
 //CUSTOM VARS
 var classSettings = [];
 for (let i = 0; i < labels.length; i++) {
-    classSettings.push({ label: labels[i], nutriScore: true });
+    classSettings.push({ label: labels[i], nutriScore: 0 });
 }
 
 //END CUSTOM VARS
@@ -156,8 +152,6 @@ function onLoadingFinished() {
     outputs = mlComponent.getOutputs();
     inputs = mlComponent.getInputs();
 
-    printInfo("Model built");
-
     // build grids
     for (var i = 0; i < outputs.length; i++) {
         var shape = outputs[i].shape;
@@ -168,6 +162,7 @@ function onLoadingFinished() {
 }
 
 function onRunningFinished() {
+    print("fin");
     parseYolo7Outputs(outputs);
 
     var result = DetectionHelpers.nms(boxes, scores, scoreThreshold, iouThreshold).sort(
@@ -276,14 +271,6 @@ function runOnce() {
     mlComponent.runImmediate(false);
 }
 
-/**
- * @param {string} msg
- */
-function printInfo(msg) {
-    if (script.modelInfo) {
-        print(msg);
-    }
-}
 /**
  * returns a number of classes that model detects
  * @returns {number}

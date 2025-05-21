@@ -67,8 +67,7 @@
   Enabled: true
   ScriptAsset: !<reference> 710a93d2-4119-46ad-94eb-5998561661b1
   ScriptInputsDefault:
-    modelInfo: true
-    text: true
+    {}
   ScriptTypesDefault:
     {}
   ScriptInputs:
@@ -79,8 +78,6 @@
       processingSettings: true
       scoreThreshold: 0.500000
       iouThreshold: 0.500000
-      modelInfo: false
-      text: !<reference.Text> 00000000-0000-0000-0000-000000000000
   ScriptTypes:
     "":
       {}
@@ -120,7 +117,7 @@
     []
   Name: "ML Controller [SWAP MODEL AND LABELS]"
   Enabled: true
-  Layers: 1048576
+  Layers: 1
   LocalTransform:
     position: {x: 120.000000, y: 0.000000, z: -40.000000}
     rotation: {x: 0.000000, y: -0.000000, z: 0.000000}
@@ -168,7 +165,6 @@
   Enabled: true
   ScriptAsset: !<reference> 48e5c1f6-f787-4966-9221-e96663802d34
   ScriptInputsDefault:
-    prefab: true
     screenScalingX: true
     screenScalingY: true
     debug: true
@@ -177,9 +173,9 @@
     {}
   ScriptInputs:
     "":
-      MLController: !<reference.ScriptComponent> 314815c0-16ca-408d-a7c8-956e8cade03e
+      mlController: !<reference.ScriptComponent> 314815c0-16ca-408d-a7c8-956e8cade03e
       deviceTracking: !<reference.DeviceTracking> bfeea0bb-0fff-4c93-bc74-bfee48e8964c
-      prefab: !<reference.ObjectPrefab> 00000000-0000-0000-0000-000000000000
+      prefab: !<reference.ObjectPrefab> 822264c2-86a5-4afa-a5dc-c2696f2823b0
       screenScalingX: !<float> 1.000000
       screenScalingY: !<float> 1.000000
       debug: false

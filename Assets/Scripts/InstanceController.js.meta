@@ -28,9 +28,9 @@
   CurrentVisibility: Editable
   MaxVisibility: Editable
   ScriptInputsHidden:
-    MLController: false
     debug: false
     deviceTracking: false
+    mlController: false
     prefab: false
     screenScalingX: false
     screenScalingY: false
@@ -40,7 +40,7 @@
   ReadMe: !<reference> 00000000-0000-0000-0000-000000000000
   DeclarationFile: !<reference> 00000000-0000-0000-0000-000000000000
   DefaultScriptInputs:
-    - MLController: !<reference.ScriptComponent> 00000000-0000-0000-0000-000000000000
+    - mlController: !<reference.ScriptComponent> 00000000-0000-0000-0000-000000000000
       deviceTracking: !<reference.DeviceTracking> 00000000-0000-0000-0000-000000000000
       prefab: !<reference.ObjectPrefab> 00000000-0000-0000-0000-000000000000
       screenScalingX: !<float> 1.000000

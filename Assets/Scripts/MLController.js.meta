@@ -30,10 +30,8 @@
     iouThreshold: false
     mlSettings: false
     model: false
-    modelInfo: false
     processingSettings: false
     scoreThreshold: false
-    text: false
   ScriptTypesHidden:
     {}
   DefaultScriptInputs:
@@ -43,8 +41,6 @@
       processingSettings: false
       scoreThreshold: 0.400000
       iouThreshold: 0.650000
-      modelInfo: false
-      text: !<reference.Text> 00000000-0000-0000-0000-000000000000
   ScriptTypes:
     -
       {}

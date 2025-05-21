@@ -1,4 +1,4 @@
-let info;
+let nutriScore;
 
 function updateMaterial() {
     //    pull settings from persistent storage

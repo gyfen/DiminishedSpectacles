@@ -1,0 +1,81 @@
+- !<AssetImportMetadata/b328535e-2612-4090-9d96-0e938c2987a5>
+  ImportedAssetIds:
+    ObjectPrefab: !<reference> 822264c2-86a5-4afa-a5dc-c2696f2823b0
+  ImporterName: ObjectPrefabImporter
+  PrimaryAsset: !<reference> 822264c2-86a5-4afa-a5dc-c2696f2823b0
+  PackageType: NotAPackage
+  PackagePolicy: CannotBeUnpacked
+  ExtraData:
+    {}
+  AssetDataMap:
+    ObjectPrefab: !<own> cf3f1449-1bd0-48d7-8110-c426d04681fb
+  DependentFiles:
+    []
+  ImporterSettings: !<AssetImporterSettings>
+    {}
+  CompressionSettings: !<own> 00000000-0000-0000-0000-000000000000
+- !<SceneObject/1d474a98-c7a3-4a07-b93d-aab9729dccc9>
+  PrefabRemaps:
+    []
+  Name: Instance
+  Enabled: true
+  Layers: 1
+  LocalTransform:
+    position: {x: 0.000000, y: 0.000000, z: 0.000000}
+    rotation: {x: 0.000000, y: 0.000000, z: 0.000000}
+    scale: {x: 10.000000, y: 1.000000, z: 10.000000}
+    hasSegmentScaleCompensation: false
+  Children:
+    []
+  Components:
+    - !<own> c4e4c677-938d-47fd-97e0-43a427863df0
+    - !<own> 7cf32d29-8a8a-4cb2-a841-4e8fb730d626
+- !<RenderMeshVisual/7cf32d29-8a8a-4cb2-a841-4e8fb730d626>
+  PrefabRemaps:
+    []
+  Name: Render Mesh Visual
+  Enabled: true
+  RenderOrder: 0
+  StretchMode: Stretch
+  VerticalAlignment: Center
+  HorizontalAlignment: Center
+  MeshShadowMode: None
+  ShadowColor: {x: 1.000000, y: 1.000000, z: 1.000000, w: 1.000000}
+  ShadowDensity: 1.000000
+  Materials:
+    - !<reference> e7eda618-6dda-45f7-838d-4f6c92947c5e
+  Mesh: !<reference> cc4cc74a-2163-44b1-9a7e-118184d32e57
+  Skin: !<reference> 00000000-0000-0000-0000-000000000000
+  BlendShapesEnabled: true
+  BlendNormals: false
+  BlendShapes:
+    {}
+- !<ObjectPrefab/ba32e380-9ab0-4757-a1d3-812e812a31b4>
+  PackagePath: ""
+  objects:
+    - !<own> 1d474a98-c7a3-4a07-b93d-aab9729dccc9
+  LazyLoading: false
+  RetainAssets: true
+- !<ScriptComponent/c4e4c677-938d-47fd-97e0-43a427863df0>
+  PrefabRemaps:
+    []
+  Name: Instance
+  Enabled: true
+  ScriptAsset: !<reference> be0cc6c2-af06-4ea6-b2c2-229cf4153a5d
+  ScriptInputsDefault:
+    {}
+  ScriptTypesDefault:
+    {}
+  ScriptInputs:
+    "":
+      {}
+  ScriptTypes:
+    "":
+      {}
+- !<ObjectPrefabAssetData/cf3f1449-1bd0-48d7-8110-c426d04681fb>
+  SourceRemaps:
+    - 32da7de9-9e3c-4607-9d55-bb3960d548b9: 7cf32d29-8a8a-4cb2-a841-4e8fb730d626
+    - 822264c2-86a5-4afa-a5dc-c2696f2823b0: ba32e380-9ab0-4757-a1d3-812e812a31b4
+    - a0d5361c-fabe-4a5d-a66f-36658ef70a59: c4e4c677-938d-47fd-97e0-43a427863df0
+    - dadb00c1-22f8-47da-ac99-5df5d9438823: 1d474a98-c7a3-4a07-b93d-aab9729dccc9
+  SourceState: !<own> ba32e380-9ab0-4757-a1d3-812e812a31b4

@@ -3,7 +3,7 @@ Detection Controller
 */
 
 /* Inputs */
-// @input Component.ScriptComponent MLController
+// @input Component.ScriptComponent mlController
 
 // @ui {"widget" : "separator"}
 // @input Component.DeviceTracking deviceTracking
@@ -24,6 +24,8 @@ Detection Controller
 let cameraModule;
 let imageRequest;
 
+script.mlController.onDetectionsUpdated.add(onDetectionsUpdated);
+
 if (!script.debug) {
     cameraModule = require("LensStudio:CameraModule");
     imageRequest = CameraModule.createImageRequest();
@@ -40,7 +42,7 @@ function transformScreenPoint(screenPoint) {
 }
 
 /* Spawn a prefab */
-function spawnDiminished(screenPos, label, confidence, info) {
+function spawnDiminished(screenPos, label, score, nutriScore) {
     const results = script.deviceTracking.hitTestWorldMesh(screenPos);
 
     if (results.length == 0) {
@@ -56,7 +58,7 @@ function spawnDiminished(screenPos, label, confidence, info) {
     const instanceScript = instance.getComponent("Component.ScriptComponent");
 
     // Update the instance
-    instanceScript.info = info;
+    instanceScript.nutriScore = nutriScore;
     instanceScript.updateMaterial();
 
     // TODO: they should all have to same normal
@@ -77,17 +79,23 @@ function spawnDiminished(screenPos, label, confidence, info) {
 */
 function parseDetections(detections) {
     for (let i = 0; i < detections.length; i++) {
-        const { label, score, bbox } = detections[i];
+        const { label, score, bbox, nutriScore } = detections[i];
         // TODO: make this better
-        spawnDiminished(transformScreenPoint(new vec2(bbox[0], bbox[1])), label, confidence, info);
+        spawnDiminished(
+            transformScreenPoint(new vec2(bbox[0], bbox[1])),
+            label,
+            score,
+            nutriScore
+        );
     }
 }
 
 function calibrate() {
-    mlController.runOnce();
+    script.mlController.runOnce();
 }
 
 function onDetectionsUpdated(result) {
+    print("updated");
     // Delete all existing instances
     const sceneObj = script.getSceneObject();
     for (let i = 0; i < sceneObj.getChildrenCount(); i++) {
@@ -112,4 +120,6 @@ function updateInstances() {
 // script.calibrate = calibrate;
 
 // TODO: temp test
-await calibrate();
+
+script.createEvent("OnStartEvent").bind(calibrate);
+// calibrate();

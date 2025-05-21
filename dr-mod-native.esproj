@@ -14,7 +14,7 @@ viewConfig:
     cameraFov: nan
     fullFrameAspect: 0.666660
     resolutionScale: 1.000000
-    viewport: Maximized
+    viewport: Normal
     output: Live
     stereoOutputEye: Center
     deviceTypeOverride: Spectacles
