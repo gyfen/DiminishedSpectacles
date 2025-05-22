@@ -1,0 +1,42 @@
+- !<AssetImportMetadata/3d764070-7339-45cd-bc0e-166755264b03>
+  ImportedAssetIds:
+    JavaScriptAsset: !<reference> 51a10385-f02e-40e2-852d-292f2185e81d
+  ImporterName: JavaScriptAssetImporter
+  PrimaryAsset: !<reference> 51a10385-f02e-40e2-852d-292f2185e81d
+  PackageType: NotAPackage
+  PackagePolicy: CannotBeUnpacked
+  ExtraData:
+    {}
+  AssetDataMap:
+    JavaScriptAsset: !<own> 020fd905-919c-4ad4-b9b2-634fa7a399e5
+  DependentFiles:
+    []
+  ImporterSettings: !<AssetImporterSettings>
+    {}
+  CompressionSettings: !<own> 00000000-0000-0000-0000-000000000000
+- !<ScriptAssetData/020fd905-919c-4ad4-b9b2-634fa7a399e5>
+  SvgIcon: ""
+  SetupScript:
+    code: ""
+  Description: ""
+  InternalVersion: 0
+  VersionMajor: 0
+  VersionMinor: 0
+  VersionPatch: 0
+  ComponentUid: 58f0b6b8-dcc4-4ee5-9518-27074d2d8748
+  ExportUid: 00000000-0000-0000-0000-000000000000
+  CurrentVisibility: Editable
+  MaxVisibility: Editable
+  ScriptInputsHidden:
+    instanceController: false
+    nutriScoreSlider: false
+  ScriptTypesHidden:
+    {}
+  ReadMe: !<reference> 00000000-0000-0000-0000-000000000000
+  DeclarationFile: !<reference> 00000000-0000-0000-0000-000000000000
+  DefaultScriptInputs:
+    - instanceController: !<reference.ScriptComponent> 00000000-0000-0000-0000-000000000000
+      nutriScoreSlider: !<reference.ScriptComponent> 00000000-0000-0000-0000-000000000000
+  ScriptTypes:
+    -
+      {}

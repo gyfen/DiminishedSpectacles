@@ -95,9 +95,6 @@ function onDetectionsUpdated(result) {
     }
 
     parseDetections(result);
-
-    // TODO: remove
-    // calibrate();
 }
 
 function updateInstances() {
@@ -109,9 +106,5 @@ function updateInstances() {
     }
 }
 
-// script.calibrate = calibrate;
-
-// TODO: temp test
-
-script.createEvent("OnStartEvent").bind(calibrate);
-// calibrate();
+script.calibrate = calibrate;
+script.updateInstances = updateInstances;

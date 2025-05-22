@@ -1,0 +1,46 @@
+- !<AssetImportMetadata/ae369a27-c57d-2fb1-84eb-eaeabcb24778>
+  ImporterSettings: !<AssetImporterSettings>
+    {}
+  ImportedAssetIds:
+    TypeScriptAsset: !<reference> b1d5eaa4-2e47-4a8a-b813-5f2a14f1bd43
+  ImporterName: TypeScriptAssetImporter
+  PrimaryAsset: !<reference> b1d5eaa4-2e47-4a8a-b813-5f2a14f1bd43
+  PackageType: NotAPackage
+  AssetDataMap:
+    TypeScriptAsset: !<own> c3da51a7-3961-47f4-b72d-81451289709c
+  PackagePolicy: CannotBeUnpacked
+  DependentFiles:
+    []
+  CompressionSettings: !<own> 00000000-0000-0000-0000-000000000000
+  ExtraData:
+    {}
+- !<TypeScriptAssetData/c3da51a7-3961-47f4-b72d-81451289709c>
+  Icon: ""
+  Description: ""
+  InternalVersion: 0
+  VersionMajor: 0
+  VersionMinor: 0
+  VersionPatch: 0
+  ComponentUid: 770fa0e7-bdc1-4dc9-9508-901785aeafb3
+  ExportUid: 00000000-0000-0000-0000-000000000000
+  CurrentVisibility: Editable
+  MaxVisibility: Editable
+  ScriptInputsHidden:
+    itemPrefab: false
+    itemsCount: false
+  ScriptTypesHidden:
+    {}
+  DefaultScriptInputs:
+    - itemPrefab: !<reference.ObjectPrefab> 00000000-0000-0000-0000-000000000000
+      itemsCount: !<float> 10.000000
+  ScriptTypes:
+    -
+      {}
+  InputLines:
+    - '// @input Asset.ObjectPrefab itemPrefab {"hint":"The prefab object that will be instantiated for each grid item."}'
+    - '// @input float itemsCount = 10 {"hint":"Number of grid items to instantiate and display."}'
+  SvgIcon: ""
+  DeclarationFile: !<reference> 00000000-0000-0000-0000-000000000000
+  SetupScript:
+    code: ""
+  ReadMe: !<reference> 00000000-0000-0000-0000-000000000000

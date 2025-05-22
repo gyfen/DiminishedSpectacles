@@ -1,0 +1,80 @@
+- !<Material/95feccb2-51fa-40db-a608-e49b07946d96>
+  PackagePath: ""
+  PassesInfo:
+    - !<own> 43197f3d-6812-46aa-a17f-d25dd906bf65
+- !<PassInfo/43197f3d-6812-46aa-a17f-d25dd906bf65>
+  CachedProperties:
+    - glow_mapBorderColor:
+        typeIdx: 5
+        value: {x: 1.000000, y: 1.000000, z: 1.000000, w: 1.000000}
+    - glow_mapDims:
+        typeIdx: 5
+        value: {x: 1.000000, y: 1.000000, z: 1.000000, w: 1.000000}
+    - glow_mapUvMinMax:
+        typeIdx: 5
+        value: {x: 1.000000, y: 1.000000, z: 1.000000, w: 1.000000}
+  DepthWrite: false
+  DepthTest: true
+  DepthFunction: LessEqual
+  TwoSided: false
+  ColorMask: {x: true, y: true, z: true, w: true}
+  CullMode: Back
+  PolygonOffset: {x: 0.000000, y: 0.000000}
+  FrustumCulling: Auto
+  FrustumCullPad: 0.000000
+  InstanceCount: 1
+  Defines:
+    []
+  BlendMode: Screen
+  Properties:
+    Port_Input1_N003:
+      typeIdx: 1
+      value: 0.005000
+    Port_Offset_N009:
+      typeIdx: 3
+      value: {x: 0.020000, y: 0.000000}
+    Port_Position1_N005:
+      typeIdx: 1
+      value: 0.000000
+    Port_Position2_N005:
+      typeIdx: 1
+      value: 0.760000
+    Port_Value0_N005:
+      typeIdx: 5
+      value: {x: 0.000000, y: 0.000000, z: 0.000000, w: 0.000000}
+    Port_Value1_N005:
+      typeIdx: 5
+      value: {x: 0.000000, y: 0.000000, z: 0.000000, w: 1.000000}
+    Port_Value2_N005:
+      typeIdx: 5
+      value: {x: 1.000000, y: 0.960784, z: 0.537255, w: 1.000000}
+    Port_Value3_N005:
+      typeIdx: 5
+      value: {x: 1.000000, y: 1.000000, z: 1.000000, w: 1.000000}
+    PreviewEnabled:
+      typeIdx: 0
+      value: 0
+    PreviewNodeID:
+      typeIdx: 0
+      value: 0
+    glow_map:
+      typeIdx: 9
+      value:
+        id: cb813f60-700a-486e-a33b-c8f397003a86
+        sampler:
+          filteringMode: Trilinear
+          wrapModeU: Repeat
+          wrapModeV: Repeat
+          wrapModeW: Repeat
+          borderColor: {x: 0.000000, y: 0.000000, z: 0.000000, w: 0.000000}
+          mipmaps: false
+        type: Texture2D
+    glow_mapTransform:
+      typeIdx: 7
+      value:
+        0: {x: 1.000000, y: 0.000000, z: 0.000000}
+        1: {x: 0.000000, y: 1.000000, z: 0.000000}
+        2: {x: 0.000000, y: 0.000000, z: 1.000000}
+  Pass: !<reference> 4d3005e1-2103-46c2-b4f4-cc95e706c475
+  RTCaster: false
+  RTReceiver: false
