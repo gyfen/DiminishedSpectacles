@@ -11,47 +11,10 @@
 // get class name by index
 // script.getClassLabel(index)
 
-// const labels = [
-//     "haverdrink ah terra",
-//     "haverdrink alpro",
-//     "haverdrink ekoplaza",
-//     "haverdrink natrue",
-//     "haverdrink oatly",
-//     "haverdrink rude health",
-//     "koffie cafe gondoliere",
-//     "koffie douwe egberts",
-//     "koffie ekoplaza",
-//     "koffie fairtrade original",
-//     "koffie kanis gunnink",
-//     "koffie perla bio",
-//     "pasta ah bio",
-//     "pasta de cecco",
-//     "pasta grand italia",
-//     "pasta la bio idea",
-//     "pasta la molisana",
-//     "pasta rummo",
-//     "pastasaus ah bio",
-//     "pastasaus ekoplaza",
-//     "pastasaus fertilia",
-//     "pastasaus heinz",
-//     "pastasaus jumbo",
-//     "pastasaus spagheroni",
-//     "pindakaas ah bio",
-//     "pindakaas calve",
-//     "pindakaas jumbo",
-//     "pindakaas luna e terra",
-//     "pindakaas skippy",
-//     "pindakaas whole earth",
-// ];
-
 //inputs
 //@input Asset.MLAsset model {"label": "ML Model", "hint": "Object Detection ML Model"}
 /** @type {MLAsset} */
 var model = script.model;
-
-//@input Asset.Texture inputTexture {"hint": "Texture passed to ML model input, Device Camera Texture",  "showIf" : "mlSettings"}
-/** @type {Texture} */
-var inputTexture = script.inputTexture;
 
 //@ui {"widget" : "separator"}
 //@input float scoreThreshold = 0.4 {"widget" : "slider", "min" : 0, "max" : 1, "step" : 0.05}
@@ -110,6 +73,8 @@ var scores = [];
 var inputShape;
 /** @type {MLComponent} */
 var mlComponent;
+/** @type {MLComponent} */
+var mlComponent2;
 /** @type {OutputPlaceholder[]} */
 var outputs;
 /** @type {InputPlaceholder[]} */
@@ -166,11 +131,12 @@ function onLoadingFinished() {
         grids.push(makeGrid(shape.x, shape.y));
     }
     inputShape = inputs[0].shape;
-    // inputs[0].texture = inputTexture;
 
+    // set camera texture
     let cameraRequestLeft = CameraModule.createCameraRequest();
     cameraRequestLeft.cameraId = CameraModule.CameraId.Left_Color;
     let cameraTexLeft = cameraModule.requestCamera(cameraRequestLeft);
+
     inputs[0].texture = cameraTexLeft;
 }
 
@@ -178,15 +144,13 @@ function onLoadingFinished2() {
     outputs2 = mlComponent2.getOutputs();
     inputs2 = mlComponent2.getInputs();
 
-    // make this a different texture
+    // set camera texture
     let cameraRequestRight = CameraModule.createCameraRequest();
     cameraRequestRight.cameraId = CameraModule.CameraId.Right_Color;
     let cameraTexRight = cameraModule.requestCamera(cameraRequestRight);
 
     inputs2[0].texture = cameraTexRight;
 }
-
-let all_results = [];
 
 function onRunningFinished() {
     parseResults(outputs);
@@ -196,37 +160,37 @@ function onRunningFinished2() {
     parseResults(outputs2);
 }
 
+const allDetections = [];
+
 function parseResults(outputs) {
     [boxes, scores] = parseYolo7Outputs(outputs);
 
-    var result = DetectionHelpers.nms(boxes, scores, scoreThreshold, iouThreshold).sort(
+    // Get results
+    const results = DetectionHelpers.nms(boxes, scores, scoreThreshold, iouThreshold).sort(
         DetectionHelpers.compareByScoreReversed
     );
 
-    let resultObj = {};
+    // Convert all results to a detection in the format {label: {...data}}
+    // This is used to reqeust the label data more efficiently
+    const detections = {};
 
-    for (var i = 0; i < result.length; i++) {
-        const idx = result[i].index;
-        if (
-            classSettings.length > idx &&
-            classSettings[idx].label &&
-            classSettings[idx].nutriScore
-        ) {
-            resultObj[classSettings[idx].label] = {
-                confidence: result[i].score,
-                bbox: result[i].bbox,
-                nutriScore: classSettings[idx].nutriScore,
-            };
-        }
+    for (var i = 0; i < results.length; i++) {
+        const result = results[i]; // model output
+        const classSetting = classSettings[result.idx]; // user defined data
+
+        detections[classSetting.label] = {
+            confidence: result.score,
+            bbox: result.bbox,
+            nutriScore: classSetting.nutriScore,
+        };
     }
 
-    // push to results
-    all_results.push(resultObj);
+    allDetections.push(resultObj);
 
-    // only trigger when both camera frames are processed
-    if (all_results.length == 2) {
-        onDetectionsUpdated.trigger(all_results);
-        all_results = []; // reset buffer
+    // Only trigger when both camera frames are processed
+    if (allDetections.length == 2) {
+        onDetectionsUpdated.trigger(...allDetections);
+        allDetections = []; // Reset buffer
     }
 }
 
@@ -314,6 +278,7 @@ function parseYolo7Outputs(outputs) {
     return [boxes, scores];
 }
 
+/* Run both detections asynchronously */
 function runOnce() {
     mlComponent.runImmediate(false);
     mlComponent2.runImmediate(false);
@@ -331,7 +296,7 @@ function getClassLabel(index) {
     return classSettings[index].label ? classSettings[index].label : "class_" + index;
 }
 
-//initialize
+// Initialize
 init();
 
 //public api functions

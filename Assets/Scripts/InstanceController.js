@@ -1,5 +1,5 @@
 /*
-Detection Controller
+Instance Controller
 */
 
 /* Inputs */
@@ -24,6 +24,7 @@ script.mlController.onDetectionsUpdated.add(onDetectionsUpdated);
 if (!script.debug) {
     cameraModule = require("LensStudio:CameraModule");
     imageRequest = CameraModule.createImageRequest();
+    // TODO: crop img?
     // imageRequest.crop(Rect.create(-1, 1, -1, 1));
     // imageRequest.resolution(new vec2(1280, 1280));
 }
@@ -36,8 +37,8 @@ function transformScreenPoint(screenPoint) {
     );
 }
 
-/* Spawn a prefab */
-function spawnDiminished(screenPos, label, score, nutriScore) {
+/* Spawn an instance */
+function spawnInstance(screenPos, label, confidence, nutriScore) {
     const results = script.deviceTracking.hitTestWorldMesh(screenPos);
 
     if (results.length == 0) {
@@ -52,7 +53,7 @@ function spawnDiminished(screenPos, label, score, nutriScore) {
     const instance = script.prefab.instantiate(script.getSceneObject());
     const instanceScript = instance.getComponent("Component.ScriptComponent");
 
-    // Update the instance
+    // Update the instance data
     instanceScript.nutriScore = nutriScore;
     instanceScript.updateMaterial();
 
@@ -69,14 +70,12 @@ function spawnDiminished(screenPos, label, score, nutriScore) {
     return true;
 }
 
-/*  Triggers when detections are updated.
-    Spawns prefabs for all
-*/
-function spawnDetections(detections) {
+/* Spawn all instances */
+function spawnInstances(detections) {
     for (const [label, data] of Object.entries(detections)) {
         const { confidence, bbox, nutriScore } = data;
         // TODO: make this better
-        spawnDiminished(
+        spawnInstance(
             transformScreenPoint(new vec2(bbox[0], bbox[1])),
             label,
             confidence,
@@ -85,10 +84,7 @@ function spawnDetections(detections) {
     }
 }
 
-function calibrate() {
-    script.mlController.runOnce();
-}
-
+/* Averages two bounding boxes and returns the result */
 function mergeBboxes(bbox1, bbox2) {
     const mergedBbox = [];
 
@@ -99,23 +95,25 @@ function mergeBboxes(bbox1, bbox2) {
     return mergedBbox;
 }
 
+/* Merge two detection results into one better result */
 function mergeDetections(detections1, detections2) {
-    let mergedDetections = {};
+    const mergedDetections = {};
 
+    // Create a set of all labels without duplicates
     const labels1 = Object.keys(detections1);
     const labels2 = Object.keys(detections2);
-    const allLabels = new Set([...labels1, ...labels2]);
+    const allLabels = new Set([...Object.keys(detections1), ...labels2]);
 
     for (const label of allLabels) {
-        // merge
+        // Average the bboxes if both labels exist
         if (detections1[label] && detections2[label]) {
             const bbox1 = detections1[label].bbox;
             const bbox2 = detections2[label].bbox;
 
-            detections1[label].bbox = mergeBboxes(bbox1, bbox2);
+            detections1[label].bbox = mergeBboxes(bbox1, bbox2); // reuse detections1
             mergedDetections[label] = detections1[label];
         }
-        // take the one which exists
+        // If only one label detected
         else if (!script.consensusRequired) {
             const data = detections1[label] || detections2[label];
             mergedDetections[label] = data;
@@ -125,18 +123,28 @@ function mergeDetections(detections1, detections2) {
     return mergedDetections;
 }
 
-function onDetectionsUpdated(all_detections) {
+/* Gets triggered by MLController when detection results are in */
+function onDetectionsUpdated(detections1, detections2) {
     // Delete all existing instances
+    // TODO: instead of delete, move the object if its exists already.
     const sceneObj = script.getSceneObject();
     for (let i = 0; i < sceneObj.getChildrenCount(); i++) {
         const instance = sceneObj.getChild(i);
         instance.destroy();
     }
 
-    const detections = mergeDetections(...all_detections);
-    spawnDetections(detections);
+    const detections = mergeDetections(detections1, detections2);
+    spawnInstances(detections);
 }
 
+/* --- Public API --- */
+
+/* Detect objects and spawn instances */
+function calibrate() {
+    script.mlController.runOnce();
+}
+
+/* Update the material of all instances */
 function updateInstances() {
     const sceneObj = script.getSceneObject();
     for (let i = 0; i < sceneObj.getChildrenCount(); i++) {
