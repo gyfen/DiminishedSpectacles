@@ -84,47 +84,8 @@ function spawnInstances(detections) {
     }
 }
 
-/* Averages two bounding boxes and returns the result */
-function mergeBboxes(bbox1, bbox2) {
-    const mergedBbox = [];
-
-    for (let i = 0; i < bbox1.length; i++) {
-        mergedBbox.push((bbox1[i] + bbox2[i]) / 2);
-    }
-
-    return mergedBbox;
-}
-
-/* Merge two detection results into one better result */
-function mergeDetections(detections1, detections2) {
-    const mergedDetections = {};
-
-    // Create a set of all labels without duplicates
-    const labels1 = Object.keys(detections1);
-    const labels2 = Object.keys(detections2);
-    const allLabels = new Set([...Object.keys(detections1), ...labels2]);
-
-    for (const label of allLabels) {
-        // Average the bboxes if both labels exist
-        if (detections1[label] && detections2[label]) {
-            const bbox1 = detections1[label].bbox;
-            const bbox2 = detections2[label].bbox;
-
-            detections1[label].bbox = mergeBboxes(bbox1, bbox2); // reuse detections1
-            mergedDetections[label] = detections1[label];
-        }
-        // If only one label detected
-        else if (!script.consensusRequired) {
-            const data = detections1[label] || detections2[label];
-            mergedDetections[label] = data;
-        }
-    }
-
-    return mergedDetections;
-}
-
 /* Gets triggered by MLController when detection results are in */
-function onDetectionsUpdated(detections1, detections2) {
+function onDetectionsUpdated(detections) {
     // Delete all existing instances
     // TODO: instead of delete, move the object if its exists already.
     const sceneObj = script.getSceneObject();
@@ -133,7 +94,6 @@ function onDetectionsUpdated(detections1, detections2) {
         instance.destroy();
     }
 
-    const detections = mergeDetections(detections1, detections2);
     spawnInstances(detections);
 }
 

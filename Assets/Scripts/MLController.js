@@ -160,7 +160,46 @@ function onRunningFinished2() {
     parseResults(outputs2);
 }
 
-let allDetections = [];
+/* Averages two bounding boxes and returns the result */
+function mergeBboxes(bbox1, bbox2) {
+    const mergedBbox = [];
+
+    for (let i = 0; i < bbox1.length; i++) {
+        mergedBbox.push((bbox1[i] + bbox2[i]) / 2);
+    }
+
+    return mergedBbox;
+}
+
+/* Merge two detection results into one better result */
+function mergeDetections(detections1, detections2) {
+    const mergedDetections = {};
+
+    // Create a set of all labels without duplicates
+    const labels1 = Object.keys(detections1);
+    const labels2 = Object.keys(detections2);
+    const allLabels = new Set([...labels1, ...labels2]);
+
+    for (const label of allLabels) {
+        // Average the bboxes if both labels exist
+        if (detections1[label] && detections2[label]) {
+            const bbox1 = detections1[label].bbox;
+            const bbox2 = detections2[label].bbox;
+
+            detections1[label].bbox = mergeBboxes(bbox1, bbox2); // reuse detections1
+            mergedDetections[label] = detections1[label];
+        }
+        // If only one label detected
+        else if (!script.consensusRequired) {
+            const data = detections1[label] || detections2[label];
+            mergedDetections[label] = data;
+        }
+    }
+
+    return mergedDetections;
+}
+
+let detectionsBuffer;
 
 function parseResults(outputs) {
     [boxes, scores] = parseYolo7Outputs(outputs);
@@ -177,7 +216,6 @@ function parseResults(outputs) {
     for (var i = 0; i < results.length; i++) {
         const result = results[i]; // model output
         const classSetting = classSettings[result.index]; // user defined data
-        print(result);
 
         detections[classSetting.label] = {
             confidence: result.score,
@@ -186,12 +224,13 @@ function parseResults(outputs) {
         };
     }
 
-    allDetections.push(detections);
-
     // Only trigger when both camera frames are processed
-    if (allDetections.length == 2) {
-        onDetectionsUpdated.trigger(...allDetections);
-        allDetections = []; // Reset buffer
+    if (detectionsBuffer) {
+        const mergedDetections = mergeDetections(detections, detectionsBuffer);
+        onDetectionsUpdated.trigger(mergedDetections);
+        detectionsBuffer = null; // Reset buffer
+    } else {
+        detectionsBuffer = detections;
     }
 }
 
