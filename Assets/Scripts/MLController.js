@@ -114,11 +114,18 @@ var mlComponent;
 var outputs;
 /** @type {InputPlaceholder[]} */
 var inputs;
+/** @type {OutputPlaceholder[]} */
+var outputs2;
+/** @type {InputPlaceholder[]} */
+var inputs2;
 /** @type {number} */
 var classCount = classSettings.length;
 
 /** @type {EventWrapper} List of callbacks to call once detections were processed */
 var onDetectionsUpdated = new EventWrapper();
+
+// cam
+let cameraModule = require("LensStudio:CameraModule");
 
 /**
  * create ml component
@@ -128,12 +135,22 @@ function init() {
         print("Error, please set ML Model asset input");
         return;
     }
+
+    // 1
     mlComponent = script.getSceneObject().createComponent("MLComponent");
     mlComponent.model = model;
     mlComponent.onLoadingFinished = onLoadingFinished;
     mlComponent.onRunningFinished = onRunningFinished;
     mlComponent.inferenceMode = MachineLearning.InferenceMode.Accelerator;
     mlComponent.build([]);
+
+    // 2
+    mlComponent2 = script.getSceneObject().createComponent("MLComponent");
+    mlComponent2.model = model;
+    mlComponent2.onLoadingFinished = onLoadingFinished2;
+    mlComponent2.onRunningFinished = onRunningFinished2;
+    mlComponent2.inferenceMode = MachineLearning.InferenceMode.Accelerator;
+    mlComponent2.build([]);
 }
 
 /**
@@ -149,15 +166,44 @@ function onLoadingFinished() {
         grids.push(makeGrid(shape.x, shape.y));
     }
     inputShape = inputs[0].shape;
-    inputs[0].texture = inputTexture;
+    // inputs[0].texture = inputTexture;
+
+    let cameraRequestLeft = CameraModule.createCameraRequest();
+    cameraRequestLeft.cameraId = CameraModule.CameraId.Left_Color;
+    let cameraTexLeft = cameraModule.requestCamera(cameraRequestLeft);
+    inputs[0].texture = cameraTexLeft;
 }
 
+function onLoadingFinished2() {
+    outputs2 = mlComponent2.getOutputs();
+    inputs2 = mlComponent2.getInputs();
+
+    // make this a different texture
+    let cameraRequestRight = CameraModule.createCameraRequest();
+    cameraRequestRight.cameraId = CameraModule.CameraId.Right_Color;
+    let cameraTexRight = cameraModule.requestCamera(cameraRequestRight);
+
+    inputs2[0].texture = cameraTexRight;
+}
+
+let all_results = [];
+
 function onRunningFinished() {
-    parseYolo7Outputs(outputs);
+    parseResults(outputs);
+}
+
+function onRunningFinished2() {
+    parseResults(outputs2);
+}
+
+function parseResults(outputs) {
+    [boxes, scores] = parseYolo7Outputs(outputs);
 
     var result = DetectionHelpers.nms(boxes, scores, scoreThreshold, iouThreshold).sort(
         DetectionHelpers.compareByScoreReversed
     );
+
+    let resultObj = {};
 
     for (var i = 0; i < result.length; i++) {
         const idx = result[i].index;
@@ -166,12 +212,22 @@ function onRunningFinished() {
             classSettings[idx].label &&
             classSettings[idx].nutriScore
         ) {
-            result[i].label = classSettings[idx].label;
-            result[i].nutriScore = classSettings[idx].nutriScore;
+            resultObj[classSettings[idx].label] = {
+                confidence: result[i].score,
+                bbox: result[i].bbox,
+                nutriScore: classSettings[idx].nutriScore,
+            };
         }
     }
 
-    onDetectionsUpdated.trigger(result);
+    // push to results
+    all_results.push(resultObj);
+
+    // only trigger when both camera frames are processed
+    if (all_results.length == 2) {
+        onDetectionsUpdated.trigger(all_results);
+        all_results = []; // reset buffer
+    }
 }
 
 // The following code is based on:
@@ -200,8 +256,8 @@ function makeGrid(nx, ny) {
  * @returns
  */
 function parseYolo7Outputs(outputs) {
-    boxes = [];
-    scores = [];
+    const boxes = [];
+    const scores = [];
     var num_heads = outputs.length;
     for (var i = 0; i < num_heads; i++) {
         var output = outputs[i];
@@ -260,6 +316,7 @@ function parseYolo7Outputs(outputs) {
 
 function runOnce() {
     mlComponent.runImmediate(false);
+    mlComponent2.runImmediate(false);
 }
 
 /**

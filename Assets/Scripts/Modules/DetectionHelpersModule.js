@@ -16,7 +16,6 @@ var Detection = function (bbox, score, index, label) {
     this.score = score;
     this.index = index;
     this.label = label == undefined ? "class_" + index : label;
-    this.nutriScore = undefined;
 };
 /**
  * @returns {string}

@@ -15,6 +15,9 @@ Detection Controller
 // @input float screenScalingX = 1.0
 // @input float screenScalingY = 1.0
 
+// @ui {"widget" : "separator"}
+// @input bool consensusRequired = true
+
 // Register callback
 script.mlController.onDetectionsUpdated.add(onDetectionsUpdated);
 
@@ -69,14 +72,14 @@ function spawnDiminished(screenPos, label, score, nutriScore) {
 /*  Triggers when detections are updated.
     Spawns prefabs for all
 */
-function parseDetections(detections) {
-    for (let i = 0; i < detections.length; i++) {
-        const { label, score, bbox, nutriScore } = detections[i];
+function spawnDetections(detections) {
+    for (const [label, data] of Object.entries(detections)) {
+        const { confidence, bbox, nutriScore } = data;
         // TODO: make this better
         spawnDiminished(
             transformScreenPoint(new vec2(bbox[0], bbox[1])),
             label,
-            score,
+            confidence,
             nutriScore
         );
     }
@@ -86,7 +89,43 @@ function calibrate() {
     script.mlController.runOnce();
 }
 
-function onDetectionsUpdated(result) {
+function mergeBboxes(bbox1, bbox2) {
+    const mergedBbox = [];
+
+    for (let i = 0; i < bbox1.length; i++) {
+        mergedBbox.push((bbox1[i] + bbox2[i]) / 2);
+    }
+
+    return mergedBbox;
+}
+
+function mergeDetections(detections1, detections2) {
+    let mergedDetections = {};
+
+    const labels1 = Object.keys(detections1);
+    const labels2 = Object.keys(detections2);
+    const allLabels = new Set([...labels1, ...labels2]);
+
+    for (const label of allLabels) {
+        // merge
+        if (detections1[label] && detections2[label]) {
+            const bbox1 = detections1[label].bbox;
+            const bbox2 = detections2[label].bbox;
+
+            detections1[label].bbox = mergeBboxes(bbox1, bbox2);
+            mergedDetections[label] = detections1[label];
+        }
+        // take the one which exists
+        else if (!script.consensusRequired) {
+            const data = detections1[label] || detections2[label];
+            mergedDetections[label] = data;
+        }
+    }
+
+    return mergedDetections;
+}
+
+function onDetectionsUpdated(all_detections) {
     // Delete all existing instances
     const sceneObj = script.getSceneObject();
     for (let i = 0; i < sceneObj.getChildrenCount(); i++) {
@@ -94,7 +133,8 @@ function onDetectionsUpdated(result) {
         instance.destroy();
     }
 
-    parseDetections(result);
+    const detections = mergeDetections(...all_detections);
+    spawnDetections(detections);
 }
 
 function updateInstances() {
