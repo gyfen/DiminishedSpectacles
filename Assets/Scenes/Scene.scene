@@ -2341,7 +2341,7 @@
 - !<SceneObject/7bd8f16e-a8fb-4cb2-acbc-6390d4fdf130>
   PrefabRemaps:
     []
-  Name: Settings
+  Name: Settings Container
   Enabled: true
   Layers: 1
   LocalTransform:
