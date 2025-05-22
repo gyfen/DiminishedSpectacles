@@ -795,6 +795,23 @@
     - !<own> 9ead1c18-6c52-448b-babe-153b5e4a12f2
   Components:
     []
+- !<SceneObject/220fdd0c-882d-41b1-8030-bb62c0373e46>
+  PrefabRemaps:
+    []
+  Name: Content
+  Enabled: true
+  Layers: 1
+  LocalTransform:
+    position: {x: 0.000000, y: 3.000000, z: 1.000000}
+    rotation: {x: 0.000000, y: -0.000000, z: 0.000000}
+    scale: {x: 1.000000, y: 1.000000, z: 1.000000}
+    hasSegmentScaleCompensation: false
+  Children:
+    - !<own> dadffc07-57de-4e71-b856-0ecc5dd49fdf
+    - !<own> 2ea5f9ea-071c-465e-91b6-60417fd1063a
+    - !<own> 8cac61d6-1480-4bee-ba39-0a918c122b94
+  Components:
+    - !<own> 5feb0e3a-ed30-493d-afe4-f5049af9e863
 - !<SceneObject/222d8cd9-deb8-4719-9f6b-571b62836799>
   PrefabRemaps:
     []
@@ -969,7 +986,7 @@
   Enabled: true
   Layers: 1
   LocalTransform:
-    position: {x: -5.000000, y: 0.000000, z: 0.000000}
+    position: {x: -4.900000, y: 0.000000, z: 0.000000}
     rotation: {x: 0.000000, y: 0.000000, z: 0.000000}
     scale: {x: 1.000000, y: 1.000000, z: 1.000000}
     hasSegmentScaleCompensation: false
@@ -1142,7 +1159,7 @@
   Enabled: true
   Layers: 1
   LocalTransform:
-    position: {x: 0.000000, y: 0.000000, z: 2.000000}
+    position: {x: 0.000000, y: -3.000000, z: 0.000000}
     rotation: {x: 0.000000, y: -0.000000, z: 0.000000}
     scale: {x: 1.000000, y: 1.000000, z: 1.000000}
     hasSegmentScaleCompensation: false
@@ -1804,6 +1821,18 @@
   ScriptTypes:
     "":
       {}
+- !<Canvas/5feb0e3a-ed30-493d-afe4-f5049af9e863>
+  PrefabRemaps:
+    []
+  Name: Canvas
+  Enabled: true
+  UnitType: World
+  SortingType: Hierarchy
+  WorldSpaceRect:
+    left: -15.000000
+    bottom: -20.000000
+    right: 15.000000
+    top: 20.000000
 - !<ScriptComponent/60195954-5093-44b6-8e61-33e3692fea45>
   PrefabRemaps:
     []
@@ -2320,9 +2349,7 @@
     scale: {x: 1.000000, y: 1.000000, z: 1.000000}
     hasSegmentScaleCompensation: false
   Children:
-    - !<own> dadffc07-57de-4e71-b856-0ecc5dd49fdf
-    - !<own> 2ea5f9ea-071c-465e-91b6-60417fd1063a
-    - !<own> 8cac61d6-1480-4bee-ba39-0a918c122b94
+    - !<own> 220fdd0c-882d-41b1-8030-bb62c0373e46
   Components:
     - !<own> 200e086b-514c-42cf-827d-10bf1a308f0e
 - !<SceneObject/7c958db4-a569-4a6f-a396-24e0a016bf54>
@@ -2855,7 +2882,7 @@
   Enabled: true
   Layers: 1
   LocalTransform:
-    position: {x: 0.000000, y: -5.000000, z: 2.000000}
+    position: {x: 0.000000, y: -8.000000, z: 0.000000}
     rotation: {x: 0.000000, y: -0.000000, z: 0.000000}
     scale: {x: 1.000000, y: 1.000000, z: 1.000000}
     hasSegmentScaleCompensation: false
@@ -3054,7 +3081,7 @@
     deactivatedFixedPivot: false
   Pivot: {x: 0.000000, y: 0.000000}
   Transform:
-    position: {x: 0.000000, y: 0.000000, z: 0.100000}
+    position: {x: 0.000000, y: 0.000000, z: -0.300000}
     rotation: {x: 0.000000, y: -0.000000, z: 0.000000}
     scale: {x: 1.000000, y: 1.000000, z: 1.000000}
     hasSegmentScaleCompensation: false
@@ -3975,7 +4002,7 @@
   Enabled: true
   Layers: 1
   LocalTransform:
-    position: {x: 0.000000, y: 0.000000, z: 0.100000}
+    position: {x: 0.000000, y: 0.000000, z: -0.300000}
     rotation: {x: 0.000000, y: -0.000000, z: 0.000000}
     scale: {x: 1.000000, y: 1.000000, z: 1.000000}
     hasSegmentScaleCompensation: false
@@ -4168,7 +4195,7 @@
   Enabled: true
   Layers: 1
   LocalTransform:
-    position: {x: 0.000000, y: 3.000000, z: 2.000000}
+    position: {x: 0.000000, y: 0.000000, z: 0.000000}
     rotation: {x: 0.000000, y: -0.000000, z: 0.000000}
     scale: {x: 1.000000, y: 1.000000, z: 1.000000}
     hasSegmentScaleCompensation: false
