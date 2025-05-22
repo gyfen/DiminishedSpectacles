@@ -3,10 +3,11 @@
   objects:
     - !<own> 00000000-0000-0065-0000-000000000064
     - !<own> 1395ead6-b938-4dff-a70e-fe4bb9b28c46
-    - !<own> 753f75da-8772-4efc-8c06-a373b0ca721d
     - !<own> 81e9aa8b-3fa6-4f0d-b51e-2070cf282ae5
     - !<own> 53b9fd8e-91a5-4db8-a28b-749f2976164e
     - !<own> 8dd5f63d-833d-4047-8404-bfe5ac597b00
+    - !<own> 753f75da-8772-4efc-8c06-a373b0ca721d
+    - !<own> 0de113bc-5eaa-4471-b88e-36f7d78027fe
   layers: !<Layers/267ee9a7-aff2-4f9d-9a49-f71214747d03>
     userLayers:
       []
@@ -220,6 +221,22 @@
     - !<own> baa412d1-e2cf-4cb6-8bd3-15e46f0ebab1
   Components:
     []
+- !<SceneObject/0de113bc-5eaa-4471-b88e-36f7d78027fe>
+  PrefabRemaps:
+    - 0de113bc-5eaa-4471-b88e-36f7d78027fe: 6d2c11db-d9f2-4641-8836-94616ef7f92a
+    - c5a9b211-58a2-46d4-adcf-02be49372782: 31f991e5-1aa8-49cf-a6db-bff68b6276bb
+  Name: World Mesh Invisible
+  Enabled: true
+  Layers: 1
+  LocalTransform:
+    position: {x: 0.000000, y: 0.000000, z: 0.000000}
+    rotation: {x: 0.000000, y: 0.000000, z: 0.000000}
+    scale: {x: 1.000000, y: 1.000000, z: 1.000000}
+    hasSegmentScaleCompensation: false
+  Children:
+    []
+  Components:
+    - !<own> c5a9b211-58a2-46d4-adcf-02be49372782
 - !<SceneObject/0ec5b3d1-a4a6-47b2-863f-d35c80d2488e>
   PrefabRemaps:
     []
@@ -1375,7 +1392,7 @@
   Enabled: true
   Layers: 1
   LocalTransform:
-    position: {x: 0.000000, y: -33.599998, z: -25.000000}
+    position: {x: 0.000000, y: -33.599998, z: -27.500000}
     rotation: {x: 0.000000, y: -0.000000, z: 0.000000}
     scale: {x: 1.000000, y: 1.000000, z: 1.000000}
     hasSegmentScaleCompensation: false
@@ -3690,6 +3707,26 @@
     - !<own> 0b308068-0beb-4f01-9832-281d0e463076
   Components:
     []
+- !<RenderMeshVisual/c5a9b211-58a2-46d4-adcf-02be49372782>
+  PrefabRemaps:
+    []
+  Name: Render Mesh Visual
+  Enabled: true
+  RenderOrder: 0
+  StretchMode: Stretch
+  VerticalAlignment: Center
+  HorizontalAlignment: Center
+  MeshShadowMode: None
+  ShadowColor: {x: 1.000000, y: 1.000000, z: 1.000000, w: 1.000000}
+  ShadowDensity: 1.000000
+  Materials:
+    - !<reference> a7176433-2bcb-4cfd-81ea-c92cdf4687e6
+  Mesh: !<reference> d6ef8085-e435-4acb-809c-a4a538c01f5b
+  Skin: !<reference> 00000000-0000-0000-0000-000000000000
+  BlendShapesEnabled: true
+  BlendNormals: false
+  BlendShapes:
+    {}
 - !<BodyComponent/c5e8ff07-ac76-4fdb-b08e-fb506028369f>
   PrefabRemaps:
     []
