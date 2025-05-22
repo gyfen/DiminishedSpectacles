@@ -7,7 +7,7 @@ const nutriScoreSlider = script.nutriScoreSlider;
 const store = global.persistentStorageSystem.store;
 
 
-function init() {
+function OnStart() {
     // set slider value from storage
     nutriScoreSlider.currentValue = store.getInt("nutriScore") || 1.0;
 }
@@ -22,7 +22,7 @@ function updateNutriScore() {
     instanceController.updateInstances();
 }
 
-script.createEvent("OnStartEvent").bind(init);
+script.createEvent("OnStartEvent").bind(OnStart);
 //init();
 
 script.calibrate = calibrate;

@@ -160,7 +160,7 @@ function onRunningFinished2() {
     parseResults(outputs2);
 }
 
-const allDetections = [];
+let allDetections = [];
 
 function parseResults(outputs) {
     [boxes, scores] = parseYolo7Outputs(outputs);
@@ -185,7 +185,7 @@ function parseResults(outputs) {
         };
     }
 
-    allDetections.push(resultObj);
+    allDetections.push(detections);
 
     // Only trigger when both camera frames are processed
     if (allDetections.length == 2) {
