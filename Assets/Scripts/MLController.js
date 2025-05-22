@@ -65,10 +65,6 @@ const strides = [16, 32, 8];
  */
 /** @type {GridEntry[][][]}*/
 var grids = [];
-/** @type {[number, number, number, number]}*/
-var boxes = [];
-/** @type {number[]}*/
-var scores = [];
 /** @type {vec3} */
 var inputShape;
 /** @type {MLComponent} */
@@ -162,7 +158,7 @@ function onRunningFinished2() {
 
 /* Averages two bounding boxes and returns the result */
 function mergeBboxes(bbox1, bbox2) {
-    const mergedBbox = [];
+    let mergedBbox = [];
 
     for (let i = 0; i < bbox1.length; i++) {
         mergedBbox.push((bbox1[i] + bbox2[i]) / 2);
@@ -210,7 +206,7 @@ function parseResults(outputs) {
     );
 
     // Convert all results to a detection in the format {label: {...data}}
-    // This is used to reqeust the label data more efficiently
+    // This is used to request the label data more efficiently
     const detections = {};
 
     for (var i = 0; i < results.length; i++) {
