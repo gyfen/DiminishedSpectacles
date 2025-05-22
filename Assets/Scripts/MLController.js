@@ -95,7 +95,7 @@ let cameraModule = require("LensStudio:CameraModule");
 /**
  * create ml component
  */
-function init() {
+function onAwake() {
     if (!script.model) {
         print("Error, please set ML Model asset input");
         return;
@@ -337,7 +337,7 @@ function getClassLabel(index) {
 }
 
 // Initialize
-init();
+onAwake();
 
 //public api functions
 script.onDetectionsUpdated = onDetectionsUpdated;
