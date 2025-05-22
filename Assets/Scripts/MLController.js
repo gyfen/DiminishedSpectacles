@@ -176,7 +176,8 @@ function parseResults(outputs) {
 
     for (var i = 0; i < results.length; i++) {
         const result = results[i]; // model output
-        const classSetting = classSettings[result.idx]; // user defined data
+        const classSetting = classSettings[result.index]; // user defined data
+        print(result);
 
         detections[classSetting.label] = {
             confidence: result.score,
