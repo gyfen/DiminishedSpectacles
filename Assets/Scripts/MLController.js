@@ -316,8 +316,12 @@ function parseYolo7Outputs(outputs) {
 
 /* Run both detections asynchronously */
 function runOnce() {
-    mlComponent.runImmediate(false);
-    mlComponent2.runImmediate(false);
+    try {
+        mlComponent.runImmediate(false);
+        mlComponent2.runImmediate(false);
+    } catch (error) {
+        print(error);
+    }
 }
 
 /**
