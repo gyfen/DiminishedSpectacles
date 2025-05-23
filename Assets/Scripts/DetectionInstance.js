@@ -13,7 +13,7 @@ function updateMaterial() {
     const newMaterial = script.materials[store.getInt("overlayType")].clone();
 
     // TODO: this can also be linear, instead of threshold.
-    const alpha = script.nutriScore < store.getInt("nutriScore") ? 0 : 1; // nutriscore is assigned by instance controller
+    const alpha = script.nutriScore > store.getInt("nutriScore") ? 1 : 0; // nutriscore is assigned by instance controller
     const color = newMaterial.mainPass.baseColor;
     newMaterial.mainPass.baseColor = new vec4(color.x, color.y, color.z, alpha);
 
