@@ -17,6 +17,7 @@
 var model = script.model;
 
 //@ui {"widget" : "separator"}
+//@ui {"widget":"group_start", "label":"NMS"}
 //@input float scoreThreshold = 0.4 {"widget" : "slider", "min" : 0, "max" : 1, "step" : 0.05}
 /** @type {number} */
 var scoreThreshold = script.scoreThreshold;
@@ -24,6 +25,7 @@ var scoreThreshold = script.scoreThreshold;
 //@input float iouThreshold = 0.65 {"widget" : "slider", "min" : 0, "max" : 1, "step" : 0.05}
 /** @type {number} */
 var iouThreshold = script.iouThreshold;
+//@ui {"widget":"group_end"}
 
 /*
 @typedef ClassSettings
@@ -31,9 +33,11 @@ var iouThreshold = script.iouThreshold;
 @property {int} nutriScore {"widget":"combobox", "values":[{"label":"A", "value":0}, {"label":"B", "value":1}, {"label":"C", "value":2}, {"label":"D", "value":3}, {"label":"E", "value":4}]}
 */
 //@ui {"widget" : "separator"}
+//@ui {"widget":"group_start", "label":"Labels and values"}
 // @input ClassSettings[] classSettings
 /** @type {[string, int]} */
 var classSettings = script.classSettings;
+//@ui {"widget":"group_end"}
 
 var DetectionHelpers = require("Modules/DetectionHelpersModule");
 var Events = require("Modules/EventModule");

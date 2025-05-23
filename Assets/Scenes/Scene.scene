@@ -1230,14 +1230,14 @@
   Enabled: true
   ScriptAsset: !<reference> 710a93d2-4119-46ad-94eb-5998561661b1
   ScriptInputsDefault:
-    {}
+    iouThreshold: true
   ScriptTypesDefault:
     {}
   ScriptInputs:
     "":
       model: !<reference.MLAsset> 64cad88c-e6f3-42a5-bfc0-ee8c586c90eb
       scoreThreshold: 0.500000
-      iouThreshold: 0.500000
+      iouThreshold: 0.650000
       classSettings:
         - label: haverdrink ah terra
           nutriScore: 2
