@@ -17,7 +17,7 @@
 - !<ScriptComponent/120feaff-18fe-4de6-9ab7-ee8cd3c14ce8>
   PrefabRemaps:
     []
-  Name: Instance
+  Name: DetectionInstance
   Enabled: true
   ScriptAsset: !<reference> be0cc6c2-af06-4ea6-b2c2-229cf4153a5d
   ScriptInputsDefault:

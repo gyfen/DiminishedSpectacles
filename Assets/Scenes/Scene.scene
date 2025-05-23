@@ -1240,65 +1240,65 @@
       iouThreshold: 0.500000
       classSettings:
         - label: haverdrink ah terra
-          nutriScore: 3
+          nutriScore: 2
         - label: haverdrink alpro
-          nutriScore: 5
+          nutriScore: 0
         - label: haverdrink ekoplaza
-          nutriScore: 1
+          nutriScore: 4
         - label: haverdrink natrue
-          nutriScore: 3
+          nutriScore: 2
         - label: haverdrink oatly
-          nutriScore: 3
+          nutriScore: 2
         - label: haverdrink rude health
           nutriScore: 2
         - label: koffie cafe gondoliere
-          nutriScore: 4
+          nutriScore: 1
         - label: koffie douwe egberts
-          nutriScore: 4
+          nutriScore: 1
         - label: koffie ekoplaza
-          nutriScore: 3
-        - label: koffie fairtrade original
-          nutriScore: 4
-        - label: koffie kanis gunnink
-          nutriScore: 4
-        - label: koffie perla bio
-          nutriScore: 4
-        - label: pasta ah bio
-          nutriScore: 4
-        - label: pasta de cecco
-          nutriScore: 5
-        - label: pasta grand italia
-          nutriScore: 5
-        - label: pasta la bio idea
-          nutriScore: 3
-        - label: pasta la molisana
-          nutriScore: 5
-        - label: pasta rummo
-          nutriScore: 5
-        - label: pastasaus ah bio
-          nutriScore: 5
-        - label: pastasaus ekoplaza
-          nutriScore: 4
-        - label: pastasaus fertilia
           nutriScore: 2
+        - label: koffie fairtrade original
+          nutriScore: 1
+        - label: koffie kanis gunnink
+          nutriScore: 1
+        - label: koffie perla bio
+          nutriScore: 1
+        - label: pasta ah bio
+          nutriScore: 1
+        - label: pasta de cecco
+          nutriScore: 0
+        - label: pasta grand italia
+          nutriScore: 0
+        - label: pasta la bio idea
+          nutriScore: 2
+        - label: pasta la molisana
+          nutriScore: 0
+        - label: pasta rummo
+          nutriScore: 0
+        - label: pastasaus ah bio
+          nutriScore: 0
+        - label: pastasaus ekoplaza
+          nutriScore: 1
+        - label: pastasaus fertilia
+          nutriScore: 3
         - label: pastasaus heinz
-          nutriScore: 5
+          nutriScore: 0
         - label: pastasaus jumbo
-          nutriScore: 5
+          nutriScore: 0
         - label: pastasaus spagheroni
-          nutriScore: 3
+          nutriScore: 2
         - label: pindakaas ah bio
-          nutriScore: 5
+          nutriScore: 0
         - label: pindakaas calve
-          nutriScore: 5
+          nutriScore: 0
         - label: pindakaas jumbo
-          nutriScore: 5
+          nutriScore: 0
         - label: pindakaas luna e terra
-          nutriScore: 4
+          nutriScore: 1
         - label: pindakaas skippy
-          nutriScore: 3
+          nutriScore: 2
         - label: pindakaas whole earth
-          nutriScore: 5
+          nutriScore: 0
   ScriptTypes:
     "":
       {}
@@ -2104,8 +2104,8 @@
   Enabled: true
   ScriptAsset: !<reference> 3ad001d8-1e29-46e7-9cc8-d7f0e9bc2335
   ScriptInputsDefault:
+    _minValue: true
     toggleDuration: true
-    editEventCallbacks: true
     customFunctionForOnHoverEnter: true
     onHoverEnterFunctionNames: true
     customFunctionForOnHoverExit: true
@@ -2122,16 +2122,16 @@
     {}
   ScriptInputs:
     "":
-      _minValue: !<float> 1.000000
-      _maxValue: !<float> 5.000000
-      startValue: !<float> 1.000000
+      _minValue: !<float> 0.000000
+      _maxValue: !<float> 4.000000
+      startValue: !<float> 0.000000
       stepBehavior: true
       _stepSize: !<float> 1.000000
       toggleDuration: 0.200000
       sliderMin: !<reference.SceneObject> 331a3006-7c86-4cf2-9011-8e105f4e3d9b
       sliderMax: !<reference.SceneObject> 18b83af3-d142-4858-8f68-cd6ff8531752
       _sliderKnob: !<reference.SceneObject> cbe893ed-5f81-4041-b2d5-7e6e40e53a10
-      editEventCallbacks: false
+      editEventCallbacks: true
       customFunctionForOnHoverEnter: !<reference.ScriptComponent> 00000000-0000-0000-0000-000000000000
       onHoverEnterFunctionNames: !<string[]>
         []
@@ -3432,7 +3432,7 @@
   Layers: 1
   LocalTransform:
     position: {x: 0.000000, y: 0.000000, z: 0.000000}
-    rotation: {x: 0.000000, y: -0.000000, z: 0.000000}
+    rotation: {x: 0.000000, y: 0.000000, z: 0.000000}
     scale: {x: 1.000000, y: 1.000000, z: 1.000000}
     hasSegmentScaleCompensation: false
   Children:
@@ -4197,7 +4197,7 @@
   Layers: 1
   LocalTransform:
     position: {x: 0.000000, y: 0.000000, z: 0.000000}
-    rotation: {x: 0.000000, y: -0.000000, z: 0.000000}
+    rotation: {x: 0.000000, y: 0.000000, z: 0.000000}
     scale: {x: 1.000000, y: 1.000000, z: 1.000000}
     hasSegmentScaleCompensation: false
   Children:

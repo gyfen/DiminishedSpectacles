@@ -28,7 +28,7 @@ var iouThreshold = script.iouThreshold;
 /*
 @typedef ClassSettings
 @property {string} label
-@property {int} nutriScore {"widget":"combobox", "values":[{"label":"A", "value":5}, {"label":"B", "value":4}, {"label":"C", "value":3}, {"label":"D", "value":2}, {"label":"E", "value":1}]}
+@property {int} nutriScore {"widget":"combobox", "values":[{"label":"A", "value":0}, {"label":"B", "value":1}, {"label":"C", "value":2}, {"label":"D", "value":3}, {"label":"E", "value":4}]}
 */
 //@ui {"widget" : "separator"}
 // @input ClassSettings[] classSettings
