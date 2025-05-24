@@ -64,15 +64,18 @@ function parseDetections(detectionsLeft, detectionsRight) {
                         new vec2(detectionLeft.bbox[0], detectionLeft.bbox[1]),
                         0
                     ),
-                    cameraLeft.unproject(new vec2(detectionLeft.bbox[0], detectionLeft.bbox[1]), 0)
+                    cameraRight.unproject(
+                        new vec2(detectionRight.bbox[0], detectionRight.bbox[1]),
+                        0
+                    )
                 ),
                 rayEnd: averageVec3(
                     cameraLeft.unproject(
                         new vec2(detectionLeft.bbox[0], detectionLeft.bbox[1]),
                         depth
                     ),
-                    cameraLeft.unproject(
-                        new vec2(detectionLeft.bbox[0], detectionLeft.bbox[1]),
+                    cameraRight.unproject(
+                        new vec2(detectionRight.bbox[0], detectionRight.bbox[1]),
                         depth
                     )
                 ),
@@ -91,6 +94,13 @@ function parseDetections(detectionsLeft, detectionsRight) {
 
 /* Spawn an instance */
 function spawnInstance(rayStart, rayEnd, width, height, label, nutriScore) {
+    print(rayStart);
+    print(rayEnd);
+    print(width);
+    print(height);
+    print(label);
+    print(nutriScore);
+
     const results = script.deviceTracking.raycastWorldMesh(rayStart, rayEnd);
 
     if (results.length == 0) {
@@ -124,8 +134,10 @@ function spawnInstance(rayStart, rayEnd, width, height, label, nutriScore) {
 
 /* Spawn all instances */
 function spawnInstances(parsedDetections) {
-    for (let i = 0; i < parseDetections.length; i++) {
-        const { rayStart, rayEnd, width, height, label, nutriScore } = parsedDetections[i];
+    print(parsedDetections.length);
+    for (let i = 0; i < parsedDetections.length; i++) {
+        print(i);
+        let { rayStart, rayEnd, width, height, label, nutriScore } = parsedDetections[i];
         // TODO: make this better
         spawnInstance(rayStart, rayEnd, width, height, label, nutriScore);
     }
