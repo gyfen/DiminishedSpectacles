@@ -6,6 +6,7 @@ Instance Controller
 // @input Component.ScriptComponent mlController
 
 // @ui {"widget" : "separator"}
+// @input SceneObject cameraObj
 // @input Component.DeviceTracking deviceTracking
 
 // @ui {"widget" : "separator"}
@@ -55,28 +56,39 @@ function parseDetections(detectionsLeft, detectionsRight) {
         const detectionLeft = detectionsLeft[label];
         const detectionRight = detectionsRight[label];
 
+        const trans = script.cameraObj.getTransform().getWorldTransform();
+        // cameraLeft.pose.multiplyPoint
+
         if (detectionLeft && detectionRight) {
             const depth = 1000; // TODO: make this better
 
             const parsedDetection = {
                 rayStart: averageVec3(
-                    cameraLeft.unproject(
-                        new vec2(detectionLeft.bbox[0], detectionLeft.bbox[1]),
-                        0
+                    trans.multiplyPoint(
+                        cameraLeft.unproject(
+                            new vec2(detectionLeft.bbox[0], detectionLeft.bbox[1]),
+                            0
+                        )
                     ),
-                    cameraRight.unproject(
-                        new vec2(detectionRight.bbox[0], detectionRight.bbox[1]),
-                        0
+                    trans.multiplyPoint(
+                        cameraRight.unproject(
+                            new vec2(detectionRight.bbox[0], detectionRight.bbox[1]),
+                            0
+                        )
                     )
                 ),
                 rayEnd: averageVec3(
-                    cameraLeft.unproject(
-                        new vec2(detectionLeft.bbox[0], detectionLeft.bbox[1]),
-                        depth
+                    trans.multiplyPoint(
+                        cameraLeft.unproject(
+                            new vec2(detectionLeft.bbox[0], detectionLeft.bbox[1]),
+                            depth
+                        )
                     ),
-                    cameraRight.unproject(
-                        new vec2(detectionRight.bbox[0], detectionRight.bbox[1]),
-                        depth
+                    trans.multiplyPoint(
+                        cameraRight.unproject(
+                            new vec2(detectionRight.bbox[0], detectionRight.bbox[1]),
+                            depth
+                        )
                     )
                 ),
                 width: (detectionLeft.bbox[2] + detectionRight.bbox[2]) / 2,
