@@ -94,13 +94,6 @@ function parseDetections(detectionsLeft, detectionsRight) {
 
 /* Spawn an instance */
 function spawnInstance(rayStart, rayEnd, width, height, label, nutriScore) {
-    print(rayStart);
-    print(rayEnd);
-    print(width);
-    print(height);
-    print(label);
-    print(nutriScore);
-
     const results = script.deviceTracking.raycastWorldMesh(rayStart, rayEnd);
 
     if (results.length == 0) {
@@ -134,9 +127,7 @@ function spawnInstance(rayStart, rayEnd, width, height, label, nutriScore) {
 
 /* Spawn all instances */
 function spawnInstances(parsedDetections) {
-    print(parsedDetections.length);
     for (let i = 0; i < parsedDetections.length; i++) {
-        print(i);
         let { rayStart, rayEnd, width, height, label, nutriScore } = parsedDetections[i];
         // TODO: make this better
         spawnInstance(rayStart, rayEnd, width, height, label, nutriScore);
