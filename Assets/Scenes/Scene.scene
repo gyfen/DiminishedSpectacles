@@ -4724,7 +4724,6 @@
       prefab: !<reference.ObjectPrefab> 72cb2d4b-a4c3-4c12-8ae9-cac10ab62a2a
       screenScalingX: !<float> 4.000000
       screenScalingY: 2.300000
-      consensusRequired: true
   ScriptTypes:
     "":
       {}

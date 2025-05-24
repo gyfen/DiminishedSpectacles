@@ -15,8 +15,8 @@ Instance Controller
 // @input float screenScalingX = 1.0
 // @input float screenScalingY = 1.0
 
-// @ui {"widget" : "separator"}
-// @input bool consensusRequired = true
+let cameraLeft;
+let cameraRight;
 
 // Register callback
 script.mlController.onDetectionsUpdated.add(onDetectionsUpdated);
@@ -24,22 +24,74 @@ script.mlController.onDetectionsUpdated.add(onDetectionsUpdated);
 if (!script.debug) {
     cameraModule = require("LensStudio:CameraModule");
     imageRequest = CameraModule.createImageRequest();
-    // TODO: crop img?
-    // imageRequest.crop(Rect.create(-1, 1, -1, 1));
-    // imageRequest.resolution(new vec2(1280, 1280));
 }
 
-/* Transform screenpoint to correcly fit to the spectacles screen */
-function transformScreenPoint(screenPoint) {
-    return new vec2(
-        screenPoint.x * script.screenScalingX - (script.screenScalingX - 1) / 2,
-        screenPoint.y * script.screenScalingY - (script.screenScalingY - 1) / 2
-    );
+/* Averages two bounding boxes and returns the result */
+// function mergeBboxes(bbox1, bbox2) {
+//     let mergedBbox = [];
+
+//     for (let i = 0; i < bbox1.length; i++) {
+//         mergedBbox.push((bbox1[i] + bbox2[i]) / 2);
+//     }
+
+//     return mergedBbox;
+// }
+
+function averageVec3(v1, v2) {
+    return new vec3((v1.x + v2.x) / 2, (v1.y + v2.y) / 2, (v1.z + v2.z) / 2);
+}
+
+/* Merge two detection results into one better result */
+function parseDetections(detectionsLeft, detectionsRight) {
+    const mergedDetections = [];
+
+    // Create a set of all labels without duplicates
+    const labels1 = Object.keys(detectionsLeft);
+    const labels2 = Object.keys(detectionsRight);
+    const allLabels = new Set([...labels1, ...labels2]);
+
+    for (const label of allLabels) {
+        // if both labels exist
+        const detectionLeft = detectionsLeft[label];
+        const detectionRight = detectionsRight[label];
+
+        if (detectionLeft && detectionRight) {
+            const depth = 1000; // TODO: make this better
+
+            const parsedDetection = {
+                rayStart: averageVec3(
+                    cameraLeft.unproject(
+                        new vec2(detectionLeft.bbox[0], detectionLeft.bbox[1]),
+                        0
+                    ),
+                    cameraLeft.unproject(new vec2(detectionLeft.bbox[0], detectionLeft.bbox[1]), 0)
+                ),
+                rayEnd: averageVec3(
+                    cameraLeft.unproject(
+                        new vec2(detectionLeft.bbox[0], detectionLeft.bbox[1]),
+                        depth
+                    ),
+                    cameraLeft.unproject(
+                        new vec2(detectionLeft.bbox[0], detectionLeft.bbox[1]),
+                        depth
+                    )
+                ),
+                width: (detectionLeft.bbox[2] + detectionRight.bbox[2]) / 2,
+                height: (detectionLeft.bbox[3] + detectionRight.bbox[3]) / 2,
+                label: label,
+                nutriScore: detectionLeft.nutriScore,
+            };
+
+            mergedDetections.push(parsedDetection);
+        }
+    }
+
+    return mergedDetections;
 }
 
 /* Spawn an instance */
-function spawnInstance(screenPos, label, confidence, nutriScore) {
-    const results = script.deviceTracking.hitTestWorldMesh(screenPos);
+function spawnInstance(rayStart, rayEnd, width, height, label, nutriScore) {
+    const results = script.deviceTracking.raycastWorldMesh(rayStart, rayEnd);
 
     if (results.length == 0) {
         return false;
@@ -71,21 +123,16 @@ function spawnInstance(screenPos, label, confidence, nutriScore) {
 }
 
 /* Spawn all instances */
-function spawnInstances(detections) {
-    for (const [label, data] of Object.entries(detections)) {
-        const { confidence, bbox, nutriScore } = data;
+function spawnInstances(parsedDetections) {
+    for (let i = 0; i < parseDetections.length; i++) {
+        const { rayStart, rayEnd, width, height, label, nutriScore } = parsedDetections[i];
         // TODO: make this better
-        spawnInstance(
-            transformScreenPoint(new vec2(bbox[0], bbox[1])),
-            label,
-            confidence,
-            nutriScore
-        );
+        spawnInstance(rayStart, rayEnd, width, height, label, nutriScore);
     }
 }
 
 /* Gets triggered by MLController when detection results are in */
-function onDetectionsUpdated(detections) {
+function onDetectionsUpdated(detectionsLeft, detectionsRight) {
     // Delete all existing instances
     // TODO: instead of delete, move the object if its exists already.
     const sceneObj = script.getSceneObject();
@@ -94,7 +141,9 @@ function onDetectionsUpdated(detections) {
         instance.destroy();
     }
 
-    spawnInstances(detections);
+    const parsedDetections = parseDetections(detectionsLeft, detectionsRight);
+
+    spawnInstances(parsedDetections);
 }
 
 /* --- Public API --- */
@@ -113,6 +162,15 @@ function updateInstances() {
         instanceScript.updateMaterial();
     }
 }
+
+function onStart() {
+    cameraLeft = global.deviceInfoSystem.getTrackingCameraForId(CameraModule.CameraId.Left_Color);
+    cameraRight = global.deviceInfoSystem.getTrackingCameraForId(
+        CameraModule.CameraId.Right_Color
+    );
+}
+
+script.createEvent("OnStartEvent").bind(onStart);
 
 script.calibrate = calibrate;
 script.updateInstances = updateInstances;

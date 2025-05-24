@@ -153,55 +153,17 @@ function onLoadingFinished2() {
 }
 
 function onRunningFinished() {
-    parseResults(outputs);
+    parseResults(outputs, true);
 }
 
 function onRunningFinished2() {
-    parseResults(outputs2);
+    parseResults(outputs2, false);
 }
 
-/* Averages two bounding boxes and returns the result */
-function mergeBboxes(bbox1, bbox2) {
-    let mergedBbox = [];
+let detectionsLeft;
+let detectionsRight;
 
-    for (let i = 0; i < bbox1.length; i++) {
-        mergedBbox.push((bbox1[i] + bbox2[i]) / 2);
-    }
-
-    return mergedBbox;
-}
-
-/* Merge two detection results into one better result */
-function mergeDetections(detections1, detections2) {
-    const mergedDetections = {};
-
-    // Create a set of all labels without duplicates
-    const labels1 = Object.keys(detections1);
-    const labels2 = Object.keys(detections2);
-    const allLabels = new Set([...labels1, ...labels2]);
-
-    for (const label of allLabels) {
-        // Average the bboxes if both labels exist
-        if (detections1[label] && detections2[label]) {
-            const bbox1 = detections1[label].bbox;
-            const bbox2 = detections2[label].bbox;
-
-            detections1[label].bbox = mergeBboxes(bbox1, bbox2); // reuse detections1
-            mergedDetections[label] = detections1[label];
-        }
-        // If only one label detected
-        else if (!script.consensusRequired) {
-            const data = detections1[label] || detections2[label];
-            mergedDetections[label] = data;
-        }
-    }
-
-    return mergedDetections;
-}
-
-let detectionsBuffer;
-
-function parseResults(outputs) {
+function parseResults(outputs, isLeftCamera) {
     [boxes, scores] = parseYolo7Outputs(outputs);
 
     // Get results
@@ -224,13 +186,17 @@ function parseResults(outputs) {
         };
     }
 
-    // Only trigger when both camera frames are processed
-    if (detectionsBuffer) {
-        const mergedDetections = mergeDetections(detections, detectionsBuffer);
-        onDetectionsUpdated.trigger(mergedDetections);
-        detectionsBuffer = null; // Reset buffer
+    if (isLeftCamera) {
+        detectionsLeft = detections;
     } else {
-        detectionsBuffer = detections;
+        detectionsRight = detections;
+    }
+
+    // Only trigger when both camera frames are processed
+    if (detectionsLeft && detectionsRight) {
+        onDetectionsUpdated.trigger(detectionsLeft, detectionsRight);
+        detectionsLeft = null; // Reset buffer
+        detectionsRight = null; // Reset buffer
     }
 }
 
