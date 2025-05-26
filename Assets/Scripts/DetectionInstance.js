@@ -7,7 +7,6 @@ Instance
 // @input Component.Text textComponent
 
 const store = global.persistentStorageSystem.store;
-const renderMeshVisual = meshComponent.getComponent("Component.RenderMeshVisual");
 
 let label;
 let nutriScore;

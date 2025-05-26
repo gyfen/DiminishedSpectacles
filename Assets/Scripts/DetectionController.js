@@ -132,31 +132,28 @@ function updateTracklet(rayStart, rayEnd, width, height, label, nutriScore) {
     const normal = results[0].normal;
 
     // get instance
-    const instance = getTracklet(label);
+    const tracklet = getTracklet(label);
 
     // enable the instance
-    instance.enabled = true;
+    tracklet.enabled = true;
 
     // Instantiate the object we want to place
     // const instance = script.prefab.instantiate(script.getSceneObject());
-    const instanceScript = instance.getComponent("Component.ScriptComponent");
+    const trackletScript = tracklet.getComponent("Component.ScriptComponent");
 
-    // Update the instance data
-    instanceScript.setData(label, nutriScore);
-    instanceScript.updateMaterial();
+    // Update the tracklet data
+    trackletScript.setData(label, nutriScore);
+    trackletScript.updateMaterial();
 
     // TODO: they should all have the same normal
     // Rotate the object based on World Mesh Surface
     const up = vec3.up();
     const forwardDir = up.projectOnPlane(normal);
     const rot = quat.lookAt(forwardDir, normal);
-    instance.getTransform().setWorldRotation(rot);
+    tracklet.getTransform().setWorldRotation(rot);
 
     // Set position
-    instance.getTransform().setWorldPosition(point);
-
-    // Register the instance
-    // tracklets[label] = instance;
+    tracklet.getTransform().setWorldPosition(point);
 
     return true;
 }
@@ -183,8 +180,6 @@ function updateTracklets(parsedDetections) {
 function onDetectionsUpdated(detectionsLeft, detectionsRight) {
     // parse detections
     const parsedDetections = parseDetections(detectionsLeft, detectionsRight);
-
-    print("detectoins");
 
     // update the tracklets with the new detections
     updateTracklets(parsedDetections);
