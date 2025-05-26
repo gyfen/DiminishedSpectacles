@@ -145,7 +145,7 @@ function updateTracklet(rayStart, rayEnd, width, height, label, nutriScore) {
     instanceScript.setData(label, nutriScore);
     instanceScript.updateMaterial();
 
-    // TODO: they should all have to same normal
+    // TODO: they should all have the same normal
     // Rotate the object based on World Mesh Surface
     const up = vec3.up();
     const forwardDir = up.projectOnPlane(normal);

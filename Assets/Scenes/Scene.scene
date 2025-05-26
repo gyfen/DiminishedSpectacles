@@ -4912,8 +4912,6 @@
       cameraObj: !<reference.SceneObject> 00000000-0000-0065-0000-000000000064
       deviceTracking: !<reference.DeviceTracking> bfeea0bb-0fff-4c93-bc74-bfee48e8964c
       prefab: !<reference.ObjectPrefab> 30275f4b-10d6-465d-9522-c72789219746
-      screenScalingX: !<float> 4.000000
-      screenScalingY: 2.300000
   ScriptTypes:
     "":
       {}
