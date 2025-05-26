@@ -25,9 +25,9 @@ function updateMaterial() {
     script.renderMeshVisualComponent.mainMaterial = newMaterial;
 }
 
-function setData(label, nutriScore) {
-    nutriScore = nutriScore;
-    label = label;
+function setData(newLabel, newNutriScore) {
+    nutriScore = newNutriScore;
+    label = newLabel;
 
     script.textComponent.text = label;
 }

@@ -17,7 +17,6 @@ function calibrate() {
 
 function updateNutriScore() {
     const newNutriScore = nutriScoreSlider.currentValue | 0;
-    print(newNutriScore);
     store.putInt("nutriScore", newNutriScore);
     instanceController.updateTrackletsMaterial();
 }

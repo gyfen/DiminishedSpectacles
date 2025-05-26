@@ -1,30 +1,10 @@
-- !<ObjectPrefab/e0e6e543-4439-4327-bd57-e741eaa84bb2>
+- !<ObjectPrefab/f402a376-53ea-4dfd-8e8d-9160df019856>
   PackagePath: ""
   objects:
-    - !<own> ba4fce37-0248-46bf-97d2-c9c7289cbae9
+    - !<own> ef63a5d8-c9da-497b-9dce-5a60bbc04e1d
   LazyLoading: false
   RetainAssets: true
-- !<ScriptComponent/178d4a88-ee14-4eff-bdc9-7646b71fb6ca>
-  PrefabRemaps:
-    []
-  Name: DetectionInstance
-  Enabled: true
-  ScriptAsset: !<reference> be0cc6c2-af06-4ea6-b2c2-229cf4153a5d
-  ScriptInputsDefault:
-    {}
-  ScriptTypesDefault:
-    {}
-  ScriptInputs:
-    "":
-      materials: !<reference.Material[]>
-        - !<reference> e7eda618-6dda-45f7-838d-4f6c92947c5e
-        - !<reference> b8ef08d8-ea31-4507-ab13-6d8079d23818
-      renderMeshVisualComponent: !<reference.RenderMeshVisual> b5c7c899-bb9b-4bb7-9160-3cf437a5b32e
-      textComponent: !<reference.Text> 36105b25-8c92-4cf4-89e1-35bda2c53bda
-  ScriptTypes:
-    "":
-      {}
-- !<Text/36105b25-8c92-4cf4-89e1-35bda2c53bda>
+- !<Text/23b4b53c-5b4e-439e-a947-e959560db669>
   PrefabRemaps:
     []
   Name: Text
@@ -100,7 +80,7 @@
     CapitalizationOverride: None
   DepthTest: false
   TwoSided: false
-- !<SceneObject/4d2cd053-c964-4293-804b-46cffd4acc16>
+- !<SceneObject/2bb11e52-26b7-4ac5-acaa-2f508c899a70>
   PrefabRemaps:
     []
   Name: Mesh
@@ -109,28 +89,33 @@
   LocalTransform:
     position: {x: 0.000000, y: 0.000000, z: 0.000000}
     rotation: {x: 0.000000, y: 0.000000, z: 0.000000}
-    scale: {x: 10.000000, y: 1.000000, z: 10.000000}
+    scale: {x: 10.000000, y: 3.000000, z: 10.000000}
     hasSegmentScaleCompensation: false
   Children:
     []
   Components:
-    - !<own> b5c7c899-bb9b-4bb7-9160-3cf437a5b32e
-- !<SceneObject/894da044-06d1-4fa3-a7b8-33632b63a28d>
+    - !<own> e9d941fc-51f4-4c5c-bdba-a6170e9d5c8d
+- !<ScriptComponent/32fa07f7-24f2-4b98-97f4-616e1e73c7a2>
   PrefabRemaps:
     []
-  Name: Text
+  Name: DetectionInstance
   Enabled: true
-  Layers: 1
-  LocalTransform:
-    position: {x: 0.000000, y: 0.510000, z: 0.000000}
-    rotation: {x: -90.000000, y: 0.000000, z: 0.000000}
-    scale: {x: 1.000000, y: 1.000000, z: 1.000000}
-    hasSegmentScaleCompensation: false
-  Children:
-    []
-  Components:
-    - !<own> 36105b25-8c92-4cf4-89e1-35bda2c53bda
-- !<RenderMeshVisual/b5c7c899-bb9b-4bb7-9160-3cf437a5b32e>
+  ScriptAsset: !<reference> be0cc6c2-af06-4ea6-b2c2-229cf4153a5d
+  ScriptInputsDefault:
+    {}
+  ScriptTypesDefault:
+    {}
+  ScriptInputs:
+    "":
+      materials: !<reference.Material[]>
+        - !<reference> e7eda618-6dda-45f7-838d-4f6c92947c5e
+        - !<reference> b8ef08d8-ea31-4507-ab13-6d8079d23818
+      renderMeshVisualComponent: !<reference.RenderMeshVisual> e9d941fc-51f4-4c5c-bdba-a6170e9d5c8d
+      textComponent: !<reference.Text> 23b4b53c-5b4e-439e-a947-e959560db669
+  ScriptTypes:
+    "":
+      {}
+- !<RenderMeshVisual/e9d941fc-51f4-4c5c-bdba-a6170e9d5c8d>
   PrefabRemaps:
     []
   Name: Render Mesh Visual
@@ -150,10 +135,10 @@
   BlendNormals: false
   BlendShapes:
     {}
-- !<SceneObject/ba4fce37-0248-46bf-97d2-c9c7289cbae9>
+- !<SceneObject/ef63a5d8-c9da-497b-9dce-5a60bbc04e1d>
   PrefabRemaps:
     []
-  Name: Instance
+  Name: Tracklet
   Enabled: true
   Layers: 1
   LocalTransform:
@@ -162,7 +147,22 @@
     scale: {x: 1.000000, y: 1.000000, z: 1.000000}
     hasSegmentScaleCompensation: false
   Children:
-    - !<own> 894da044-06d1-4fa3-a7b8-33632b63a28d
-    - !<own> 4d2cd053-c964-4293-804b-46cffd4acc16
+    - !<own> f8e7546f-9c65-4706-bae9-6f5e3019be49
+    - !<own> 2bb11e52-26b7-4ac5-acaa-2f508c899a70
   Components:
-    - !<own> 178d4a88-ee14-4eff-bdc9-7646b71fb6ca
+    - !<own> 32fa07f7-24f2-4b98-97f4-616e1e73c7a2
+- !<SceneObject/f8e7546f-9c65-4706-bae9-6f5e3019be49>
+  PrefabRemaps:
+    []
+  Name: Text
+  Enabled: true
+  Layers: 1
+  LocalTransform:
+    position: {x: 0.000000, y: 1.510000, z: 0.000000}
+    rotation: {x: 90.000000, y: 0.000000, z: 0.000000}
+    scale: {x: -1.000000, y: 1.000000, z: 1.000000}
+    hasSegmentScaleCompensation: false
+  Children:
+    []
+  Components:
+    - !<own> 23b4b53c-5b4e-439e-a947-e959560db669
