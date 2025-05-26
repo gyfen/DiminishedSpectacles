@@ -19,7 +19,7 @@ function updateNutriScore() {
     const newNutriScore = nutriScoreSlider.currentValue | 0;
     print(newNutriScore);
     store.putInt("nutriScore", newNutriScore);
-    instanceController.updateInstances();
+    instanceController.updateTrackletsMaterial();
 }
 
 script.createEvent("OnStartEvent").bind(OnStart);

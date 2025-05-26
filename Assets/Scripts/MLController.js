@@ -306,6 +306,9 @@ function getClassLabel(index) {
     return classSettings[index].label ? classSettings[index].label : "class_" + index;
 }
 
+function getLabels() {
+    return Object.keys(classSettings);
+}
 // Initialize
 onAwake();
 
@@ -313,4 +316,5 @@ onAwake();
 script.onDetectionsUpdated = onDetectionsUpdated;
 script.getClassCount = getClassCount;
 script.getClassLabel = getClassLabel;
+script.getLabels = getLabels;
 script.runOnce = runOnce;
