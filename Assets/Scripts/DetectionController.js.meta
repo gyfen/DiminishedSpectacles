@@ -32,8 +32,6 @@
     deviceTracking: false
     mlController: false
     prefab: false
-    screenScalingX: false
-    screenScalingY: false
   ScriptTypesHidden:
     {}
   ReadMe: !<reference> 00000000-0000-0000-0000-000000000000
@@ -43,8 +41,6 @@
       cameraObj: !<reference.SceneObject> 00000000-0000-0000-0000-000000000000
       deviceTracking: !<reference.DeviceTracking> 00000000-0000-0000-0000-000000000000
       prefab: !<reference.ObjectPrefab> 00000000-0000-0000-0000-000000000000
-      screenScalingX: !<float> 1.000000
-      screenScalingY: !<float> 1.000000
   ScriptTypes:
     -
       {}

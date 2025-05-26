@@ -12,10 +12,6 @@ Instance Controller
 // @ui {"widget" : "separator"}
 // @input Asset.ObjectPrefab prefab
 
-// @ui {"widget" : "separator"}
-// @input float screenScalingX = 1.0
-// @input float screenScalingY = 1.0
-
 const maxDepth = 1000;
 
 let cameraLeft;
@@ -40,7 +36,7 @@ function averageVec3(v1, v2) {
 returns {label: {rayStart, rayEnd, normWidth, normHeight}} */
 
 function mergeDetectionLabels(d1, d2) {
-    return new Set([...Object.keys(d1), ...Object.keys(d1)]);
+    return new Set([...Object.keys(d1), ...Object.keys(d2)]);
 }
 
 /** @returns {string: {vec2, vec2, float, float, string, int}} */
@@ -146,7 +142,7 @@ function updateTracklet(rayStart, rayEnd, width, height, label, nutriScore) {
     const instanceScript = instance.getComponent("Component.ScriptComponent");
 
     // Update the instance data
-    instanceScript.nutriScore = nutriScore;
+    instanceScript.setData(label, nutriScore);
     instanceScript.updateMaterial();
 
     // TODO: they should all have to same normal
@@ -172,8 +168,8 @@ function updateTracklets(parsedDetections) {
 
     for (const label of mergedLabels) {
         // if this label has a detection: enable and update it
-        if (parseDetections[label] !== undefined) {
-            const { rayStart, rayEnd, width, height, nutriScore } = parseDetections[label];
+        if (parsedDetections[label] !== undefined) {
+            const { rayStart, rayEnd, width, height, nutriScore } = parsedDetections[label];
             updateTracklet(rayStart, rayEnd, width, height, label, nutriScore);
         }
         // if this label is not detected: disable
@@ -188,6 +184,8 @@ function onDetectionsUpdated(detectionsLeft, detectionsRight) {
     // parse detections
     const parsedDetections = parseDetections(detectionsLeft, detectionsRight);
 
+    print("detectoins");
+
     // update the tracklets with the new detections
     updateTracklets(parsedDetections);
 }
@@ -201,9 +199,11 @@ function calibrate() {
 
 /* Update the material of all instances */
 function updateTrackletsMaterial() {
-    for (const [label, tracklets] of Object.entries(tracklets)) {
-        const trackletScript = tracklet.getComponent("Component.ScriptComponent");
-        trackletScript.updateMaterial();
+    for (const [label, tracklet] of Object.entries(tracklets)) {
+        if (tracklet.enabled) {
+            const trackletScript = tracklet.getComponent("Component.ScriptComponent");
+            trackletScript.updateMaterial();
+        }
     }
 }
 
