@@ -19,7 +19,7 @@ Instance Controller
 let cameraLeft;
 let cameraRight;
 
-// Register callback
+// Register ML callback
 script.mlController.onDetectionsUpdated.add(onDetectionsUpdated);
 
 if (!script.debug) {
@@ -27,22 +27,15 @@ if (!script.debug) {
     imageRequest = CameraModule.createImageRequest();
 }
 
-/* Averages two bounding boxes and returns the result */
-// function mergeBboxes(bbox1, bbox2) {
-//     let mergedBbox = [];
-
-//     for (let i = 0; i < bbox1.length; i++) {
-//         mergedBbox.push((bbox1[i] + bbox2[i]) / 2);
-//     }
-
-//     return mergedBbox;
-// }
+// object keep track of all detection instances
+const detectionInstances = {};
 
 function averageVec3(v1, v2) {
     return new vec3((v1.x + v2.x) / 2, (v1.y + v2.y) / 2, (v1.z + v2.z) / 2);
 }
 
-/* Merge two detection results into one better result */
+/* Merge two detection results into one better result*/
+/** @returns {vec2, vec2, float, float, string, int} */
 function parseDetections(detectionsLeft, detectionsRight) {
     const mergedDetections = [];
 
