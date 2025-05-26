@@ -4721,7 +4721,7 @@
     "":
       mlController: !<reference.ScriptComponent> 314815c0-16ca-408d-a7c8-956e8cade03e
       cameraObject: !<reference.SceneObject> 00000000-0000-0065-0000-000000000064
-      trackletPrefab: !<reference.ObjectPrefab> 3c68f8be-d3fd-4d7b-8f64-69e27471af14
+      trackletPrefab: !<reference.ObjectPrefab> 5ae1339a-f309-4974-a2b4-54d91ae3faed
   ScriptTypes:
     "":
       {}
