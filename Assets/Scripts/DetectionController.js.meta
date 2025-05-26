@@ -28,19 +28,17 @@
   CurrentVisibility: Editable
   MaxVisibility: Editable
   ScriptInputsHidden:
-    cameraObj: false
-    deviceTracking: false
+    cameraObject: false
     mlController: false
-    prefab: false
+    trackletPrefab: false
   ScriptTypesHidden:
     {}
   ReadMe: !<reference> 00000000-0000-0000-0000-000000000000
   DeclarationFile: !<reference> 00000000-0000-0000-0000-000000000000
   DefaultScriptInputs:
     - mlController: !<reference.ScriptComponent> 00000000-0000-0000-0000-000000000000
-      cameraObj: !<reference.SceneObject> 00000000-0000-0000-0000-000000000000
-      deviceTracking: !<reference.DeviceTracking> 00000000-0000-0000-0000-000000000000
-      prefab: !<reference.ObjectPrefab> 00000000-0000-0000-0000-000000000000
+      cameraObject: !<reference.SceneObject> 00000000-0000-0000-0000-000000000000
+      trackletPrefab: !<reference.ObjectPrefab> 00000000-0000-0000-0000-000000000000
   ScriptTypes:
     -
       {}

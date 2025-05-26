@@ -1,10 +1,16 @@
 /*
-Instance
+Tracklet
 */
 
 // @input Asset.Material[] materials
-// @input Component.RenderMeshVisual renderMeshVisualComponent
+const materials = script.materials;
+
+// @input SceneObject meshObject
+const meshObject = script.meshObject;
+const renderMeshVisual = renderMesh.getComponent("Component.RenderMeshVisual");
+
 // @input Component.Text textComponent
+const textComponent = script.textComponent;
 
 const store = global.persistentStorageSystem.store;
 
@@ -22,15 +28,25 @@ function updateMaterial() {
     const color = newMaterial.mainPass.baseColor;
     newMaterial.mainPass.baseColor = new vec4(color.x, color.y, color.z, alpha);
 
-    script.renderMeshVisualComponent.mainMaterial = newMaterial;
+    script.renderMeshVisual.mainMaterial = newMaterial;
+}
+
+function setTransform(position, rotation, absoluteWidth, absoluteHeight) {
+    const transform = meshObject.getTransform();
+
+    transform.setWorldRotation(rotation);
+    transform.setWorldPosition(position);
+
+    const newScale = new vec3(absoluteWidth, transform.getLocalScale.y, absoluteHeight);
+    transform.setLocalScale(newScale);
 }
 
 function setData(newLabel, newNutriScore) {
     nutriScore = newNutriScore;
     label = newLabel;
-
     script.textComponent.text = label;
 }
 
 script.updateMaterial = updateMaterial;
 script.setData = setData;
+script.setTransform = setTransform;

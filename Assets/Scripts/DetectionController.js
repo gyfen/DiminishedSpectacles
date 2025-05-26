@@ -4,49 +4,65 @@ Instance Controller
 
 /* Inputs */
 // @input Component.ScriptComponent mlController
+const mlController = script.mlController;
 
 // @ui {"widget" : "separator"}
-// @input SceneObject cameraObj
-// @input Component.DeviceTracking deviceTracking
+// @input SceneObject cameraObject
+const cameraObject = script.cameraObject;
+const camera = cameraObject.getComponent("Component.Camera");
+const deviceTracking = cameraObject.getComponent("Component.DeviceTracking");
 
 // @ui {"widget" : "separator"}
-// @input Asset.ObjectPrefab prefab
+// @input Asset.ObjectPrefab trackletPrefab
+const trackletPrefab = script.trackletPrefab;
 
-const maxDepth = 1000;
-
-let cameraLeft;
-let cameraRight;
+// Define camera left and right
+let deviceCameraLeft;
+let deviceCameraRight;
+let deviceCameraResolution;
+let deviceCameraFocalLength;
 
 // Register ML callback
-script.mlController.onDetectionsUpdated.add(onDetectionsUpdated);
+mlController.onDetectionsUpdated.add(onDetectionsUpdated);
 
-if (!script.debug) {
-    cameraModule = require("LensStudio:CameraModule");
-    imageRequest = CameraModule.createImageRequest();
-}
-
-// object to keep track of all detection instances
+// Object to keep track of all detection instances
 const tracklets = {};
 
 function averageVec3(v1, v2) {
     return new vec3((v1.x + v2.x) / 2, (v1.y + v2.y) / 2, (v1.z + v2.z) / 2);
 }
 
-/* Merge two detection results into one better result
-returns {label: {rayStart, rayEnd, normWidth, normHeight}} */
-
 function mergeDetectionLabels(d1, d2) {
     return new Set([...Object.keys(d1), ...Object.keys(d2)]);
 }
 
-/** @returns {string: {vec2, vec2, float, float, string, int}} */
-function parseDetections(detectionsLeft, detectionsRight) {
-    const mergedDetections = {};
+function deviceCameraScreenSpaceToWorldSpace(
+    deviceCamera,
+    cameraWorldTransform,
+    xNorm,
+    yNorm,
+    absoluteDepth
+) {
+    return cameraWorldTransform.multiplyPoint(
+        deviceCamera.unproject(new vec2(xNorm, yNorm), absoluteDepth)
+    );
+}
 
-    // Create a set of all labels without duplicates
-    // const labels1 = Object.keys(detectionsLeft);
-    // const labels2 = Object.keys(detectionsRight);
-    // const allLabels = new Set([...labels1, ...labels2]);
+function normWidthToAbsolute(width, depth) {
+    return ((width * deviceCameraResolution.x) / deviceCameraFocalLength.x) * depth;
+}
+
+function normHeightToAbsolute(height, depth) {
+    return ((height * deviceCameraResolution.y) / deviceCameraFocalLength.y) * depth;
+}
+
+/** Merge two detection results into one better result
+ * returns {label: {rayStart, rayEnd, absoluteWidth, absoluteHeight}}
+ * @returns {string: {vec2, vec2, float, float, int}}
+ */
+function parseDetections(detectionsLeft, detectionsRight) {
+    const parsedDetections = {};
+
     const allLabels = mergeDetectionLabels(detectionsLeft, detectionsRight);
 
     for (const label of allLabels) {
@@ -54,61 +70,62 @@ function parseDetections(detectionsLeft, detectionsRight) {
         const detectionLeft = detectionsLeft[label];
         const detectionRight = detectionsRight[label];
 
-        const trans = script.cameraObj.getTransform().getWorldTransform();
-        // cameraLeft.pose.multiplyPoint
+        const cameraWorldTransform = cameraObject.getTransform().getWorldTransform();
 
         if (detectionLeft && detectionRight) {
-            const depth = maxDepth; // TODO: make this better
-
             const parsedDetection = {
                 rayStart: averageVec3(
-                    trans.multiplyPoint(
-                        cameraLeft.unproject(
-                            new vec2(detectionLeft.bbox[0], detectionLeft.bbox[1]),
-                            0
-                        )
+                    deviceCameraScreenSpaceToWorldSpace(
+                        deviceCameraLeft,
+                        cameraWorldTransform,
+                        detectionLeft.bbox[0],
+                        detectionLeft.bbox[1],
+                        camera.near
                     ),
-                    trans.multiplyPoint(
-                        cameraRight.unproject(
-                            new vec2(detectionRight.bbox[0], detectionRight.bbox[1]),
-                            0
-                        )
+                    deviceCameraScreenSpaceToWorldSpace(
+                        deviceCameraRight,
+                        cameraWorldTransform,
+                        detectionLeft.bbox[0],
+                        detectionLeft.bbox[1],
+                        camera.near
                     )
                 ),
                 rayEnd: averageVec3(
-                    trans.multiplyPoint(
-                        cameraLeft.unproject(
-                            new vec2(detectionLeft.bbox[0], detectionLeft.bbox[1]),
-                            depth
-                        )
+                    deviceCameraScreenSpaceToWorldSpace(
+                        deviceCameraLeft,
+                        cameraWorldTransform,
+                        detectionRight.bbox[0],
+                        detectionRight.bbox[1],
+                        camera.far
                     ),
-                    trans.multiplyPoint(
-                        cameraRight.unproject(
-                            new vec2(detectionRight.bbox[0], detectionRight.bbox[1]),
-                            depth
-                        )
+                    deviceCameraScreenSpaceToWorldSpace(
+                        deviceCameraRight,
+                        cameraWorldTransform,
+                        detectionRight.bbox[0],
+                        detectionRight.bbox[1],
+                        camera.far
                     )
                 ),
-                width: (detectionLeft.bbox[2] + detectionRight.bbox[2]) / 2,
-                height: (detectionLeft.bbox[3] + detectionRight.bbox[3]) / 2,
-                // label: label,
+                width: normWidthToAbsolute((detectionLeft.bbox[2] + detectionRight.bbox[2]) / 2),
+                height: normHeightToAbsolute((detectionLeft.bbox[3] + detectionRight.bbox[3]) / 2),
                 nutriScore: detectionLeft.nutriScore,
             };
 
-            mergedDetections[label] = parsedDetection;
+            parsedDetections[label] = parsedDetection;
         }
     }
 
-    return mergedDetections;
+    return parsedDetections;
 }
 
 /* gets an tracklet for a label. if the tracklet doesnt exist, spawn one */
 function getTracklet(label) {
-    // appempt to get from storage
+    // attempt to get from storage
     let tracklet = tracklets[label];
+
     // otherwise create a new one
     if (!tracklet) {
-        tracklet = script.prefab.instantiate(script.getSceneObject());
+        tracklet = trackletPrefab.instantiate(script.getSceneObject());
         tracklets[label] = tracklet;
     }
 
@@ -119,11 +136,11 @@ function disableTracklet(label) {
     tracklets[label].enabled = false;
 }
 
-/* Spawn a tracklet */
-function updateTracklet(rayStart, rayEnd, width, height, label, nutriScore) {
-    const results = script.deviceTracking.raycastWorldMesh(rayStart, rayEnd);
+/* update a tracklet */
+function updateTracklet(rayStart, rayEnd, absoluteWidth, absoluteHeight, label, nutriScore) {
+    const results = deviceTracking.raycastWorldMesh(rayStart, rayEnd);
 
-    if (results.length == 0) {
+    if (results.length === 0) {
         return false;
     }
 
@@ -131,29 +148,24 @@ function updateTracklet(rayStart, rayEnd, width, height, label, nutriScore) {
     const point = results[0].position;
     const normal = results[0].normal;
 
-    // get instance
+    // get the tracklet
     const tracklet = getTracklet(label);
-
-    // enable the instance
     tracklet.enabled = true;
 
     // Instantiate the object we want to place
-    // const instance = script.prefab.instantiate(script.getSceneObject());
     const trackletScript = tracklet.getComponent("Component.ScriptComponent");
 
-    // Update the tracklet data
-    trackletScript.setData(label, nutriScore);
-    trackletScript.updateMaterial();
-
+    // calc rotation
     // TODO: they should all have the same normal
     // Rotate the object based on World Mesh Surface
     const up = vec3.up();
     const forwardDir = up.projectOnPlane(normal);
     const rot = quat.lookAt(forwardDir, normal);
-    tracklet.getTransform().setWorldRotation(rot);
 
-    // Set position
-    tracklet.getTransform().setWorldPosition(point);
+    // Update the tracklet data
+    trackletScript.setData(label, nutriScore);
+    trackletScript.setTransform(point, rot, absoluteWidth, absoluteHeight);
+    trackletScript.updateMaterial();
 
     return true;
 }
@@ -166,8 +178,9 @@ function updateTracklets(parsedDetections) {
     for (const label of mergedLabels) {
         // if this label has a detection: enable and update it
         if (parsedDetections[label] !== undefined) {
-            const { rayStart, rayEnd, width, height, nutriScore } = parsedDetections[label];
-            updateTracklet(rayStart, rayEnd, width, height, label, nutriScore);
+            const { rayStart, rayEnd, absoluteWidth, absoluteHeight, nutriScore } =
+                parsedDetections[label];
+            updateTracklet(rayStart, rayEnd, absoluteWidth, absoluteHeight, label, nutriScore);
         }
         // if this label is not detected: disable
         else {
@@ -189,7 +202,7 @@ function onDetectionsUpdated(detectionsLeft, detectionsRight) {
 
 /* Detect objects and spawn instances */
 function calibrate() {
-    script.mlController.runOnce();
+    mlController.runOnce();
 }
 
 /* Update the material of all instances */
@@ -203,15 +216,15 @@ function updateTrackletsMaterial() {
 }
 
 function onStart() {
-    // const labels = script.mlController.getLabels();
-
-    // // spawn all detection instances
-    // for (let i = 0; i < labels.length; i++) {}
-
-    cameraLeft = global.deviceInfoSystem.getTrackingCameraForId(CameraModule.CameraId.Left_Color);
-    cameraRight = global.deviceInfoSystem.getTrackingCameraForId(
+    deviceCameraLeft = global.deviceInfoSystem.getTrackingCameraForId(
+        CameraModule.CameraId.Left_Color
+    );
+    deviceCameraRight = global.deviceInfoSystem.getTrackingCameraForId(
         CameraModule.CameraId.Right_Color
     );
+
+    deviceCameraResolution = deviceCameraLeft.resolution;
+    deviceCameraFocalLength = deviceCameraLeft.focalLength;
 }
 
 script.createEvent("OnStartEvent").bind(onStart);
