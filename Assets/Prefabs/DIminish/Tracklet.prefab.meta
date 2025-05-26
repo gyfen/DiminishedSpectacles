@@ -1,20 +1,67 @@
-- !<AssetImportMetadata/a4d23e9e-0e83-4030-b2d9-8b706a40a347>
+- !<AssetImportMetadata/8c43040c-da91-42a8-bc2d-c739908f07c0>
   ImportedAssetIds:
-    ObjectPrefab: !<reference> f402a376-53ea-4dfd-8e8d-9160df019856
+    ObjectPrefab: !<reference> 3c68f8be-d3fd-4d7b-8f64-69e27471af14
   ImporterName: ObjectPrefabImporter
-  PrimaryAsset: !<reference> f402a376-53ea-4dfd-8e8d-9160df019856
+  PrimaryAsset: !<reference> 3c68f8be-d3fd-4d7b-8f64-69e27471af14
   PackageType: NotAPackage
   PackagePolicy: CannotBeUnpacked
   ExtraData:
     {}
   AssetDataMap:
-    ObjectPrefab: !<own> 7c49933c-4476-4884-b996-b44a80c31e8a
+    ObjectPrefab: !<own> 284349a3-76b1-4df8-a52d-79d9480d3d8a
   DependentFiles:
     []
   ImporterSettings: !<AssetImporterSettings>
     {}
   CompressionSettings: !<own> 00000000-0000-0000-0000-000000000000
-- !<RenderMeshVisual/16062d0c-63f9-4e75-b9a3-b20940ac0407>
+- !<SceneObject/000f3954-911c-4566-9b27-17bc0f8acec8>
+  PrefabRemaps:
+    []
+  Name: Mesh
+  Enabled: true
+  Layers: 1
+  LocalTransform:
+    position: {x: 0.000000, y: 0.000000, z: 0.000000}
+    rotation: {x: 0.000000, y: 0.000000, z: 0.000000}
+    scale: {x: 1.000000, y: 2.000000, z: 1.000000}
+    hasSegmentScaleCompensation: false
+  Children:
+    []
+  Components:
+    - !<own> 5fd1e80b-330a-4b25-8ede-c7be890cd825
+- !<ObjectPrefabAssetData/284349a3-76b1-4df8-a52d-79d9480d3d8a>
+  SourceRemaps:
+    - 140dc7a2-f1a3-4117-bd3a-1c156d1e4923: 000f3954-911c-4566-9b27-17bc0f8acec8
+    - 224a1622-0bf9-4c03-a30d-4360278f0fd2: d8486a14-c2c7-41d8-9df2-eb675d5506da
+    - 3c68f8be-d3fd-4d7b-8f64-69e27471af14: 525903e3-63a2-493a-963d-3804453b1796
+    - 492d029b-d03e-4763-ba84-4a255dfaa1cb: d646c0d6-5c4a-4aef-b972-4e4603c5b028
+    - 764d6635-33f9-469f-a5c3-5240385ae9f5: 3bd94261-e4a5-4e04-a5e8-ea0d8204354d
+    - afad674a-bdeb-4e33-8bc5-d6a7faab7aa0: 5fd1e80b-330a-4b25-8ede-c7be890cd825
+    - ee56cb29-7c0a-44c5-b503-821738659eed: 8375217c-dd0a-4da2-9e12-8f8c7c1eb75e
+  SourceState: !<own> 525903e3-63a2-493a-963d-3804453b1796
+- !<SceneObject/3bd94261-e4a5-4e04-a5e8-ea0d8204354d>
+  PrefabRemaps:
+    []
+  Name: Tracklet
+  Enabled: true
+  Layers: 1
+  LocalTransform:
+    position: {x: 0.000000, y: 0.000000, z: 0.000000}
+    rotation: {x: 0.000000, y: 0.000000, z: 0.000000}
+    scale: {x: 1.000000, y: 1.000000, z: 1.000000}
+    hasSegmentScaleCompensation: false
+  Children:
+    - !<own> 8375217c-dd0a-4da2-9e12-8f8c7c1eb75e
+    - !<own> 000f3954-911c-4566-9b27-17bc0f8acec8
+  Components:
+    - !<own> d646c0d6-5c4a-4aef-b972-4e4603c5b028
+- !<ObjectPrefab/525903e3-63a2-493a-963d-3804453b1796>
+  PackagePath: ""
+  objects:
+    - !<own> 3bd94261-e4a5-4e04-a5e8-ea0d8204354d
+  LazyLoading: false
+  RetainAssets: true
+- !<RenderMeshVisual/5fd1e80b-330a-4b25-8ede-c7be890cd825>
   PrefabRemaps:
     []
   Name: Render Mesh Visual
@@ -34,38 +81,7 @@
   BlendNormals: false
   BlendShapes:
     {}
-- !<SceneObject/2c81a536-547a-4886-a1a7-87f791dd6300>
-  PrefabRemaps:
-    []
-  Name: Mesh
-  Enabled: true
-  Layers: 1
-  LocalTransform:
-    position: {x: 0.000000, y: 0.000000, z: 0.000000}
-    rotation: {x: 0.000000, y: 0.000000, z: 0.000000}
-    scale: {x: 10.000000, y: 3.000000, z: 10.000000}
-    hasSegmentScaleCompensation: false
-  Children:
-    []
-  Components:
-    - !<own> 16062d0c-63f9-4e75-b9a3-b20940ac0407
-- !<SceneObject/3d1f416f-4429-4839-9746-408a6cf73345>
-  PrefabRemaps:
-    []
-  Name: Tracklet
-  Enabled: true
-  Layers: 1
-  LocalTransform:
-    position: {x: 0.000000, y: 0.000000, z: 0.000000}
-    rotation: {x: 0.000000, y: 0.000000, z: 0.000000}
-    scale: {x: 1.000000, y: 1.000000, z: 1.000000}
-    hasSegmentScaleCompensation: false
-  Children:
-    - !<own> 494209b4-a8b3-419e-a182-f2467554cc78
-    - !<own> 2c81a536-547a-4886-a1a7-87f791dd6300
-  Components:
-    - !<own> bf94ae85-d79b-47cf-a5ba-ed3c94c41fa0
-- !<SceneObject/494209b4-a8b3-419e-a182-f2467554cc78>
+- !<SceneObject/8375217c-dd0a-4da2-9e12-8f8c7c1eb75e>
   PrefabRemaps:
     []
   Name: Text
@@ -79,18 +95,8 @@
   Children:
     []
   Components:
-    - !<own> d61e8171-f5dc-428f-9049-bbec73ecef25
-- !<ObjectPrefabAssetData/7c49933c-4476-4884-b996-b44a80c31e8a>
-  SourceRemaps:
-    - 23b4b53c-5b4e-439e-a947-e959560db669: d61e8171-f5dc-428f-9049-bbec73ecef25
-    - 2bb11e52-26b7-4ac5-acaa-2f508c899a70: 2c81a536-547a-4886-a1a7-87f791dd6300
-    - 32fa07f7-24f2-4b98-97f4-616e1e73c7a2: bf94ae85-d79b-47cf-a5ba-ed3c94c41fa0
-    - e9d941fc-51f4-4c5c-bdba-a6170e9d5c8d: 16062d0c-63f9-4e75-b9a3-b20940ac0407
-    - ef63a5d8-c9da-497b-9dce-5a60bbc04e1d: 3d1f416f-4429-4839-9746-408a6cf73345
-    - f402a376-53ea-4dfd-8e8d-9160df019856: c4a873bf-0251-42f2-bb92-0964858365f1
-    - f8e7546f-9c65-4706-bae9-6f5e3019be49: 494209b4-a8b3-419e-a182-f2467554cc78
-  SourceState: !<own> c4a873bf-0251-42f2-bb92-0964858365f1
-- !<ScriptComponent/bf94ae85-d79b-47cf-a5ba-ed3c94c41fa0>
+    - !<own> d8486a14-c2c7-41d8-9df2-eb675d5506da
+- !<ScriptComponent/d646c0d6-5c4a-4aef-b972-4e4603c5b028>
   PrefabRemaps:
     []
   Name: DetectionInstance
@@ -105,18 +111,12 @@
       materials: !<reference.Material[]>
         - !<reference> e7eda618-6dda-45f7-838d-4f6c92947c5e
         - !<reference> b8ef08d8-ea31-4507-ab13-6d8079d23818
-      renderMeshVisualComponent: !<reference.RenderMeshVisual> 16062d0c-63f9-4e75-b9a3-b20940ac0407
-      textComponent: !<reference.Text> d61e8171-f5dc-428f-9049-bbec73ecef25
+      meshObject: !<reference.SceneObject> 000f3954-911c-4566-9b27-17bc0f8acec8
+      textComponent: !<reference.Text> d8486a14-c2c7-41d8-9df2-eb675d5506da
   ScriptTypes:
     "":
       {}
-- !<ObjectPrefab/c4a873bf-0251-42f2-bb92-0964858365f1>
-  PackagePath: ""
-  objects:
-    - !<own> 3d1f416f-4429-4839-9746-408a6cf73345
-  LazyLoading: false
-  RetainAssets: true
-- !<Text/d61e8171-f5dc-428f-9049-bbec73ecef25>
+- !<Text/d8486a14-c2c7-41d8-9df2-eb675d5506da>
   PrefabRemaps:
     []
   Name: Text
@@ -128,7 +128,7 @@
   MeshShadowMode: None
   ShadowColor: {x: 1.000000, y: 1.000000, z: 1.000000, w: 1.000000}
   ShadowDensity: 1.000000
-  Text: Text
+  Text: ldfkgsd;lfkgjsd;lrkjgsd;lrkgjsd;rlkgj
   Editable: false
   ShowEditingPreview: true
   TouchHandler: !<reference> 00000000-0000-0000-0000-000000000000
@@ -136,9 +136,9 @@
   FontSize: 48
   Font: !<reference> 00000000-0000-0000-0000-000000000000
   LayoutRect:
-    left: -7.500000
+    left: -5.000000
     bottom: -2.250000
-    right: 7.500000
+    right: 5.000000
     top: 2.250000
   OverflowVertical: Overflow
   OverflowHorizontal: Overflow

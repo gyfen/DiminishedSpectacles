@@ -48,16 +48,25 @@ function deviceCameraScreenSpaceToWorldSpace(
     );
 }
 
+/* Convert world space point to camera space point */
+function worldSpaceToDeviceCameraSpace(point) {
+    const cameraWorldTransform = cameraObject.getTransform().getWorldTransform();
+
+    return cameraWorldTransform.inverse().multiplyPoint(point);
+}
+
+/* Convert normalized width to absolute width in cm */
 function normWidthToAbsolute(width, depth) {
     return ((width * deviceCameraResolution.x) / deviceCameraFocalLength.x) * depth;
 }
 
+/* Convert normalized height to absolute height in cm */
 function normHeightToAbsolute(height, depth) {
     return ((height * deviceCameraResolution.y) / deviceCameraFocalLength.y) * depth;
 }
 
 /** Merge two detection results into one better result
- * returns {label: {rayStart, rayEnd, absoluteWidth, absoluteHeight}}
+ * returns {label: {rayStart, rayEnd, width, height}}
  * @returns {string: {vec2, vec2, float, float, int}}
  */
 function parseDetections(detectionsLeft, detectionsRight) {
@@ -66,53 +75,57 @@ function parseDetections(detectionsLeft, detectionsRight) {
     const allLabels = mergeDetectionLabels(detectionsLeft, detectionsRight);
 
     for (const label of allLabels) {
-        // if both labels exist
         const detectionLeft = detectionsLeft[label];
         const detectionRight = detectionsRight[label];
 
         const cameraWorldTransform = cameraObject.getTransform().getWorldTransform();
 
-        if (detectionLeft && detectionRight) {
-            const parsedDetection = {
-                rayStart: averageVec3(
-                    deviceCameraScreenSpaceToWorldSpace(
-                        deviceCameraLeft,
-                        cameraWorldTransform,
-                        detectionLeft.bbox[0],
-                        detectionLeft.bbox[1],
-                        camera.near
-                    ),
-                    deviceCameraScreenSpaceToWorldSpace(
-                        deviceCameraRight,
-                        cameraWorldTransform,
-                        detectionLeft.bbox[0],
-                        detectionLeft.bbox[1],
-                        camera.near
-                    )
-                ),
-                rayEnd: averageVec3(
-                    deviceCameraScreenSpaceToWorldSpace(
-                        deviceCameraLeft,
-                        cameraWorldTransform,
-                        detectionRight.bbox[0],
-                        detectionRight.bbox[1],
-                        camera.far
-                    ),
-                    deviceCameraScreenSpaceToWorldSpace(
-                        deviceCameraRight,
-                        cameraWorldTransform,
-                        detectionRight.bbox[0],
-                        detectionRight.bbox[1],
-                        camera.far
-                    )
-                ),
-                width: normWidthToAbsolute((detectionLeft.bbox[2] + detectionRight.bbox[2]) / 2),
-                height: normHeightToAbsolute((detectionLeft.bbox[3] + detectionRight.bbox[3]) / 2),
-                nutriScore: detectionLeft.nutriScore,
-            };
-
-            parsedDetections[label] = parsedDetection;
+        // If left and right dont have the same label, skip it.
+        if (detectionLeft === undefined || detectionRight === undefined) {
+            // TODO: remove cheating
+            // detectionRight = detectionLeft;
+            continue;
         }
+
+        const parsedDetection = {
+            rayStart: averageVec3(
+                deviceCameraScreenSpaceToWorldSpace(
+                    deviceCameraLeft,
+                    cameraWorldTransform,
+                    detectionLeft.bbox[0],
+                    detectionLeft.bbox[1],
+                    camera.near
+                ),
+                deviceCameraScreenSpaceToWorldSpace(
+                    deviceCameraRight,
+                    cameraWorldTransform,
+                    detectionLeft.bbox[0],
+                    detectionLeft.bbox[1],
+                    camera.near
+                )
+            ),
+            rayEnd: averageVec3(
+                deviceCameraScreenSpaceToWorldSpace(
+                    deviceCameraLeft,
+                    cameraWorldTransform,
+                    detectionRight.bbox[0],
+                    detectionRight.bbox[1],
+                    camera.far
+                ),
+                deviceCameraScreenSpaceToWorldSpace(
+                    deviceCameraRight,
+                    cameraWorldTransform,
+                    detectionRight.bbox[0],
+                    detectionRight.bbox[1],
+                    camera.far
+                )
+            ),
+            width: (detectionLeft.bbox[2] + detectionRight.bbox[2]) / 2,
+            height: (detectionLeft.bbox[3] + detectionRight.bbox[3]) / 2,
+            nutriScore: detectionLeft.nutriScore,
+        };
+
+        parsedDetections[label] = parsedDetection;
     }
 
     return parsedDetections;
@@ -137,16 +150,12 @@ function disableTracklet(label) {
 }
 
 /* update a tracklet */
-function updateTracklet(rayStart, rayEnd, absoluteWidth, absoluteHeight, label, nutriScore) {
+function updateTracklet(rayStart, rayEnd, width, height, label, nutriScore) {
     const results = deviceTracking.raycastWorldMesh(rayStart, rayEnd);
 
     if (results.length === 0) {
         return false;
     }
-
-    // Get World Mesh data at the screen position
-    const point = results[0].position;
-    const normal = results[0].normal;
 
     // get the tracklet
     const tracklet = getTracklet(label);
@@ -155,12 +164,21 @@ function updateTracklet(rayStart, rayEnd, absoluteWidth, absoluteHeight, label, 
     // Instantiate the object we want to place
     const trackletScript = tracklet.getComponent("Component.ScriptComponent");
 
+    // Get World Mesh data at the screen position
+    const point = results[0].position;
+    const normal = results[0].normal;
+
     // calc rotation
     // TODO: they should all have the same normal
     // Rotate the object based on World Mesh Surface
     const up = vec3.up();
     const forwardDir = up.projectOnPlane(normal);
     const rot = quat.lookAt(forwardDir, normal);
+
+    // compute the camera space depth from the world space point
+    const depth = worldSpaceToDeviceCameraSpace(point).z;
+    const absoluteWidth = normWidthToAbsolute(width, depth);
+    const absoluteHeight = normHeightToAbsolute(height, depth);
 
     // Update the tracklet data
     trackletScript.setData(label, nutriScore);
@@ -178,9 +196,8 @@ function updateTracklets(parsedDetections) {
     for (const label of mergedLabels) {
         // if this label has a detection: enable and update it
         if (parsedDetections[label] !== undefined) {
-            const { rayStart, rayEnd, absoluteWidth, absoluteHeight, nutriScore } =
-                parsedDetections[label];
-            updateTracklet(rayStart, rayEnd, absoluteWidth, absoluteHeight, label, nutriScore);
+            const { rayStart, rayEnd, width, height, nutriScore } = parsedDetections[label];
+            updateTracklet(rayStart, rayEnd, width, height, label, nutriScore);
         }
         // if this label is not detected: disable
         else {

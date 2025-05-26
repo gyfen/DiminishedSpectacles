@@ -1,10 +1,25 @@
-- !<ObjectPrefab/f402a376-53ea-4dfd-8e8d-9160df019856>
+- !<ObjectPrefab/3c68f8be-d3fd-4d7b-8f64-69e27471af14>
   PackagePath: ""
   objects:
-    - !<own> ef63a5d8-c9da-497b-9dce-5a60bbc04e1d
+    - !<own> 764d6635-33f9-469f-a5c3-5240385ae9f5
   LazyLoading: false
   RetainAssets: true
-- !<Text/23b4b53c-5b4e-439e-a947-e959560db669>
+- !<SceneObject/140dc7a2-f1a3-4117-bd3a-1c156d1e4923>
+  PrefabRemaps:
+    []
+  Name: Mesh
+  Enabled: true
+  Layers: 1
+  LocalTransform:
+    position: {x: 0.000000, y: 0.000000, z: 0.000000}
+    rotation: {x: 0.000000, y: 0.000000, z: 0.000000}
+    scale: {x: 1.000000, y: 2.000000, z: 1.000000}
+    hasSegmentScaleCompensation: false
+  Children:
+    []
+  Components:
+    - !<own> afad674a-bdeb-4e33-8bc5-d6a7faab7aa0
+- !<Text/224a1622-0bf9-4c03-a30d-4360278f0fd2>
   PrefabRemaps:
     []
   Name: Text
@@ -16,7 +31,7 @@
   MeshShadowMode: None
   ShadowColor: {x: 1.000000, y: 1.000000, z: 1.000000, w: 1.000000}
   ShadowDensity: 1.000000
-  Text: Text
+  Text: ldfkgsd;lfkgjsd;lrkjgsd;lrkgjsd;rlkgj
   Editable: false
   ShowEditingPreview: true
   TouchHandler: !<reference> 00000000-0000-0000-0000-000000000000
@@ -24,9 +39,9 @@
   FontSize: 48
   Font: !<reference> 00000000-0000-0000-0000-000000000000
   LayoutRect:
-    left: -7.500000
+    left: -5.000000
     bottom: -2.250000
-    right: 7.500000
+    right: 5.000000
     top: 2.250000
   OverflowVertical: Overflow
   OverflowHorizontal: Overflow
@@ -80,22 +95,7 @@
     CapitalizationOverride: None
   DepthTest: false
   TwoSided: false
-- !<SceneObject/2bb11e52-26b7-4ac5-acaa-2f508c899a70>
-  PrefabRemaps:
-    []
-  Name: Mesh
-  Enabled: true
-  Layers: 1
-  LocalTransform:
-    position: {x: 0.000000, y: 0.000000, z: 0.000000}
-    rotation: {x: 0.000000, y: 0.000000, z: 0.000000}
-    scale: {x: 10.000000, y: 3.000000, z: 10.000000}
-    hasSegmentScaleCompensation: false
-  Children:
-    []
-  Components:
-    - !<own> e9d941fc-51f4-4c5c-bdba-a6170e9d5c8d
-- !<ScriptComponent/32fa07f7-24f2-4b98-97f4-616e1e73c7a2>
+- !<ScriptComponent/492d029b-d03e-4763-ba84-4a255dfaa1cb>
   PrefabRemaps:
     []
   Name: DetectionInstance
@@ -110,12 +110,28 @@
       materials: !<reference.Material[]>
         - !<reference> e7eda618-6dda-45f7-838d-4f6c92947c5e
         - !<reference> b8ef08d8-ea31-4507-ab13-6d8079d23818
-      renderMeshVisualComponent: !<reference.RenderMeshVisual> e9d941fc-51f4-4c5c-bdba-a6170e9d5c8d
-      textComponent: !<reference.Text> 23b4b53c-5b4e-439e-a947-e959560db669
+      meshObject: !<reference.SceneObject> 140dc7a2-f1a3-4117-bd3a-1c156d1e4923
+      textComponent: !<reference.Text> 224a1622-0bf9-4c03-a30d-4360278f0fd2
   ScriptTypes:
     "":
       {}
-- !<RenderMeshVisual/e9d941fc-51f4-4c5c-bdba-a6170e9d5c8d>
+- !<SceneObject/764d6635-33f9-469f-a5c3-5240385ae9f5>
+  PrefabRemaps:
+    []
+  Name: Tracklet
+  Enabled: true
+  Layers: 1
+  LocalTransform:
+    position: {x: 0.000000, y: 0.000000, z: 0.000000}
+    rotation: {x: 0.000000, y: 0.000000, z: 0.000000}
+    scale: {x: 1.000000, y: 1.000000, z: 1.000000}
+    hasSegmentScaleCompensation: false
+  Children:
+    - !<own> ee56cb29-7c0a-44c5-b503-821738659eed
+    - !<own> 140dc7a2-f1a3-4117-bd3a-1c156d1e4923
+  Components:
+    - !<own> 492d029b-d03e-4763-ba84-4a255dfaa1cb
+- !<RenderMeshVisual/afad674a-bdeb-4e33-8bc5-d6a7faab7aa0>
   PrefabRemaps:
     []
   Name: Render Mesh Visual
@@ -135,23 +151,7 @@
   BlendNormals: false
   BlendShapes:
     {}
-- !<SceneObject/ef63a5d8-c9da-497b-9dce-5a60bbc04e1d>
-  PrefabRemaps:
-    []
-  Name: Tracklet
-  Enabled: true
-  Layers: 1
-  LocalTransform:
-    position: {x: 0.000000, y: 0.000000, z: 0.000000}
-    rotation: {x: 0.000000, y: 0.000000, z: 0.000000}
-    scale: {x: 1.000000, y: 1.000000, z: 1.000000}
-    hasSegmentScaleCompensation: false
-  Children:
-    - !<own> f8e7546f-9c65-4706-bae9-6f5e3019be49
-    - !<own> 2bb11e52-26b7-4ac5-acaa-2f508c899a70
-  Components:
-    - !<own> 32fa07f7-24f2-4b98-97f4-616e1e73c7a2
-- !<SceneObject/f8e7546f-9c65-4706-bae9-6f5e3019be49>
+- !<SceneObject/ee56cb29-7c0a-44c5-b503-821738659eed>
   PrefabRemaps:
     []
   Name: Text
@@ -165,4 +165,4 @@
   Children:
     []
   Components:
-    - !<own> 23b4b53c-5b4e-439e-a947-e959560db669
+    - !<own> 224a1622-0bf9-4c03-a30d-4360278f0fd2

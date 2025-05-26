@@ -7,7 +7,7 @@ const materials = script.materials;
 
 // @input SceneObject meshObject
 const meshObject = script.meshObject;
-const renderMeshVisual = renderMesh.getComponent("Component.RenderMeshVisual");
+const renderMeshVisual = meshObject.getComponent("Component.RenderMeshVisual");
 
 // @input Component.Text textComponent
 const textComponent = script.textComponent;
@@ -28,7 +28,7 @@ function updateMaterial() {
     const color = newMaterial.mainPass.baseColor;
     newMaterial.mainPass.baseColor = new vec4(color.x, color.y, color.z, alpha);
 
-    script.renderMeshVisual.mainMaterial = newMaterial;
+    renderMeshVisual.mainMaterial = newMaterial;
 }
 
 function setTransform(position, rotation, absoluteWidth, absoluteHeight) {
@@ -37,7 +37,7 @@ function setTransform(position, rotation, absoluteWidth, absoluteHeight) {
     transform.setWorldRotation(rotation);
     transform.setWorldPosition(position);
 
-    const newScale = new vec3(absoluteWidth, transform.getLocalScale.y, absoluteHeight);
+    const newScale = new vec3(absoluteWidth, transform.getLocalScale().y, absoluteHeight);
     transform.setLocalScale(newScale);
 }
 
