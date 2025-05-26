@@ -29,6 +29,7 @@
   MaxVisibility: Editable
   ScriptInputsHidden:
     materials: false
+    renderMeshVisualComponent: false
     textComponent: false
   ScriptTypesHidden:
     {}
@@ -37,6 +38,7 @@
   DefaultScriptInputs:
     - materials: !<reference.Material[]>
         []
+      renderMeshVisualComponent: !<reference.RenderMeshVisual> 00000000-0000-0000-0000-000000000000
       textComponent: !<reference.Text> 00000000-0000-0000-0000-000000000000
   ScriptTypes:
     -

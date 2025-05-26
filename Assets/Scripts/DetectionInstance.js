@@ -3,11 +3,11 @@ Instance
 */
 
 // @input Asset.Material[] materials
-
+// @input Component.RenderMeshVisual renderMeshVisualComponent
 // @input Component.Text textComponent
 
 const store = global.persistentStorageSystem.store;
-const renderMeshVisual = script.sceneObject.getComponent("Component.RenderMeshVisual");
+const renderMeshVisual = meshComponent.getComponent("Component.RenderMeshVisual");
 
 let label;
 let nutriScore;
@@ -23,12 +23,12 @@ function updateMaterial() {
     const color = newMaterial.mainPass.baseColor;
     newMaterial.mainPass.baseColor = new vec4(color.x, color.y, color.z, alpha);
 
-    renderMeshVisual.mainMaterial = newMaterial;
+    script.renderMeshVisualComponent.mainMaterial = newMaterial;
 }
 
 function setData(label, nutriScore) {
-    let nutriScore = nutriScore;
-    let label = label;
+    nutriScore = nutriScore;
+    label = label;
 
     script.textComponent.text = label;
 }
