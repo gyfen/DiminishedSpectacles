@@ -1231,6 +1231,7 @@
   ScriptAsset: !<reference> 710a93d2-4119-46ad-94eb-5998561661b1
   ScriptInputsDefault:
     iouThreshold: true
+    debugTextureOverride: true
   ScriptTypesDefault:
     {}
   ScriptInputs:
@@ -1299,6 +1300,8 @@
           nutriScore: 2
         - label: pindakaas whole earth
           nutriScore: 0
+      debugTextureOverride: false
+      overrideTexture: !<reference.Texture> 63ccea88-b41f-43c4-b105-458b8474bcc9
   ScriptTypes:
     "":
       {}
@@ -2105,7 +2108,6 @@
   ScriptAsset: !<reference> 3ad001d8-1e29-46e7-9cc8-d7f0e9bc2335
   ScriptInputsDefault:
     _minValue: true
-    toggleDuration: true
     customFunctionForOnHoverEnter: true
     onHoverEnterFunctionNames: true
     customFunctionForOnHoverExit: true
@@ -2127,7 +2129,7 @@
       startValue: !<float> 0.000000
       stepBehavior: true
       _stepSize: !<float> 1.000000
-      toggleDuration: 0.200000
+      toggleDuration: 0.050000
       sliderMin: !<reference.SceneObject> 331a3006-7c86-4cf2-9011-8e105f4e3d9b
       sliderMax: !<reference.SceneObject> 18b83af3-d142-4858-8f68-cd6ff8531752
       _sliderKnob: !<reference.SceneObject> cbe893ed-5f81-4041-b2d5-7e6e40e53a10
@@ -4714,7 +4716,7 @@
   Enabled: true
   ScriptAsset: !<reference> 48e5c1f6-f787-4966-9221-e96663802d34
   ScriptInputsDefault:
-    {}
+    debugLocally: true
   ScriptTypesDefault:
     {}
   ScriptInputs:
@@ -4722,7 +4724,7 @@
       mlController: !<reference.ScriptComponent> 314815c0-16ca-408d-a7c8-956e8cade03e
       cameraObject: !<reference.SceneObject> 00000000-0000-0065-0000-000000000064
       trackletPrefab: !<reference.ObjectPrefab> c053ce85-371f-4af6-88aa-2abc84b2601a
-      debugLocally: true
+      debugLocally: false
   ScriptTypes:
     "":
       {}

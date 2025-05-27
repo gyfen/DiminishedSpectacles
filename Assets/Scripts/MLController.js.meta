@@ -27,8 +27,10 @@
   MaxVisibility: Editable
   ScriptInputsHidden:
     classSettings: false
+    debugTextureOverride: false
     iouThreshold: false
     model: false
+    overrideTexture: false
     scoreThreshold: false
   ScriptTypesHidden:
     {}
@@ -38,6 +40,8 @@
       iouThreshold: 0.650000
       classSettings:
         []
+      debugTextureOverride: false
+      overrideTexture: !<reference.Texture> 00000000-0000-0000-0000-000000000000
   ScriptTypes:
     -
       {}

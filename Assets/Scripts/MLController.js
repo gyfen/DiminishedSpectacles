@@ -39,6 +39,12 @@ var iouThreshold = script.iouThreshold;
 var classSettings = script.classSettings;
 //@ui {"widget":"group_end"}
 
+//@ui {"widget" : "separator"}
+// @input bool debugTextureOverride = false
+const debugTextureOverride = script.debugTextureOverride;
+// @input Asset.Texture overrideTexture {"showIf": "debugTextureOverride"}
+const overrideTexture = script.overrideTexture;
+
 var DetectionHelpers = require("Modules/DetectionHelpersModule");
 var Events = require("Modules/EventModule");
 
@@ -137,7 +143,7 @@ function onLoadingFinished() {
     cameraRequestLeft.cameraId = CameraModule.CameraId.Left_Color;
     let cameraTexLeft = cameraModule.requestCamera(cameraRequestLeft);
 
-    inputs[0].texture = cameraTexLeft;
+    inputs[0].texture = debugTextureOverride ? overrideTexture : cameraTexLeft;
 }
 
 function onLoadingFinished2() {
@@ -149,7 +155,7 @@ function onLoadingFinished2() {
     cameraRequestRight.cameraId = CameraModule.CameraId.Right_Color;
     let cameraTexRight = cameraModule.requestCamera(cameraRequestRight);
 
-    inputs2[0].texture = cameraTexRight;
+    inputs2[0].texture = debugTextureOverride ? overrideTexture : cameraTexRight;
 }
 
 function onRunningFinished() {

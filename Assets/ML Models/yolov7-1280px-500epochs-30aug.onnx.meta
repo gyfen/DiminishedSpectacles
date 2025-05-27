@@ -1,0 +1,686 @@
+- !<AssetImportMetadata/e2fea4d0-23f9-4149-94f3-73ca9c2047ea>
+  ImportedAssetIds:
+    FileMLAsset: !<reference> 850ea352-8914-48e2-b6cf-512b46da05b4
+  ImporterName: FileMLAssetImporter
+  PrimaryAsset: !<reference> 850ea352-8914-48e2-b6cf-512b46da05b4
+  PackageType: NotAPackage
+  PackagePolicy: CannotBeUnpacked
+  ExtraData:
+    {}
+  AssetDataMap:
+    {}
+  DependentFiles:
+    []
+  ImporterSettings: !<FileMLAssetImporterSettings>
+    Inputs:
+      - !<MLInput>
+        Name: images
+        Shape: {x: 1280.000000, y: 1280.000000, z: 3.000000}
+        Normalizations:
+          - scale: 0.003900
+            bias: 0.000000
+          - scale: 0.003900
+            bias: 0.000000
+          - scale: 0.003900
+            bias: 0.000000
+        Transformer:
+          stretch: true
+          alignment.horizontal: Center
+          alignment.vertical: Center
+          fill: {x: 0.000000, y: 0.000000, z: 0.000000, w: 1.000000}
+          flipX: false
+          flipY: false
+          rotation: None
+        Texture: !<reference> 00000000-0000-0000-0000-000000000000
+    Outputs:
+      - !<MLOutput>
+        Name: output
+        Shape: {x: 160.000000, y: 160.000000, z: 105.000000}
+        Normalizations:
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+        InputName: ""
+        OutputTexture: !<reference> 00000000-0000-0000-0000-000000000000
+      - !<MLOutput>
+        Name: 270
+        Shape: {x: 80.000000, y: 80.000000, z: 105.000000}
+        Normalizations:
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+        InputName: ""
+        OutputTexture: !<reference> 00000000-0000-0000-0000-000000000000
+      - !<MLOutput>
+        Name: 272
+        Shape: {x: 40.000000, y: 40.000000, z: 105.000000}
+        Normalizations:
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+          - scale: 1.000000
+            bias: 0.000000
+        InputName: ""
+        OutputTexture: !<reference> 00000000-0000-0000-0000-000000000000
+  CompressionSettings: !<SingleCompressionSettings>
+    CompressorName: FastDnn
+    CompressionSettings: !<own> 00000000-0000-0000-0000-000000000000

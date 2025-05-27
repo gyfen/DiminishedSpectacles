@@ -80,7 +80,6 @@ function parseDetections(detectionsLeft, detectionsRight) {
         let detectionRight = detectionsRight[label];
 
         // Debug: only use left camera
-        // global.deviceInfoSystem.isSpectacles()
         if (debugLocally) {
             detectionRight = detectionLeft;
         }
