@@ -1,30 +1,20 @@
-- !<AssetImportMetadata/440d2391-406e-4c6a-adac-f14c92f20520>
+- !<AssetImportMetadata/b16dac61-4d14-4e7f-ba7b-4092fa8d5b24>
   ImportedAssetIds:
-    ObjectPrefab: !<reference> 5ae1339a-f309-4974-a2b4-54d91ae3faed
+    ObjectPrefab: !<reference> c053ce85-371f-4af6-88aa-2abc84b2601a
   ImporterName: ObjectPrefabImporter
-  PrimaryAsset: !<reference> 5ae1339a-f309-4974-a2b4-54d91ae3faed
+  PrimaryAsset: !<reference> c053ce85-371f-4af6-88aa-2abc84b2601a
   PackageType: NotAPackage
   PackagePolicy: CannotBeUnpacked
   ExtraData:
     {}
   AssetDataMap:
-    ObjectPrefab: !<own> 131d2690-c2e8-443b-9f6a-d745758e15cd
+    ObjectPrefab: !<own> 88317127-0fc5-4fb9-be9a-d99df5e486e1
   DependentFiles:
     []
   ImporterSettings: !<AssetImporterSettings>
     {}
   CompressionSettings: !<own> 00000000-0000-0000-0000-000000000000
-- !<ObjectPrefabAssetData/131d2690-c2e8-443b-9f6a-d745758e15cd>
-  SourceRemaps:
-    - 00fba318-0517-4c8c-b0ba-6087804cec09: 7e9ddf50-0def-423c-ad23-56022fdbd4e9
-    - 4747d2f8-7a7f-4705-87bc-ca0b0df68dac: c633f8f3-ebe2-405f-bac8-436f4436e3ce
-    - 53821433-f144-490a-88d5-452b8c50c6b9: 4dcfad84-bbb8-4a3e-b525-9adb9813445f
-    - 5ae1339a-f309-4974-a2b4-54d91ae3faed: 3bf8a3fb-7929-4e83-a55a-2d9ff63f45f0
-    - 64b930b9-adcc-4a7e-9f39-8c64dcfa2fe6: 245cd5bd-4162-48fd-93cc-d57885e2480e
-    - 990c7c15-ccd6-4649-b9e8-69c80a3f1440: 3cce1716-26bc-40cb-81b5-591ad7a396ba
-    - c0872b3a-a492-49e1-b2eb-32dfbbf430ba: 859649fd-9f4d-4317-b58a-52bf9fa74eb5
-  SourceState: !<own> 3bf8a3fb-7929-4e83-a55a-2d9ff63f45f0
-- !<RenderMeshVisual/245cd5bd-4162-48fd-93cc-d57885e2480e>
+- !<RenderMeshVisual/0fd3c61e-426d-4b08-ae77-8673f29e01ba>
   PrefabRemaps:
     []
   Name: Render Mesh Visual
@@ -44,43 +34,22 @@
   BlendNormals: false
   BlendShapes:
     {}
-- !<ObjectPrefab/3bf8a3fb-7929-4e83-a55a-2d9ff63f45f0>
-  PackagePath: ""
-  objects:
-    - !<own> c633f8f3-ebe2-405f-bac8-436f4436e3ce
-  LazyLoading: false
-  RetainAssets: true
-- !<SceneObject/3cce1716-26bc-40cb-81b5-591ad7a396ba>
-  PrefabRemaps:
-    []
-  Name: Mesh
-  Enabled: true
-  Layers: 1
-  LocalTransform:
-    position: {x: 0.000000, y: 0.000000, z: 0.000000}
-    rotation: {x: 0.000000, y: 0.000000, z: 0.000000}
-    scale: {x: 1.000000, y: 2.000000, z: 1.000000}
-    hasSegmentScaleCompensation: false
-  Children:
-    []
-  Components:
-    - !<own> 245cd5bd-4162-48fd-93cc-d57885e2480e
-- !<SceneObject/4dcfad84-bbb8-4a3e-b525-9adb9813445f>
+- !<SceneObject/49434b59-72ff-4aaa-b3d6-ed05288d9408>
   PrefabRemaps:
     []
   Name: Text
   Enabled: true
   Layers: 1
   LocalTransform:
-    position: {x: 0.000000, y: 1.510000, z: 0.000000}
+    position: {x: 0.000000, y: 1.100000, z: 0.000000}
     rotation: {x: 90.000000, y: 0.000000, z: 0.000000}
     scale: {x: -1.000000, y: 1.000000, z: 1.000000}
     hasSegmentScaleCompensation: false
   Children:
     []
   Components:
-    - !<own> 859649fd-9f4d-4317-b58a-52bf9fa74eb5
-- !<ScriptComponent/7e9ddf50-0def-423c-ad23-56022fdbd4e9>
+    - !<own> 86afefef-2c3f-4621-9c35-954851d101b6
+- !<ScriptComponent/6ead44e7-a574-4bd5-b922-ada857ef6a14>
   PrefabRemaps:
     []
   Name: DetectionInstance
@@ -95,12 +64,12 @@
       materials: !<reference.Material[]>
         - !<reference> e7eda618-6dda-45f7-838d-4f6c92947c5e
         - !<reference> b8ef08d8-ea31-4507-ab13-6d8079d23818
-      meshObject: !<reference.SceneObject> 3cce1716-26bc-40cb-81b5-591ad7a396ba
-      textComponent: !<reference.Text> 859649fd-9f4d-4317-b58a-52bf9fa74eb5
+      meshObject: !<reference.SceneObject> a149b749-67e2-4530-b011-bb6d93ea691e
+      textComponent: !<reference.Text> 86afefef-2c3f-4621-9c35-954851d101b6
   ScriptTypes:
     "":
       {}
-- !<Text/859649fd-9f4d-4317-b58a-52bf9fa74eb5>
+- !<Text/86afefef-2c3f-4621-9c35-954851d101b6>
   PrefabRemaps:
     []
   Name: Text
@@ -112,7 +81,7 @@
   MeshShadowMode: None
   ShadowColor: {x: 1.000000, y: 1.000000, z: 1.000000, w: 1.000000}
   ShadowDensity: 1.000000
-  Text: ""
+  Text: label
   Editable: false
   ShowEditingPreview: true
   TouchHandler: !<reference> 00000000-0000-0000-0000-000000000000
@@ -176,7 +145,32 @@
     CapitalizationOverride: None
   DepthTest: false
   TwoSided: false
-- !<SceneObject/c633f8f3-ebe2-405f-bac8-436f4436e3ce>
+- !<ObjectPrefabAssetData/88317127-0fc5-4fb9-be9a-d99df5e486e1>
+  SourceRemaps:
+    - 2825e73e-1f16-44e7-8083-5d483e312341: 49434b59-72ff-4aaa-b3d6-ed05288d9408
+    - 6b727395-f9f7-4180-a5d4-f4df4086f906: a149b749-67e2-4530-b011-bb6d93ea691e
+    - 7717f5e8-a0a7-42b7-a674-d628db807383: abdfc65a-0f0c-4942-a710-35586e6491a8
+    - c053ce85-371f-4af6-88aa-2abc84b2601a: c2ddbeb0-ab5a-4d7d-9364-5eef0a4bc177
+    - ca9d1e92-169f-42a1-adb1-54acb9eeda5a: 0fd3c61e-426d-4b08-ae77-8673f29e01ba
+    - d8bd9544-92a3-44fe-907b-d083e9771cb3: 6ead44e7-a574-4bd5-b922-ada857ef6a14
+    - f5145cba-7d59-4cb7-9989-5a38853acdd0: 86afefef-2c3f-4621-9c35-954851d101b6
+  SourceState: !<own> c2ddbeb0-ab5a-4d7d-9364-5eef0a4bc177
+- !<SceneObject/a149b749-67e2-4530-b011-bb6d93ea691e>
+  PrefabRemaps:
+    []
+  Name: Mesh
+  Enabled: true
+  Layers: 1
+  LocalTransform:
+    position: {x: 0.000000, y: 0.000000, z: 0.000000}
+    rotation: {x: 0.000000, y: 0.000000, z: 0.000000}
+    scale: {x: 1.000000, y: 2.000000, z: 1.000000}
+    hasSegmentScaleCompensation: false
+  Children:
+    []
+  Components:
+    - !<own> 0fd3c61e-426d-4b08-ae77-8673f29e01ba
+- !<SceneObject/abdfc65a-0f0c-4942-a710-35586e6491a8>
   PrefabRemaps:
     []
   Name: Tracklet
@@ -188,7 +182,13 @@
     scale: {x: 1.000000, y: 1.000000, z: 1.000000}
     hasSegmentScaleCompensation: false
   Children:
-    - !<own> 4dcfad84-bbb8-4a3e-b525-9adb9813445f
-    - !<own> 3cce1716-26bc-40cb-81b5-591ad7a396ba
+    - !<own> 49434b59-72ff-4aaa-b3d6-ed05288d9408
+    - !<own> a149b749-67e2-4530-b011-bb6d93ea691e
   Components:
-    - !<own> 7e9ddf50-0def-423c-ad23-56022fdbd4e9
+    - !<own> 6ead44e7-a574-4bd5-b922-ada857ef6a14
+- !<ObjectPrefab/c2ddbeb0-ab5a-4d7d-9364-5eef0a4bc177>
+  PackagePath: ""
+  objects:
+    - !<own> abdfc65a-0f0c-4942-a710-35586e6491a8
+  LazyLoading: false
+  RetainAssets: true

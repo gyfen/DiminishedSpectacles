@@ -9,12 +9,17 @@ const mlController = script.mlController;
 // @ui {"widget" : "separator"}
 // @input SceneObject cameraObject
 const cameraObject = script.cameraObject;
+
 const camera = cameraObject.getComponent("Component.Camera");
 const deviceTracking = cameraObject.getComponent("Component.DeviceTracking");
 
 // @ui {"widget" : "separator"}
 // @input Asset.ObjectPrefab trackletPrefab
 const trackletPrefab = script.trackletPrefab;
+
+// @ui {"widget" : "separator"}
+// @input bool debugLocally
+const debugLocally = script.debugLocally;
 
 // Define camera left and right
 let deviceCameraLeft;
@@ -36,20 +41,16 @@ function mergeDetectionLabels(d1, d2) {
     return new Set([...Object.keys(d1), ...Object.keys(d2)]);
 }
 
-function deviceCameraScreenSpaceToWorldSpace(
-    deviceCamera,
-    cameraWorldTransform,
-    xNorm,
-    yNorm,
-    absoluteDepth
-) {
+function deviceCameraScreenSpaceToWorldSpace(deviceCamera, xNorm, yNorm, absoluteDepth) {
+    const cameraWorldTransform = cameraObject.getTransform().getWorldTransform();
+
     return cameraWorldTransform.multiplyPoint(
         deviceCamera.unproject(new vec2(xNorm, yNorm), absoluteDepth)
     );
 }
 
 /* Convert world space point to camera space point */
-function worldSpaceToDeviceCameraSpace(point) {
+function worldSpaceToCameraSpace(point) {
     const cameraWorldTransform = cameraObject.getTransform().getWorldTransform();
 
     return cameraWorldTransform.inverse().multiplyPoint(point);
@@ -76,14 +77,16 @@ function parseDetections(detectionsLeft, detectionsRight) {
 
     for (const label of allLabels) {
         const detectionLeft = detectionsLeft[label];
-        const detectionRight = detectionsRight[label];
+        let detectionRight = detectionsRight[label];
 
-        const cameraWorldTransform = cameraObject.getTransform().getWorldTransform();
+        // Debug: only use left camera
+        // global.deviceInfoSystem.isSpectacles()
+        if (debugLocally) {
+            detectionRight = detectionLeft;
+        }
 
         // If left and right dont have the same label, skip it.
         if (detectionLeft === undefined || detectionRight === undefined) {
-            // TODO: remove cheating
-            // detectionRight = detectionLeft;
             continue;
         }
 
@@ -91,30 +94,26 @@ function parseDetections(detectionsLeft, detectionsRight) {
             rayStart: averageVec3(
                 deviceCameraScreenSpaceToWorldSpace(
                     deviceCameraLeft,
-                    cameraWorldTransform,
                     detectionLeft.bbox[0],
                     detectionLeft.bbox[1],
                     camera.near
                 ),
                 deviceCameraScreenSpaceToWorldSpace(
                     deviceCameraRight,
-                    cameraWorldTransform,
-                    detectionLeft.bbox[0],
-                    detectionLeft.bbox[1],
+                    detectionRight.bbox[0],
+                    detectionRight.bbox[1],
                     camera.near
                 )
             ),
             rayEnd: averageVec3(
                 deviceCameraScreenSpaceToWorldSpace(
                     deviceCameraLeft,
-                    cameraWorldTransform,
-                    detectionRight.bbox[0],
-                    detectionRight.bbox[1],
+                    detectionLeft.bbox[0],
+                    detectionLeft.bbox[1],
                     camera.far
                 ),
                 deviceCameraScreenSpaceToWorldSpace(
                     deviceCameraRight,
-                    cameraWorldTransform,
                     detectionRight.bbox[0],
                     detectionRight.bbox[1],
                     camera.far
@@ -176,7 +175,7 @@ function updateTracklet(rayStart, rayEnd, width, height, label, nutriScore) {
     const rot = quat.lookAt(forwardDir, normal);
 
     // compute the camera space depth from the world space point
-    const depth = worldSpaceToDeviceCameraSpace(point).z;
+    const depth = worldSpaceToCameraSpace(point).z;
     const absoluteWidth = normWidthToAbsolute(width, depth);
     const absoluteHeight = normHeightToAbsolute(height, depth);
 
@@ -236,6 +235,8 @@ function onStart() {
     deviceCameraLeft = global.deviceInfoSystem.getTrackingCameraForId(
         CameraModule.CameraId.Left_Color
     );
+    // For debugging on other platforms, set the right camera to be the same as the left
+
     deviceCameraRight = global.deviceInfoSystem.getTrackingCameraForId(
         CameraModule.CameraId.Right_Color
     );

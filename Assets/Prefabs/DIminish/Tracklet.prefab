@@ -1,30 +1,40 @@
-- !<ObjectPrefab/5ae1339a-f309-4974-a2b4-54d91ae3faed>
+- !<ObjectPrefab/c053ce85-371f-4af6-88aa-2abc84b2601a>
   PackagePath: ""
   objects:
-    - !<own> 4747d2f8-7a7f-4705-87bc-ca0b0df68dac
+    - !<own> 7717f5e8-a0a7-42b7-a674-d628db807383
   LazyLoading: false
   RetainAssets: true
-- !<ScriptComponent/00fba318-0517-4c8c-b0ba-6087804cec09>
+- !<SceneObject/2825e73e-1f16-44e7-8083-5d483e312341>
   PrefabRemaps:
     []
-  Name: DetectionInstance
+  Name: Text
   Enabled: true
-  ScriptAsset: !<reference> be0cc6c2-af06-4ea6-b2c2-229cf4153a5d
-  ScriptInputsDefault:
-    {}
-  ScriptTypesDefault:
-    {}
-  ScriptInputs:
-    "":
-      materials: !<reference.Material[]>
-        - !<reference> e7eda618-6dda-45f7-838d-4f6c92947c5e
-        - !<reference> b8ef08d8-ea31-4507-ab13-6d8079d23818
-      meshObject: !<reference.SceneObject> 990c7c15-ccd6-4649-b9e8-69c80a3f1440
-      textComponent: !<reference.Text> c0872b3a-a492-49e1-b2eb-32dfbbf430ba
-  ScriptTypes:
-    "":
-      {}
-- !<SceneObject/4747d2f8-7a7f-4705-87bc-ca0b0df68dac>
+  Layers: 1
+  LocalTransform:
+    position: {x: 0.000000, y: 1.100000, z: 0.000000}
+    rotation: {x: 90.000000, y: 0.000000, z: 0.000000}
+    scale: {x: -1.000000, y: 1.000000, z: 1.000000}
+    hasSegmentScaleCompensation: false
+  Children:
+    []
+  Components:
+    - !<own> f5145cba-7d59-4cb7-9989-5a38853acdd0
+- !<SceneObject/6b727395-f9f7-4180-a5d4-f4df4086f906>
+  PrefabRemaps:
+    []
+  Name: Mesh
+  Enabled: true
+  Layers: 1
+  LocalTransform:
+    position: {x: 0.000000, y: 0.000000, z: 0.000000}
+    rotation: {x: 0.000000, y: 0.000000, z: 0.000000}
+    scale: {x: 1.000000, y: 2.000000, z: 1.000000}
+    hasSegmentScaleCompensation: false
+  Children:
+    []
+  Components:
+    - !<own> ca9d1e92-169f-42a1-adb1-54acb9eeda5a
+- !<SceneObject/7717f5e8-a0a7-42b7-a674-d628db807383>
   PrefabRemaps:
     []
   Name: Tracklet
@@ -36,26 +46,11 @@
     scale: {x: 1.000000, y: 1.000000, z: 1.000000}
     hasSegmentScaleCompensation: false
   Children:
-    - !<own> 53821433-f144-490a-88d5-452b8c50c6b9
-    - !<own> 990c7c15-ccd6-4649-b9e8-69c80a3f1440
+    - !<own> 2825e73e-1f16-44e7-8083-5d483e312341
+    - !<own> 6b727395-f9f7-4180-a5d4-f4df4086f906
   Components:
-    - !<own> 00fba318-0517-4c8c-b0ba-6087804cec09
-- !<SceneObject/53821433-f144-490a-88d5-452b8c50c6b9>
-  PrefabRemaps:
-    []
-  Name: Text
-  Enabled: true
-  Layers: 1
-  LocalTransform:
-    position: {x: 0.000000, y: 1.510000, z: 0.000000}
-    rotation: {x: 90.000000, y: 0.000000, z: 0.000000}
-    scale: {x: -1.000000, y: 1.000000, z: 1.000000}
-    hasSegmentScaleCompensation: false
-  Children:
-    []
-  Components:
-    - !<own> c0872b3a-a492-49e1-b2eb-32dfbbf430ba
-- !<RenderMeshVisual/64b930b9-adcc-4a7e-9f39-8c64dcfa2fe6>
+    - !<own> d8bd9544-92a3-44fe-907b-d083e9771cb3
+- !<RenderMeshVisual/ca9d1e92-169f-42a1-adb1-54acb9eeda5a>
   PrefabRemaps:
     []
   Name: Render Mesh Visual
@@ -75,22 +70,27 @@
   BlendNormals: false
   BlendShapes:
     {}
-- !<SceneObject/990c7c15-ccd6-4649-b9e8-69c80a3f1440>
+- !<ScriptComponent/d8bd9544-92a3-44fe-907b-d083e9771cb3>
   PrefabRemaps:
     []
-  Name: Mesh
+  Name: DetectionInstance
   Enabled: true
-  Layers: 1
-  LocalTransform:
-    position: {x: 0.000000, y: 0.000000, z: 0.000000}
-    rotation: {x: 0.000000, y: 0.000000, z: 0.000000}
-    scale: {x: 1.000000, y: 2.000000, z: 1.000000}
-    hasSegmentScaleCompensation: false
-  Children:
-    []
-  Components:
-    - !<own> 64b930b9-adcc-4a7e-9f39-8c64dcfa2fe6
-- !<Text/c0872b3a-a492-49e1-b2eb-32dfbbf430ba>
+  ScriptAsset: !<reference> be0cc6c2-af06-4ea6-b2c2-229cf4153a5d
+  ScriptInputsDefault:
+    {}
+  ScriptTypesDefault:
+    {}
+  ScriptInputs:
+    "":
+      materials: !<reference.Material[]>
+        - !<reference> e7eda618-6dda-45f7-838d-4f6c92947c5e
+        - !<reference> b8ef08d8-ea31-4507-ab13-6d8079d23818
+      meshObject: !<reference.SceneObject> 6b727395-f9f7-4180-a5d4-f4df4086f906
+      textComponent: !<reference.Text> f5145cba-7d59-4cb7-9989-5a38853acdd0
+  ScriptTypes:
+    "":
+      {}
+- !<Text/f5145cba-7d59-4cb7-9989-5a38853acdd0>
   PrefabRemaps:
     []
   Name: Text
@@ -102,7 +102,7 @@
   MeshShadowMode: None
   ShadowColor: {x: 1.000000, y: 1.000000, z: 1.000000, w: 1.000000}
   ShadowDensity: 1.000000
-  Text: ""
+  Text: label
   Editable: false
   ShowEditingPreview: true
   TouchHandler: !<reference> 00000000-0000-0000-0000-000000000000

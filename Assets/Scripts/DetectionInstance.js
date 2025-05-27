@@ -12,6 +12,7 @@ const renderMeshVisual = meshObject.getComponent("Component.RenderMeshVisual");
 // @input Component.Text textComponent
 const textComponent = script.textComponent;
 
+// persistent storage
 const store = global.persistentStorageSystem.store;
 
 let label;
@@ -32,13 +33,14 @@ function updateMaterial() {
 }
 
 function setTransform(position, rotation, absoluteWidth, absoluteHeight) {
-    const transform = meshObject.getTransform();
+    const sceneObjectTransform = script.getSceneObject().getTransform();
+    const meshTransform = meshObject.getTransform();
 
-    transform.setWorldRotation(rotation);
-    transform.setWorldPosition(position);
+    sceneObjectTransform.setWorldRotation(rotation);
+    sceneObjectTransform.setWorldPosition(position);
 
-    const newScale = new vec3(absoluteWidth, transform.getLocalScale().y, absoluteHeight);
-    transform.setLocalScale(newScale);
+    const newScale = new vec3(absoluteWidth, meshTransform.getLocalScale().y, absoluteHeight);
+    meshTransform.setLocalScale(newScale);
 }
 
 function setData(newLabel, newNutriScore) {
