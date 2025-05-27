@@ -19,7 +19,7 @@ let label;
 let nutriScore;
 
 /* Public API */
-function updateMaterial() {
+function updateAppearance() {
     // TODO: only clone material if need to switch to a different one
     // assign new material
     const newMaterial = script.materials[store.getInt("overlayType")].clone();
@@ -30,6 +30,9 @@ function updateMaterial() {
     newMaterial.mainPass.baseColor = new vec4(color.x, color.y, color.z, alpha);
 
     renderMeshVisual.mainMaterial = newMaterial;
+
+    // Set label visibility
+    script.textComponent.enabled = Boolean(store.getInt("labelShown"));
 }
 
 function setTransform(position, rotation, absoluteWidth, absoluteHeight) {
@@ -49,6 +52,6 @@ function setData(newLabel, newNutriScore) {
     script.textComponent.text = label;
 }
 
-script.updateMaterial = updateMaterial;
+script.updateAppearance = updateAppearance;
 script.setData = setData;
 script.setTransform = setTransform;

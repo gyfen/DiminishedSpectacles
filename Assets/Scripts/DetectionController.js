@@ -181,7 +181,7 @@ function updateTracklet(rayStart, rayEnd, width, height, label, nutriScore) {
     // Update the tracklet data
     trackletScript.setData(label, nutriScore);
     trackletScript.setTransform(point, rot, absoluteWidth, absoluteHeight);
-    trackletScript.updateMaterial();
+    trackletScript.updateAppearance();
 
     return true;
 }
