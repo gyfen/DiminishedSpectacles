@@ -58,12 +58,12 @@ function worldSpaceToCameraSpace(point) {
 
 /* Convert normalized width to absolute width in cm */
 function normWidthToAbsolute(width, depth) {
-    return ((width * deviceCameraResolution.x) / deviceCameraFocalLength.x) * depth;
+    return (width * deviceCameraResolution.x * depth * 0.85) / deviceCameraFocalLength.x;
 }
 
 /* Convert normalized height to absolute height in cm */
 function normHeightToAbsolute(height, depth) {
-    return ((height * deviceCameraResolution.y) / deviceCameraFocalLength.y) * depth;
+    return (height * deviceCameraResolution.y * depth * 0.85) / deviceCameraFocalLength.y;
 }
 
 /** Merge two detection results into one better result
@@ -136,7 +136,7 @@ function getTracklet(label) {
 
     // otherwise create a new one
     if (!tracklet) {
-        tracklet = trackletPrefab.instantiate(script.getSceneObject());
+        tracklet = trackletPrefab.instantiate(script.sceneObject);
         tracklets[label] = tracklet;
     }
 
@@ -241,6 +241,7 @@ function onStart() {
     );
 
     deviceCameraResolution = deviceCameraLeft.resolution;
+    // average the focal lengths, since they differ.
     deviceCameraFocalLength = deviceCameraLeft.focalLength.moveTowards(
         deviceCameraRight.focalLength,
         0.5

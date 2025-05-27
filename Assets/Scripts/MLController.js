@@ -108,7 +108,7 @@ function onAwake() {
     }
 
     // 1
-    mlComponent = script.getSceneObject().createComponent("MLComponent");
+    mlComponent = script.sceneObject.createComponent("MLComponent");
     mlComponent.model = model;
     mlComponent.onLoadingFinished = onLoadingFinished;
     mlComponent.onRunningFinished = onRunningFinished;
@@ -116,7 +116,7 @@ function onAwake() {
     mlComponent.build([]);
 
     // 2
-    mlComponent2 = script.getSceneObject().createComponent("MLComponent");
+    mlComponent2 = script.sceneObject.createComponent("MLComponent");
     mlComponent2.model = model;
     mlComponent2.onLoadingFinished = onLoadingFinished2;
     mlComponent2.onRunningFinished = onRunningFinished2;

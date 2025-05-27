@@ -1230,6 +1230,7 @@
   Enabled: true
   ScriptAsset: !<reference> 710a93d2-4119-46ad-94eb-5998561661b1
   ScriptInputsDefault:
+    scoreThreshold: true
     iouThreshold: true
     debugTextureOverride: true
   ScriptTypesDefault:
@@ -1237,7 +1238,7 @@
   ScriptInputs:
     "":
       model: !<reference.MLAsset> 64cad88c-e6f3-42a5-bfc0-ee8c586c90eb
-      scoreThreshold: 0.500000
+      scoreThreshold: 0.400000
       iouThreshold: 0.650000
       classSettings:
         - label: haverdrink ah terra
@@ -4723,7 +4724,7 @@
     "":
       mlController: !<reference.ScriptComponent> 314815c0-16ca-408d-a7c8-956e8cade03e
       cameraObject: !<reference.SceneObject> 00000000-0000-0065-0000-000000000064
-      trackletPrefab: !<reference.ObjectPrefab> c053ce85-371f-4af6-88aa-2abc84b2601a
+      trackletPrefab: !<reference.ObjectPrefab> 3c399fa1-bc7a-4f4e-90fa-3c6ac612b0db
       debugLocally: false
   ScriptTypes:
     "":
