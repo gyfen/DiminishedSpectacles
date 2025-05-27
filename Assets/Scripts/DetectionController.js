@@ -241,7 +241,10 @@ function onStart() {
     );
 
     deviceCameraResolution = deviceCameraLeft.resolution;
-    deviceCameraFocalLength = deviceCameraLeft.focalLength;
+    deviceCameraFocalLength = deviceCameraLeft.focalLength.moveTowards(
+        deviceCameraRight.focalLength,
+        0.5
+    );
 }
 
 script.createEvent("OnStartEvent").bind(onStart);
