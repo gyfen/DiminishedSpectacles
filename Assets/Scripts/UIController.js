@@ -48,8 +48,8 @@ function updateNutriScore() {
 }
 
 function setRadioButton(button, enabled) {
-    button.getChild(0).getComponent("Component.Image").enabled = enabled;
-    button.getChild(1).getComponent("Component.Image").enabled = !enabled;
+    button.getChild(0).enabled = enabled;
+    // button.getChild(1).enabled = !enabled;
 }
 
 function updateEffect0(data) {

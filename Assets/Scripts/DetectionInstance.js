@@ -31,6 +31,7 @@ function updateAppearance() {
     // TODO: only clone material if need to switch to a different one
     // assign new material
 
+    const nutriScoreThreshold = store.getInt("nutriScore");
     // the visual effect
     const effectType = store.getInt("effectType");
     // threshold or linear
@@ -42,7 +43,7 @@ function updateAppearance() {
 
     switch (effectMode) {
         case 0:
-            alpha = nutriScore > store.getInt("nutriScore") ? 1 : 0;
+            alpha = nutriScore > nutriScoreThreshold ? 1 : 0;
             break;
         case 1:
             alpha = nutriScore / 4;
@@ -69,7 +70,8 @@ function updateAppearance() {
         // outline is a special case
         case 3:
             boxMeshObject.enabled = false;
-            planeMeshObject.enabled = true;
+
+            planeMeshObject.enabled = Boolean(nutriScore <= nutriScoreThreshold);
             break;
     }
 
