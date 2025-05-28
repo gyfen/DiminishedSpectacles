@@ -4717,15 +4717,15 @@
   Enabled: true
   ScriptAsset: !<reference> 48e5c1f6-f787-4966-9221-e96663802d34
   ScriptInputsDefault:
-    debugLocally: true
+    {}
   ScriptTypesDefault:
     {}
   ScriptInputs:
     "":
       mlController: !<reference.ScriptComponent> 314815c0-16ca-408d-a7c8-956e8cade03e
       cameraObject: !<reference.SceneObject> 00000000-0000-0065-0000-000000000064
-      trackletPrefab: !<reference.ObjectPrefab> 3c399fa1-bc7a-4f4e-90fa-3c6ac612b0db
-      debugLocally: false
+      trackletPrefab: !<reference.ObjectPrefab> 1f853962-2648-40ba-a5f1-ff313713f28f
+      debugLocally: true
   ScriptTypes:
     "":
       {}

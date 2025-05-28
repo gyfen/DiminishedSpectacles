@@ -5,9 +5,17 @@ Tracklet
 // @input Asset.Material[] materials
 const materials = script.materials;
 
-// @input SceneObject meshObject
-const meshObject = script.meshObject;
-const renderMeshVisual = meshObject.getComponent("Component.RenderMeshVisual");
+// @input SceneObject meshContainerObject
+const meshContainerObject = script.meshContainerObject;
+
+// @input SceneObject boxMeshObject
+const boxMeshObject = script.boxMeshObject;
+
+// @input SceneObject planeMeshObject
+const planeMeshObject = script.planeMeshObject;
+
+const boxRenderMeshVisual = boxMeshObject.getComponent("Component.RenderMeshVisual");
+// const planeRenderMeshVisual = planeMeshObject.getComponent("Component.RenderMeshVisual");
 
 // @input Component.Text textComponent
 const textComponent = script.textComponent;
@@ -22,14 +30,44 @@ let nutriScore;
 function updateAppearance() {
     // TODO: only clone material if need to switch to a different one
     // assign new material
-    const newMaterial = script.materials[store.getInt("overlayType")].clone();
 
-    // TODO: this can also be linear, instead of threshold.
-    const alpha = nutriScore > store.getInt("nutriScore") ? 1 : 0; // nutriscore is assigned by instance controller
-    const color = newMaterial.mainPass.baseColor;
-    newMaterial.mainPass.baseColor = new vec4(color.x, color.y, color.z, alpha);
+    // the visual effect
+    const effectType = store.getInt("effectType");
+    // threshold or linear
+    const effectMode = store.getInt("effectMode");
 
-    renderMeshVisual.mainMaterial = newMaterial;
+    let alpha = 0;
+
+    switch (effectType) {
+        case 0:
+            alpha = nutriScore > store.getInt("nutriScore") ? 1 : 0;
+            break;
+        case 1:
+            alpha = nutriScore / 4;
+            break;
+    }
+
+    switch (effect) {
+        // solid overlay
+        case 0:
+        // desaturate
+        case 1:
+            boxMeshObject.enabled = true;
+            planeMeshObject.enabled = false;
+
+            const newMaterial = script.materials[effectType].clone();
+
+            // TODO: this can also be linear, instead of threshold.
+            newMaterial.mainPass.alpha = alpha;
+
+            boxRenderMeshVisual.mainMaterial = newMaterial;
+            break;
+        // outline is a special case
+        case 2:
+            boxMeshObject.enabled = false;
+            planeMeshObject.enabled = true;
+            break;
+    }
 
     // Set label visibility
     script.textComponent.enabled = Boolean(store.getInt("labelShown"));
@@ -37,7 +75,7 @@ function updateAppearance() {
 
 function setTransform(position, rotation, absoluteWidth, absoluteHeight) {
     const sceneObjectTransform = script.getSceneObject().getTransform();
-    const meshTransform = meshObject.getTransform();
+    const meshTransform = meshContainerObject.getTransform();
 
     sceneObjectTransform.setWorldRotation(rotation);
     sceneObjectTransform.setWorldPosition(position);

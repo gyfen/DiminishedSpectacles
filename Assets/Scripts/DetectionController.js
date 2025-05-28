@@ -225,7 +225,7 @@ function updateTrackletsMaterial() {
     for (const [label, tracklet] of Object.entries(tracklets)) {
         if (tracklet.enabled) {
             const trackletScript = tracklet.getComponent("Component.ScriptComponent");
-            trackletScript.updateMaterial();
+            trackletScript.updateAppearance();
         }
     }
 }

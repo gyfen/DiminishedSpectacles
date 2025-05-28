@@ -28,8 +28,10 @@
   CurrentVisibility: Editable
   MaxVisibility: Editable
   ScriptInputsHidden:
+    boxMeshObject: false
     materials: false
-    meshObject: false
+    meshContainerObject: false
+    planeMeshObject: false
     textComponent: false
   ScriptTypesHidden:
     {}
@@ -38,7 +40,9 @@
   DefaultScriptInputs:
     - materials: !<reference.Material[]>
         []
-      meshObject: !<reference.SceneObject> 00000000-0000-0000-0000-000000000000
+      meshContainerObject: !<reference.SceneObject> 00000000-0000-0000-0000-000000000000
+      boxMeshObject: !<reference.SceneObject> 00000000-0000-0000-0000-000000000000
+      planeMeshObject: !<reference.SceneObject> 00000000-0000-0000-0000-000000000000
       textComponent: !<reference.Text> 00000000-0000-0000-0000-000000000000
   ScriptTypes:
     -

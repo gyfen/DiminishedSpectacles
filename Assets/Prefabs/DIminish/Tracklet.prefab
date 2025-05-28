@@ -1,45 +1,10 @@
-- !<ObjectPrefab/3c399fa1-bc7a-4f4e-90fa-3c6ac612b0db>
+- !<ObjectPrefab/1f853962-2648-40ba-a5f1-ff313713f28f>
   PackagePath: ""
   objects:
-    - !<own> 766f8e55-740b-407e-817e-c6373bc196de
+    - !<own> 43be0015-a507-420f-84a9-b1afd8eeab36
   LazyLoading: false
   RetainAssets: true
-- !<SceneObject/5526d9e9-f02f-4435-a770-52dcdbe20359>
-  PrefabRemaps:
-    []
-  Name: Mesh
-  Enabled: true
-  Layers: 1
-  LocalTransform:
-    position: {x: 0.000000, y: -5.000000, z: 0.000000}
-    rotation: {x: 0.000000, y: 0.000000, z: 0.000000}
-    scale: {x: 1.000000, y: 10.000000, z: 1.000000}
-    hasSegmentScaleCompensation: false
-  Children:
-    []
-  Components:
-    - !<own> a6b8f58e-fe14-4d0a-9a2a-131b77a8080f
-- !<ScriptComponent/5a892cf5-18a0-4559-89ef-7a1f903424ad>
-  PrefabRemaps:
-    []
-  Name: DetectionInstance
-  Enabled: true
-  ScriptAsset: !<reference> be0cc6c2-af06-4ea6-b2c2-229cf4153a5d
-  ScriptInputsDefault:
-    {}
-  ScriptTypesDefault:
-    {}
-  ScriptInputs:
-    "":
-      materials: !<reference.Material[]>
-        - !<reference> e7eda618-6dda-45f7-838d-4f6c92947c5e
-        - !<reference> b8ef08d8-ea31-4507-ab13-6d8079d23818
-      meshObject: !<reference.SceneObject> 5526d9e9-f02f-4435-a770-52dcdbe20359
-      textComponent: !<reference.Text> 97eeda31-f596-4278-959b-294faa7f1f89
-  ScriptTypes:
-    "":
-      {}
-- !<SceneObject/766f8e55-740b-407e-817e-c6373bc196de>
+- !<SceneObject/43be0015-a507-420f-84a9-b1afd8eeab36>
   PrefabRemaps:
     []
   Name: Tracklet
@@ -51,11 +16,66 @@
     scale: {x: 1.000000, y: 1.000000, z: 1.000000}
     hasSegmentScaleCompensation: false
   Children:
-    - !<own> a06978c0-f772-4cb4-b239-09bdaff6ea1f
-    - !<own> 5526d9e9-f02f-4435-a770-52dcdbe20359
+    - !<own> f48a6eb4-7fb2-499d-9c4b-bfae421c4cc3
+    - !<own> bf8a959e-6eab-4b56-a9de-212d33372f1c
   Components:
-    - !<own> 5a892cf5-18a0-4559-89ef-7a1f903424ad
-- !<Text/97eeda31-f596-4278-959b-294faa7f1f89>
+    - !<own> f10c266a-91c8-4372-afe4-281a6f58098d
+- !<RenderMeshVisual/7f73615d-4923-4758-b2a9-64d095f9018c>
+  PrefabRemaps:
+    []
+  Name: Render Mesh Visual
+  Enabled: true
+  RenderOrder: 0
+  StretchMode: Stretch
+  VerticalAlignment: Center
+  HorizontalAlignment: Center
+  MeshShadowMode: None
+  ShadowColor: {x: 1.000000, y: 1.000000, z: 1.000000, w: 1.000000}
+  ShadowDensity: 1.000000
+  Materials:
+    - !<reference> b8ef08d8-ea31-4507-ab13-6d8079d23818
+  Mesh: !<reference> c5146aac-a857-43b4-a296-d39561a5c5eb
+  Skin: !<reference> 00000000-0000-0000-0000-000000000000
+  BlendShapesEnabled: true
+  BlendNormals: false
+  BlendShapes:
+    {}
+- !<RenderMeshVisual/85b2abab-ec80-4398-b368-e39187efa74f>
+  PrefabRemaps:
+    []
+  Name: Render Mesh Visual
+  Enabled: true
+  RenderOrder: 0
+  StretchMode: Stretch
+  VerticalAlignment: Center
+  HorizontalAlignment: Center
+  MeshShadowMode: None
+  ShadowColor: {x: 1.000000, y: 1.000000, z: 1.000000, w: 1.000000}
+  ShadowDensity: 1.000000
+  Materials:
+    - !<reference> e7eda618-6dda-45f7-838d-4f6c92947c5e
+  Mesh: !<reference> cc4cc74a-2163-44b1-9a7e-118184d32e57
+  Skin: !<reference> 00000000-0000-0000-0000-000000000000
+  BlendShapesEnabled: true
+  BlendNormals: false
+  BlendShapes:
+    {}
+- !<SceneObject/8c37d1da-c166-4662-9147-6ba0ec609598>
+  PrefabRemaps:
+    []
+  Name: Outline Plane
+  Enabled: true
+  Layers: 1
+  LocalTransform:
+    position: {x: 0.000000, y: 0.500000, z: 0.000000}
+    rotation: {x: 0.000000, y: -0.000000, z: 0.000000}
+    scale: {x: 1.000000, y: 1.000000, z: 1.000000}
+    hasSegmentScaleCompensation: false
+  Children:
+    []
+  Components:
+    - !<own> 7f73615d-4923-4758-b2a9-64d095f9018c
+- !<Text/8f4346fe-d033-48d5-a81d-40a8297f424f>
   PrefabRemaps:
     []
   Name: Text
@@ -131,7 +151,60 @@
     CapitalizationOverride: None
   DepthTest: false
   TwoSided: false
-- !<SceneObject/a06978c0-f772-4cb4-b239-09bdaff6ea1f>
+- !<SceneObject/a3933d90-e246-49c9-8f68-30feec407d59>
+  PrefabRemaps:
+    []
+  Name: Box
+  Enabled: true
+  Layers: 1
+  LocalTransform:
+    position: {x: 0.000000, y: 0.500000, z: 0.000000}
+    rotation: {x: 0.000000, y: -0.000000, z: 0.000000}
+    scale: {x: 1.000000, y: 1.000000, z: 1.000000}
+    hasSegmentScaleCompensation: false
+  Children:
+    []
+  Components:
+    - !<own> 85b2abab-ec80-4398-b368-e39187efa74f
+- !<SceneObject/bf8a959e-6eab-4b56-a9de-212d33372f1c>
+  PrefabRemaps:
+    []
+  Name: MeshContainer
+  Enabled: true
+  Layers: 1
+  LocalTransform:
+    position: {x: 0.000000, y: -5.000000, z: 0.000000}
+    rotation: {x: 0.000000, y: 0.000000, z: 0.000000}
+    scale: {x: 1.000000, y: 10.000000, z: 1.000000}
+    hasSegmentScaleCompensation: false
+  Children:
+    - !<own> 8c37d1da-c166-4662-9147-6ba0ec609598
+    - !<own> a3933d90-e246-49c9-8f68-30feec407d59
+  Components:
+    []
+- !<ScriptComponent/f10c266a-91c8-4372-afe4-281a6f58098d>
+  PrefabRemaps:
+    []
+  Name: DetectionInstance
+  Enabled: true
+  ScriptAsset: !<reference> be0cc6c2-af06-4ea6-b2c2-229cf4153a5d
+  ScriptInputsDefault:
+    {}
+  ScriptTypesDefault:
+    {}
+  ScriptInputs:
+    "":
+      materials: !<reference.Material[]>
+        - !<reference> e7eda618-6dda-45f7-838d-4f6c92947c5e
+        - !<reference> ff4ab147-6296-4f07-9dcd-3dc5619a3e4a
+      meshContainerObject: !<reference.SceneObject> bf8a959e-6eab-4b56-a9de-212d33372f1c
+      boxMeshObject: !<reference.SceneObject> a3933d90-e246-49c9-8f68-30feec407d59
+      planeMeshObject: !<reference.SceneObject> 8c37d1da-c166-4662-9147-6ba0ec609598
+      textComponent: !<reference.Text> 8f4346fe-d033-48d5-a81d-40a8297f424f
+  ScriptTypes:
+    "":
+      {}
+- !<SceneObject/f48a6eb4-7fb2-499d-9c4b-bfae421c4cc3>
   PrefabRemaps:
     []
   Name: Text
@@ -145,24 +218,4 @@
   Children:
     []
   Components:
-    - !<own> 97eeda31-f596-4278-959b-294faa7f1f89
-- !<RenderMeshVisual/a6b8f58e-fe14-4d0a-9a2a-131b77a8080f>
-  PrefabRemaps:
-    []
-  Name: Render Mesh Visual
-  Enabled: true
-  RenderOrder: 0
-  StretchMode: Stretch
-  VerticalAlignment: Center
-  HorizontalAlignment: Center
-  MeshShadowMode: None
-  ShadowColor: {x: 1.000000, y: 1.000000, z: 1.000000, w: 1.000000}
-  ShadowDensity: 1.000000
-  Materials:
-    - !<reference> e7eda618-6dda-45f7-838d-4f6c92947c5e
-  Mesh: !<reference> cc4cc74a-2163-44b1-9a7e-118184d32e57
-  Skin: !<reference> 00000000-0000-0000-0000-000000000000
-  BlendShapesEnabled: true
-  BlendNormals: false
-  BlendShapes:
-    {}
+    - !<own> 8f4346fe-d033-48d5-a81d-40a8297f424f
