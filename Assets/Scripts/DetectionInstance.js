@@ -54,6 +54,8 @@ function updateAppearance() {
         case 0:
         // desaturate
         case 1:
+        // blur
+        case 2:
             boxMeshObject.enabled = true;
             planeMeshObject.enabled = false;
 
@@ -65,7 +67,7 @@ function updateAppearance() {
             boxRenderMeshVisual.mainMaterial = newMaterial;
             break;
         // outline is a special case
-        case 2:
+        case 3:
             boxMeshObject.enabled = false;
             planeMeshObject.enabled = true;
             break;

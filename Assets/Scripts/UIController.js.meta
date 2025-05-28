@@ -28,6 +28,10 @@
   CurrentVisibility: Editable
   MaxVisibility: Editable
   ScriptInputsHidden:
+    effectType0: false
+    effectType1: false
+    effectType2: false
+    effectType3: false
     instanceController: false
     nutriScoreSlider: false
   ScriptTypesHidden:
@@ -37,6 +41,10 @@
   DefaultScriptInputs:
     - instanceController: !<reference.ScriptComponent> 00000000-0000-0000-0000-000000000000
       nutriScoreSlider: !<reference.ScriptComponent> 00000000-0000-0000-0000-000000000000
+      effectType0: !<reference.SceneObject> 00000000-0000-0000-0000-000000000000
+      effectType1: !<reference.SceneObject> 00000000-0000-0000-0000-000000000000
+      effectType2: !<reference.SceneObject> 00000000-0000-0000-0000-000000000000
+      effectType3: !<reference.SceneObject> 00000000-0000-0000-0000-000000000000
   ScriptTypes:
     -
       {}

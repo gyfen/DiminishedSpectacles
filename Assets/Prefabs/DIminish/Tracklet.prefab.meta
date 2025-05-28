@@ -29,6 +29,7 @@
       materials: !<reference.Material[]>
         - !<reference> e7eda618-6dda-45f7-838d-4f6c92947c5e
         - !<reference> ff4ab147-6296-4f07-9dcd-3dc5619a3e4a
+        - !<reference> e7eda618-6dda-45f7-838d-4f6c92947c5e
       meshContainerObject: !<reference.SceneObject> 7fc1a50f-b536-4725-9a17-a754991d24fd
       boxMeshObject: !<reference.SceneObject> 61831fca-e695-482a-9458-fe588a589525
       planeMeshObject: !<reference.SceneObject> cbe1339a-3df3-4e34-9023-b8f4a1fbbd22
@@ -116,7 +117,7 @@
   Layers: 1
   LocalTransform:
     position: {x: 0.000000, y: 0.000000, z: 0.000000}
-    rotation: {x: 0.000000, y: -0.000000, z: 0.000000}
+    rotation: {x: 0.000000, y: 0.000000, z: 0.000000}
     scale: {x: 1.000000, y: 1.000000, z: 1.000000}
     hasSegmentScaleCompensation: false
   Children:
