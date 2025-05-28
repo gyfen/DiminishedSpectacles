@@ -748,7 +748,6 @@
     useSnapping: true
     itemSnapping: true
     worldSnapping: true
-    showCloseButton: true
   ScriptTypesDefault:
     {}
   ScriptInputs:
@@ -776,7 +775,7 @@
       showFollowButton: true
       useFOVFollow: true
       isFollowing: true
-      showCloseButton: true
+      showCloseButton: false
       _enableInteractionPlane: true
   ScriptTypes:
     "":

@@ -35,10 +35,12 @@ function updateAppearance() {
     const effectType = store.getInt("effectType");
     // threshold or linear
     const effectMode = store.getInt("effectMode");
+    // label visiblity (de debugging)
+    const labelShown = Boolean(store.getInt("labelShown"));
 
     let alpha = 0;
 
-    switch (effectType) {
+    switch (effectMode) {
         case 0:
             alpha = nutriScore > store.getInt("nutriScore") ? 1 : 0;
             break;
@@ -47,7 +49,7 @@ function updateAppearance() {
             break;
     }
 
-    switch (effect) {
+    switch (effectType) {
         // solid overlay
         case 0:
         // desaturate
@@ -70,7 +72,7 @@ function updateAppearance() {
     }
 
     // Set label visibility
-    script.textComponent.enabled = Boolean(store.getInt("labelShown"));
+    script.textComponent.enabled = labelShown;
 }
 
 function setTransform(position, rotation, absoluteWidth, absoluteHeight) {
