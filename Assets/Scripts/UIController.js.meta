@@ -33,6 +33,7 @@
     effectType2: false
     effectType3: false
     instanceController: false
+    labelToggle: false
     nutriScoreSlider: false
   ScriptTypesHidden:
     {}
@@ -41,6 +42,7 @@
   DefaultScriptInputs:
     - instanceController: !<reference.ScriptComponent> 00000000-0000-0000-0000-000000000000
       nutriScoreSlider: !<reference.ScriptComponent> 00000000-0000-0000-0000-000000000000
+      labelToggle: !<reference.ScriptComponent> 00000000-0000-0000-0000-000000000000
       effectType0: !<reference.SceneObject> 00000000-0000-0000-0000-000000000000
       effectType1: !<reference.SceneObject> 00000000-0000-0000-0000-000000000000
       effectType2: !<reference.SceneObject> 00000000-0000-0000-0000-000000000000

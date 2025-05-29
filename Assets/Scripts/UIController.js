@@ -4,6 +4,9 @@ const instanceController = script.instanceController;
 // @input Component.ScriptComponent nutriScoreSlider
 const nutriScoreSlider = script.nutriScoreSlider;
 
+// @input Component.ScriptComponent labelToggle
+const labelToggle = script.labelToggle;
+
 // @input SceneObject effectType0;
 const effectType0 = script.effectType0;
 // @input SceneObject effectType1;
@@ -21,6 +24,7 @@ function onStart() {
     // set slider value from storage
     nutriScoreSlider.currentValue = store.getInt("nutriScore") || 0.0;
 
+    // set radio buttons
     switch (store.getInt("effectType")) {
         case 0:
             setRadioButton(effectType0, true);
@@ -35,6 +39,9 @@ function onStart() {
             setRadioButton(effectType3, true);
             break;
     }
+
+    // set toggle button
+    labelToggle.setStateSilently(store.getInt("showLabels"));
 }
 
 function calibrate() {
@@ -89,8 +96,12 @@ function updateEffect(effectType) {
     setRadioButton(effectType3, false);
 }
 
+function updateLabelVisibility() {
+    store.putInt("showLabels", labelToggle.isToggledOn ? 1 : 0);
+    instanceController.updateTrackletsMaterial();
+}
+
 script.createEvent("OnStartEvent").bind(onStart);
-//init();
 
 script.calibrate = calibrate;
 script.updateNutriScore = updateNutriScore;
@@ -98,3 +109,4 @@ script.updateEffect0 = updateEffect0;
 script.updateEffect1 = updateEffect1;
 script.updateEffect2 = updateEffect2;
 script.updateEffect3 = updateEffect3;
+script.updateLabelVisibility = updateLabelVisibility;

@@ -37,7 +37,7 @@ function updateAppearance() {
     // threshold or linear
     const effectMode = store.getInt("effectMode");
     // label visiblity (de debugging)
-    const labelShown = Boolean(store.getInt("labelShown"));
+    const showLabels = Boolean(store.getInt("showLabels"));
 
     let alpha = 0;
 
@@ -76,7 +76,7 @@ function updateAppearance() {
     }
 
     // Set label visibility
-    script.textComponent.enabled = labelShown;
+    script.textComponent.enabled = showLabels;
 }
 
 function setTransform(position, rotation, absoluteWidth, absoluteHeight) {

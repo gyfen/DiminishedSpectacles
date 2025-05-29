@@ -152,4 +152,15 @@ export class ToggleButton extends BaseScriptComponent {
     this.refreshVisual()
     this.onStateChangedEvent.invoke(this._isToggledOn)
   }
+    
+    /**
+     * Sets the toggle state silently (without triggering callbacks).
+     * @param toggleOn - New state
+     */
+    public setStateSilently(toggleOn: boolean): void {
+      if (this._isToggledOn !== toggleOn) {
+        this._isToggledOn = toggleOn
+        this.refreshVisual()
+      }
+    }
 }
