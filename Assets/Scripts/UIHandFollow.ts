@@ -1,3 +1,6 @@
+// adapted from:
+// https://localjoost.github.io/Lens-Studio-Cube-Bouncer-for-the-confused-Unity-developer-add-a-hand-menu/
+
 import { HandInputData } from "../SpectaclesInteractionKit/Providers/HandInputData/HandInputData";
 import { HandType } from "../SpectaclesInteractionKit/Providers/HandInputData/HandType";
 import TrackedHand from "../SpectaclesInteractionKit/Providers/HandInputData/TrackedHand";
@@ -6,7 +9,9 @@ import WorldCameraFinderProvider from "../SpectaclesInteractionKit/Providers/Cam
 @component
 export class HandFollower extends BaseScriptComponent {
     @input private handFollowObject: SceneObject;
+    @input private SIKCursors: SceneObject;
     @input private distanceToHand: number = 5;
+    @input private minLostFrames: number = 10;
 
     private handProvider: HandInputData = HandInputData.getInstance();
     private leftHand = this.handProvider.getHand("left" as HandType);
@@ -19,16 +24,19 @@ export class HandFollower extends BaseScriptComponent {
             this.update();
         });
         this.handFollowObject.enabled = false;
+        this.SIKCursors.enabled = false;
     }
 
     update() {
         if (this.tryShowHandMenu(this.leftHand) || this.tryShowHandMenu(this.rightHand)) {
             this.handFollowObject.enabled = true;
+            this.SIKCursors.enabled = true;
             this.noTrackCount = 0;
         } else {
             this.noTrackCount++;
-            if (this.noTrackCount > 10) {
+            if (this.noTrackCount > this.minLostFrames) {
                 this.handFollowObject.enabled = false;
+                this.SIKCursors.enabled = false;
             }
         }
     }
@@ -61,7 +69,9 @@ export class HandFollower extends BaseScriptComponent {
                 .getTransform()
                 .setWorldPosition(
                     currentPosition.add(
-                        directionNextToKnuckle.mult(new vec3(this.distanceToHand, this.distanceToHand, this.distanceToHand))
+                        directionNextToKnuckle.mult(
+                            new vec3(this.distanceToHand, this.distanceToHand, this.distanceToHand)
+                        )
                     )
                 );
             return true;

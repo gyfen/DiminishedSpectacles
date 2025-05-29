@@ -2285,12 +2285,15 @@
   ScriptAsset: !<reference> c84fbd50-77eb-46d5-b359-2569f96a07ef
   ScriptInputsDefault:
     distanceToHand: true
+    minLostFrames: true
   ScriptTypesDefault:
     {}
   ScriptInputs:
     "":
       handFollowObject: !<reference.SceneObject> 7bd8f16e-a8fb-4cb2-acbc-6390d4fdf130
+      SIKCursors: !<reference.SceneObject> 4c4e6eb9-1438-4e19-9fab-6564eba34e36
       distanceToHand: !<float> 5.000000
+      minLostFrames: !<float> 10.000000
   ScriptTypes:
     "":
       {}
@@ -2377,7 +2380,7 @@
   PrefabRemaps:
     []
   Name: InteractorCursors
-  Enabled: true
+  Enabled: false
   Layers: 1
   LocalTransform:
     position: {x: 0.000000, y: 0.000000, z: 0.000000}

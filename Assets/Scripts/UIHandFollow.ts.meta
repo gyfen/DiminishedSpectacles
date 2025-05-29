@@ -28,18 +28,24 @@
   CurrentVisibility: Editable
   MaxVisibility: Editable
   ScriptInputsHidden:
+    SIKCursors: false
     distanceToHand: false
     handFollowObject: false
+    minLostFrames: false
   ScriptTypesHidden:
     {}
   ReadMe: !<reference> 00000000-0000-0000-0000-000000000000
   DeclarationFile: !<reference> 00000000-0000-0000-0000-000000000000
   DefaultScriptInputs:
     - handFollowObject: !<reference.SceneObject> 00000000-0000-0000-0000-000000000000
+      SIKCursors: !<reference.SceneObject> 00000000-0000-0000-0000-000000000000
       distanceToHand: !<float> 5.000000
+      minLostFrames: !<float> 10.000000
   ScriptTypes:
     -
       {}
   InputLines:
     - // @input SceneObject handFollowObject
+    - // @input SceneObject SIKCursors
     - // @input float distanceToHand = 5
+    - // @input float minLostFrames = 10
