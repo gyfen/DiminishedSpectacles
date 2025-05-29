@@ -12,6 +12,7 @@ export class HandFollower extends BaseScriptComponent {
     @input private SIKCursors: SceneObject;
     @input private distanceToHand: number = 5;
     @input private minLostFrames: number = 10;
+    @input private debugDisableTracking: boolean = false;
 
     private handProvider: HandInputData = HandInputData.getInstance();
     private leftHand = this.handProvider.getHand("left" as HandType);
@@ -20,6 +21,11 @@ export class HandFollower extends BaseScriptComponent {
     private noTrackCount = 0;
 
     onAwake() {
+        // For debug, have the ui always show
+        if (this.debugDisableTracking) {
+            return;
+        }
+
         this.createEvent("UpdateEvent").bind(() => {
             this.update();
         });
