@@ -7,6 +7,9 @@ const nutriScoreSlider = script.nutriScoreSlider;
 // @input Component.ScriptComponent labelToggle
 const labelToggle = script.labelToggle;
 
+// @input Component.ScriptComponent runToggle
+const runToggle = script.runToggle;
+
 // @input SceneObject effectType0;
 const effectType0 = script.effectType0;
 // @input SceneObject effectType1;
@@ -15,8 +18,6 @@ const effectType1 = script.effectType1;
 const effectType2 = script.effectType2;
 // @input SceneObject effectType3;
 const effectType3 = script.effectType3;
-
-// @input Component.
 
 const store = global.persistentStorageSystem.store;
 
@@ -44,8 +45,12 @@ function onStart() {
     labelToggle.setStateSilently(store.getInt("showLabels"));
 }
 
-function calibrate() {
-    instanceController.calibrate();
+function runContinuous() {
+    if (runToggle.isToggledOn) {
+        instanceController.startContinuous();
+    } else {
+        instanceController.stopContinuous();
+    }
 }
 
 function updateNutriScore() {
@@ -103,7 +108,9 @@ function updateLabelVisibility() {
 
 script.createEvent("OnStartEvent").bind(onStart);
 
-script.calibrate = calibrate;
+script.runOnce = instanceController.runOnce;
+script.runContinuous = runContinuous;
+
 script.updateNutriScore = updateNutriScore;
 script.updateEffect0 = updateEffect0;
 script.updateEffect1 = updateEffect1;

@@ -215,11 +215,6 @@ function onDetectionsUpdated(detectionsLeft, detectionsRight) {
 
 /* --- Public API --- */
 
-/* Detect objects and spawn instances */
-function calibrate() {
-    mlController.runOnce();
-}
-
 /* Update the material of all instances */
 function updateTrackletsMaterial() {
     for (const [label, tracklet] of Object.entries(tracklets)) {
@@ -250,5 +245,8 @@ function onStart() {
 
 script.createEvent("OnStartEvent").bind(onStart);
 
-script.calibrate = calibrate;
+script.runOnce = mlController.runOnce;
+script.startContinuous = mlController.startContinuous;
+script.stopContinuous = mlController.stopContinuous;
+
 script.updateTrackletsMaterial = updateTrackletsMaterial;

@@ -35,6 +35,7 @@
     instanceController: false
     labelToggle: false
     nutriScoreSlider: false
+    runToggle: false
   ScriptTypesHidden:
     {}
   ReadMe: !<reference> 00000000-0000-0000-0000-000000000000
@@ -43,6 +44,7 @@
     - instanceController: !<reference.ScriptComponent> 00000000-0000-0000-0000-000000000000
       nutriScoreSlider: !<reference.ScriptComponent> 00000000-0000-0000-0000-000000000000
       labelToggle: !<reference.ScriptComponent> 00000000-0000-0000-0000-000000000000
+      runToggle: !<reference.ScriptComponent> 00000000-0000-0000-0000-000000000000
       effectType0: !<reference.SceneObject> 00000000-0000-0000-0000-000000000000
       effectType1: !<reference.SceneObject> 00000000-0000-0000-0000-000000000000
       effectType2: !<reference.SceneObject> 00000000-0000-0000-0000-000000000000

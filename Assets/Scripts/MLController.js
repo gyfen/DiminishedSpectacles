@@ -300,17 +300,35 @@ function runOnce() {
     }
 }
 
+function startContinuous() {
+    mlComponent.runScheduled(
+        true,
+        MachineLearning.FrameTiming.Update,
+        MachineLearning.FrameTiming.Update
+    );
+    mlComponent2.runScheduled(
+        true,
+        MachineLearning.FrameTiming.Update,
+        MachineLearning.FrameTiming.Update
+    );
+}
+
+function stopContinuous() {
+    mlComponent.stop();
+    mlComponent2.stop();
+}
+
 /**
  * returns a number of classes that model detects
  * @returns {number}
  */
-function getClassCount() {
-    return classCount;
-}
+// function getClassCount() {
+//     return classCount;
+// }
 
-function getClassLabel(index) {
-    return classSettings[index].label ? classSettings[index].label : "class_" + index;
-}
+// function getClassLabel(index) {
+//     return classSettings[index].label ? classSettings[index].label : "class_" + index;
+// }
 
 // function getLabels() {
 //     return Object.keys(classSettings);
@@ -320,7 +338,9 @@ onAwake();
 
 //public api functions
 script.onDetectionsUpdated = onDetectionsUpdated;
-script.getClassCount = getClassCount;
-script.getClassLabel = getClassLabel;
+// script.getClassCount = getClassCount;
+// script.getClassLabel = getClassLabel;
 // script.getLabels = getLabels;
 script.runOnce = runOnce;
+script.startContinuous = startContinuous;
+script.stopContinuous = stopContinuous;
