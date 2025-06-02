@@ -21,7 +21,7 @@
   Enabled: true
   ScriptAsset: !<reference> be0cc6c2-af06-4ea6-b2c2-229cf4153a5d
   ScriptInputsDefault:
-    {}
+    cameraTexture: true
   ScriptTypesDefault:
     {}
   ScriptInputs:
@@ -34,6 +34,7 @@
       boxMeshObject: !<reference.SceneObject> 61831fca-e695-482a-9458-fe588a589525
       planeMeshObject: !<reference.SceneObject> cbe1339a-3df3-4e34-9023-b8f4a1fbbd22
       textComponent: !<reference.Text> f77d261b-0c8e-4788-ae0f-351758aef9a5
+      cameraTexture: !<reference.Texture> 00000000-0000-0000-0000-000000000000
   ScriptTypes:
     "":
       {}
@@ -95,7 +96,7 @@
   Enabled: true
   Layers: 1
   LocalTransform:
-    position: {x: 0.000000, y: 0.000000, z: 0.000000}
+    position: {x: 0.000000, y: 0.100000, z: 0.000000}
     rotation: {x: 90.000000, y: 0.000000, z: 0.000000}
     scale: {x: -1.000000, y: 1.000000, z: 1.000000}
     hasSegmentScaleCompensation: false
@@ -191,7 +192,7 @@
   TouchHandler: !<reference> 00000000-0000-0000-0000-000000000000
   SizeToFit: true
   FontSize: 48
-  Font: !<reference> 00000000-0000-0000-0000-000000000000
+  Font: !<reference> 15c0041f-8af3-45c8-bc99-90c3bf6b5e19
   LayoutRect:
     left: -5.000000
     bottom: -2.250000
@@ -201,7 +202,7 @@
   OverflowHorizontal: Overflow
   Fill: !<TextFill>
     Mode: Solid
-    Color: {x: 0.000000, y: 0.000000, z: 1.000000, w: 1.000000}
+    Color: {x: 1.000000, y: 1.000000, z: 1.000000, w: 1.000000}
     Texture: !<reference> 00000000-0000-0000-0000-000000000000
     TileCount: 5.000000
     TileZone: Rect
@@ -228,10 +229,10 @@
     OffsetX: 0.250000
     OffsetY: 0.250000
   Background: !<BackgroundSettings>
-    Enabled: false
+    Enabled: true
     Fill: !<TextFill>
       Mode: Solid
-      Color: {x: 0.000000, y: 0.000000, z: 0.000000, w: 1.000000}
+      Color: {x: 0.000000, y: 0.215686, z: 1.000000, w: 1.000000}
       Texture: !<reference> 00000000-0000-0000-0000-000000000000
       TileCount: 5.000000
       TileZone: Rect

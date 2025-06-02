@@ -62,7 +62,7 @@ export class HandFollower extends BaseScriptComponent {
                 ) *
                     180.0) /
                 Math.PI;
-            if (Math.abs(angle) > 20) {
+            if (Math.abs(angle) > 45) {
                 return false;
             }
             var directionNextToKnuckle =

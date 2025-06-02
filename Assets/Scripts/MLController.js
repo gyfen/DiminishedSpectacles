@@ -304,12 +304,14 @@ function startContinuous() {
     mlComponent.runScheduled(
         true,
         MachineLearning.FrameTiming.Update,
-        MachineLearning.FrameTiming.Update
+        // MachineLearning.FrameTiming.Update
+        MachineLearning.FrameTiming.None
     );
     mlComponent2.runScheduled(
         true,
         MachineLearning.FrameTiming.Update,
-        MachineLearning.FrameTiming.Update
+        // MachineLearning.FrameTiming.Update
+        MachineLearning.FrameTiming.None
     );
 }
 
