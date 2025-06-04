@@ -21,6 +21,9 @@ const trackletPrefab = script.trackletPrefab;
 // @input bool debugLocally
 const debugLocally = script.debugLocally;
 
+// Additional scaling factor applied to the scaling formula.
+const depthScalingCorrection = 0.85;
+
 // Define camera left and right
 let deviceCameraLeft;
 let deviceCameraRight;
@@ -58,12 +61,18 @@ function worldSpaceToCameraSpace(point) {
 
 /* Convert normalized width to absolute width in cm */
 function normWidthToAbsolute(width, depth) {
-    return (width * deviceCameraResolution.x * depth * 0.85) / deviceCameraFocalLength.x;
+    return (
+        (width * deviceCameraResolution.x * depth * depthScalingCorrection) /
+        deviceCameraFocalLength.x
+    );
 }
 
 /* Convert normalized height to absolute height in cm */
 function normHeightToAbsolute(height, depth) {
-    return (height * deviceCameraResolution.y * depth * 0.85) / deviceCameraFocalLength.y;
+    return (
+        (height * deviceCameraResolution.y * depth * depthScalingCorrection) /
+        deviceCameraFocalLength.y
+    );
 }
 
 /** Merge two detection results into one better result
@@ -229,7 +238,6 @@ function onStart() {
     deviceCameraLeft = global.deviceInfoSystem.getTrackingCameraForId(
         CameraModule.CameraId.Left_Color
     );
-    // For debugging on other platforms, set the right camera to be the same as the left
 
     deviceCameraRight = global.deviceInfoSystem.getTrackingCameraForId(
         CameraModule.CameraId.Right_Color
