@@ -39,6 +39,13 @@ var iouThreshold = script.iouThreshold;
 var classSettings = script.classSettings;
 //@ui {"widget":"group_end"}
 
+/** @type {number} */
+var classCount = classSettings.length;
+
+const classSettingsObj = Object.fromEntries(
+    classSettings.map(({ label, ...rest }) => [label, rest])
+);
+
 //@ui {"widget" : "separator"}
 // @input bool debugTextureOverride = false
 const debugTextureOverride = script.debugTextureOverride;
@@ -86,8 +93,6 @@ var inputsLeft;
 var outputsRight;
 /** @type {InputPlaceholder[]} */
 var inputsRight;
-/** @type {number} */
-var classCount = classSettings.length;
 
 let onDetectionsUpdatedLeft;
 let onDetectionsUpdatedRight;
@@ -334,6 +339,10 @@ function stopContinuous() {
 //     return classSettings[index].label ? classSettings[index].label : "class_" + index;
 // }
 
+function getLabelData(label) {
+    return classSettingsObj[label];
+}
+
 // function getLabels() {
 //     return Object.keys(classSettings);
 // }
@@ -345,6 +354,7 @@ script.onDetectionsUpdated = onDetectionsUpdated;
 // script.getClassCount = getClassCount;
 // script.getClassLabel = getClassLabel;
 // script.getLabels = getLabels;
+script.getLabelData = getLabelData;
 script.runOnce = runOnce;
 script.startContinuous = startContinuous;
 script.stopContinuous = stopContinuous;

@@ -40,6 +40,10 @@ let detectionGroups = [];
 // const tracklets = {};
 let trackletPool = [];
 
+function getLabelData(label) {
+    return;
+}
+
 function avgAdd(avg, count, val) {
     return (avg * count + val) / (count - 1);
 }
@@ -80,14 +84,14 @@ function normHeightToAbsolute(height, depth) {
 }
 
 /* update a tracklet */
-function updateTracklet(tracklet, position, normal, dimensions, label, nutriScore) {
+function updateTracklet(tracklet, position, normal, dimensions, label, data) {
     tracklet.enabled = true;
 
     // Instantiate the object we want to place
     const trackletScript = tracklet.getComponent("Component.ScriptComponent");
 
     // calc rotation
-    // TODO: they should all have the same normal
+    // TODO: they could all have the same normal, which might result in nicer results but more computation
     // Rotate the object based on World Mesh Surface
     const up = vec3.up();
     const forwardDir = up.projectOnPlane(normal);
@@ -101,7 +105,7 @@ function updateTracklet(tracklet, position, normal, dimensions, label, nutriScor
     const absoluteHeight = normHeightToAbsolute(height, depth);
 
     // Update the tracklet data
-    trackletScript.setData(label, nutriScore);
+    trackletScript.setData(label, data);
     trackletScript.setTransform(point, rot, absoluteWidth, absoluteHeight);
     trackletScript.updateAppearance();
 
@@ -241,7 +245,6 @@ function removeOldFromDetectionGroup(group, index) {
 
 /* Remove the entire group */
 function deleteDetectionGroup(index) {
-    // remove from detectionGroups
     detectionGroups.splice(index, 1);
 }
 
@@ -278,12 +281,12 @@ function updateDetectionGroup(index) {
             group.position,
             group.normal,
             group.dimensions,
-            group.label
+            group.label,
+            mlController.getLabelData(label)
         );
     }
     // remove that tracklet, if applicable
     else if (group.tracklet) {
-        // group.tracklet.enabled = false;
         retireTracklet(group.tracklet);
         group.tracklet = null;
     }
@@ -345,16 +348,16 @@ function parseDetections(detections, isLeft) {
     }
 
     for (let i = 0; i < detectionGroups.length; i++) {
-        // const group = detectionGroups[index];
-        updateDetectionGroup(index);
+        updateDetectionGroup(i);
     }
 }
 
-/* Gets triggered by MLController when detection results are in */
+/* Gets triggered by MLController when detection results are in from the left side */
 function onDetectionsUpdatedLeft(detectionsLeft) {
     parseDetections(detectionsLeft, true);
 }
 
+/* Gets triggered by MLController when detection results are in from the right side*/
 function onDetectionsUpdatedRight(detectionsRight) {
     parseDetections(detectionsRight, false);
 }
@@ -363,11 +366,14 @@ function onDetectionsUpdatedRight(detectionsRight) {
 
 /* Update the material of all instances */
 function updateTrackletsMaterial() {
-    for (const [label, tracklet] of Object.entries(tracklets)) {
-        if (tracklet.enabled) {
-            const trackletScript = tracklet.getComponent("Component.ScriptComponent");
-            trackletScript.updateAppearance();
+    for (const group of detectionGroups) {
+        const tracklet = group.tracklet;
+        if (!tracklet) {
+            continue;
         }
+
+        const trackletScript = tracklet.getComponent("Component.ScriptComponent");
+        trackletScript.updateAppearance();
     }
 }
 
@@ -391,6 +397,7 @@ function onStart() {
 
 script.createEvent("OnStartEvent").bind(onStart);
 
+// TODO: revamp runOnce
 script.runOnce = mlController.runOnce;
 script.startContinuous = mlController.startContinuous;
 script.stopContinuous = mlController.stopContinuous;

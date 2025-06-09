@@ -24,7 +24,7 @@ const textComponent = script.textComponent;
 const store = global.persistentStorageSystem.store;
 
 let label;
-let nutriScore;
+let data;
 
 /* Public API */
 function updateAppearance() {
@@ -43,10 +43,10 @@ function updateAppearance() {
 
     switch (effectMode) {
         case 0:
-            alpha = nutriScore > nutriScoreThreshold ? 1 : 0;
+            alpha = data.nutriScore > nutriScoreThreshold ? 1 : 0;
             break;
         case 1:
-            alpha = nutriScore / 4;
+            alpha = data.nutriScore / 4;
             break;
     }
 
@@ -90,9 +90,10 @@ function setTransform(position, rotation, absoluteWidth, absoluteHeight) {
     meshTransform.setLocalScale(newScale);
 }
 
-function setData(newLabel, newNutriScore) {
-    nutriScore = newNutriScore;
+function setData(newLabel, newData) {
+    // data could store more than just the nutri score...
     label = newLabel;
+    data = newData;
     script.textComponent.text = label;
 }
 
