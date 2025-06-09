@@ -7617,7 +7617,7 @@
 - !<ScriptComponent/f9969d3f-f8f9-4937-993e-692b25033f86>
   PrefabRemaps:
     []
-  Name: DetectionController
+  Name: TrackletController
   Enabled: true
   ScriptAsset: !<reference> 48e5c1f6-f787-4966-9221-e96663802d34
   ScriptInputsDefault:

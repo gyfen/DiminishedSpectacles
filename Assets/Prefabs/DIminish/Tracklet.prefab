@@ -185,7 +185,7 @@
 - !<ScriptComponent/f10c266a-91c8-4372-afe4-281a6f58098d>
   PrefabRemaps:
     []
-  Name: DetectionInstance
+  Name: Tracklet
   Enabled: true
   ScriptAsset: !<reference> be0cc6c2-af06-4ea6-b2c2-229cf4153a5d
   ScriptInputsDefault:
