@@ -31,18 +31,18 @@ let deviceCameraResolution;
 let deviceCameraFocalLength;
 
 // Register ML callback
-mlController.onDetectionsUpdated.add(onDetectionsUpdated);
+mlController.onDetectionsUpdatedLeft = onDetectionsUpdatedLeft;
+mlController.onDetectionsUpdatedRight = onDetectionsUpdatedRight;
 
 // Object to keep track of all detection instances
-const tracklets = {};
 
-function averageVec3(v1, v2) {
-    return new vec3((v1.x + v2.x) / 2, (v1.y + v2.y) / 2, (v1.z + v2.z) / 2);
-}
+let detectionGroups = [];
+// const tracklets = {};
+let trackletPool = [];
 
-function mergeDetectionLabels(d1, d2) {
-    return new Set([...Object.keys(d1), ...Object.keys(d2)]);
-}
+function avgAdd(avg, num) {}
+
+function avgRemove(avg, num) {}
 
 function deviceCameraScreenSpaceToWorldSpace(deviceCamera, xNorm, yNorm, absoluteDepth) {
     const cameraWorldTransform = cameraObject.getTransform().getWorldTransform();
@@ -75,105 +75,12 @@ function normHeightToAbsolute(height, depth) {
     );
 }
 
-/** Merge two detection results into one better result
- * returns {label: {rayStart, rayEnd, width, height}}
- * @returns {string: {vec2, vec2, float, float, int}}
- */
-function parseDetections(detectionsLeft, detectionsRight) {
-    const parsedDetections = {};
-
-    const allLabels = mergeDetectionLabels(detectionsLeft, detectionsRight);
-
-    for (const label of allLabels) {
-        const detectionLeft = detectionsLeft[label];
-        let detectionRight = detectionsRight[label];
-
-        // Debug: only use left camera
-        if (debugLocally) {
-            detectionRight = detectionLeft;
-        }
-
-        // If left and right dont have the same label, skip it.
-        if (detectionLeft === undefined || detectionRight === undefined) {
-            continue;
-        }
-
-        const parsedDetection = {
-            rayStart: averageVec3(
-                deviceCameraScreenSpaceToWorldSpace(
-                    deviceCameraLeft,
-                    detectionLeft.bbox[0],
-                    detectionLeft.bbox[1],
-                    camera.near
-                ),
-                deviceCameraScreenSpaceToWorldSpace(
-                    deviceCameraRight,
-                    detectionRight.bbox[0],
-                    detectionRight.bbox[1],
-                    camera.near
-                )
-            ),
-            rayEnd: averageVec3(
-                deviceCameraScreenSpaceToWorldSpace(
-                    deviceCameraLeft,
-                    detectionLeft.bbox[0],
-                    detectionLeft.bbox[1],
-                    camera.far
-                ),
-                deviceCameraScreenSpaceToWorldSpace(
-                    deviceCameraRight,
-                    detectionRight.bbox[0],
-                    detectionRight.bbox[1],
-                    camera.far
-                )
-            ),
-            width: (detectionLeft.bbox[2] + detectionRight.bbox[2]) / 2,
-            height: (detectionLeft.bbox[3] + detectionRight.bbox[3]) / 2,
-            nutriScore: detectionLeft.nutriScore,
-        };
-
-        parsedDetections[label] = parsedDetection;
-    }
-
-    return parsedDetections;
-}
-
-/* gets an tracklet for a label. if the tracklet doesnt exist, spawn one */
-function getTracklet(label) {
-    // attempt to get from storage
-    let tracklet = tracklets[label];
-
-    // otherwise create a new one
-    if (!tracklet) {
-        tracklet = trackletPrefab.instantiate(script.sceneObject);
-        tracklets[label] = tracklet;
-    }
-
-    return tracklet;
-}
-
-function disableTracklet(label) {
-    tracklets[label].enabled = false;
-}
-
 /* update a tracklet */
-function updateTracklet(rayStart, rayEnd, width, height, label, nutriScore) {
-    const results = deviceTracking.raycastWorldMesh(rayStart, rayEnd);
-
-    if (results.length === 0) {
-        return false;
-    }
-
-    // get the tracklet
-    const tracklet = getTracklet(label);
+function updateTracklet(tracklet, position, normal, width, height, label, nutriScore) {
     tracklet.enabled = true;
 
     // Instantiate the object we want to place
     const trackletScript = tracklet.getComponent("Component.ScriptComponent");
-
-    // Get World Mesh data at the screen position
-    const point = results[0].position;
-    const normal = results[0].normal;
 
     // calc rotation
     // TODO: they should all have the same normal
@@ -183,7 +90,7 @@ function updateTracklet(rayStart, rayEnd, width, height, label, nutriScore) {
     const rot = quat.lookAt(forwardDir, normal);
 
     // compute the camera space depth from the world space point
-    const depth = worldSpaceToCameraSpace(point).z;
+    const depth = worldSpaceToCameraSpace(position).z;
     const absoluteWidth = normWidthToAbsolute(width, depth);
     const absoluteHeight = normHeightToAbsolute(height, depth);
 
@@ -195,31 +102,189 @@ function updateTracklet(rayStart, rayEnd, width, height, label, nutriScore) {
     return true;
 }
 
-/* update all tracklets using new detections */
-function updateTracklets(parsedDetections) {
-    // all relevant labels: the tracklet labels, and detection labels combined
-    const mergedLabels = mergeDetectionLabels(tracklets, parsedDetections);
+/* gets a new tracklet. if the pool is empty, spawn one */
+function getTracklet() {
+    // if no tracklets left
+    if (trackletPool.length === 0) {
+        return trackletPrefab.instantiate(script.getSceneObject());
+    }
 
-    for (const label of mergedLabels) {
-        // if this label has a detection: enable and update it
-        if (parsedDetections[label] !== undefined) {
-            const { rayStart, rayEnd, width, height, nutriScore } = parsedDetections[label];
-            updateTracklet(rayStart, rayEnd, width, height, label, nutriScore);
+    return trackletPool.pop();
+}
+
+/* puts a tracklet back into the tracklet pool, and disables it */
+function retireTracklet(tracklet) {
+    tracklet.enabled = false;
+    trackletPool.push(tracklet);
+}
+
+/* update all tracklets using new detections */
+// function updateTracklets(parsedDetections) {
+// for (const label of mergedLabels) {
+//     // if this label has a detection: enable and update it
+//     if (parsedDetections[label] !== undefined) {
+//         const { rayStart, rayEnd, width, height, nutriScore } = parsedDetections[label];
+//         updateTracklet(rayStart, rayEnd, width, height, label, nutriScore);
+//     }
+//     // if this label is not detected: disable
+//     else {
+//         disableTracklet(label);
+//     }
+// }
+// }
+
+function newDetectionGroup(label, position, normal, dimensions) {
+    const group = {
+        length: 1,
+        tracklet: null,
+        allLabels: [label],
+        allPositions: [position],
+        allNormals: [normal],
+        allDimensions: [dimensions],
+        groupLabel: label,
+        groupPosition: position,
+        groupNormal: normal,
+        groupDimensions: dimensions,
+        updated: true,
+    };
+
+    detectionGroups.push(group);
+}
+
+function addToDetectionGroup(group, label, position, normal, dimensions) {
+    group.updated = true;
+}
+
+/* Remove the entire group */
+function deleteDetectionGroup(index) {
+    // remove from detectionGroups
+    detectionGroups.splice(index, 1);
+}
+
+/*
+Update detection groups:
+- Removes old detections
+- Enables and disabled tracklets
+- Deletes empty groups
+*/
+function updateDetectionGroup(index) {
+    const group = detectionGroups[index];
+
+    // if group wasnt updated and only one left, remove it
+    if (!group.updated && group.length === 1) {
+        deleteDetectionGroup(index);
+    }
+    // if group wasnt updated or if group is full, delete the oldest entry
+    // TODO: remove hardcode
+    else if (!group.updated || group.length > 10) {
+        // remove old
+
+        // reset update status
+        group.updated = false;
+    }
+
+    // check if tracklet is to be enabled.:
+    // count all labels, and if the max label count is > treshold (50% of window?)
+    let maxLabel;
+    let maxLabelCount = 0;
+
+    // count the labels
+    const counts = {};
+    for (const label of group.allLabels) {
+        const count = counts[label] ? counts[label] + 1 : 1;
+        counts[label] = count;
+
+        if (count > maxLabelCount) {
+            maxLabelCount = count;
+            maxLabel = label;
         }
-        // if this label is not detected: disable
-        else {
-            disableTracklet(label);
+    }
+
+    // if enough detections with the same label, assign it a tracklet
+    // TODO: treshold not hardcoded
+    if (maxLabelCount > 0.7 * 10) {
+        if (!group.tracklet) {
+            group.tracklet = requestTracklet();
         }
+
+        updateTracklet(group.tracklet);
+    }
+    // remove that tracklet, if applicable
+    else if (group.tracklet) {
+        // group.tracklet.enabled = false;
+        retireTracklet(group.tracklet);
+        group.tracklet = null;
+    }
+
+    // group.tracklet.enabled = true;
+    // else group.tracklet.enabled = false
+}
+
+function parseDetections(detections, isLeft) {
+    const deviceCamera = isLeft ? deviceCameraLeft : deviceCameraRight;
+
+    let updatedGroups = [];
+
+    // try to add every detection to a group
+    detections: for (const detection of detections) {
+        // Hittest
+        const rayStart = deviceCameraScreenSpaceToWorldSpace(
+            deviceCamera,
+            detection.bbox[0],
+            detection.bbox[1],
+            camera.near
+        );
+
+        const rayEnd = deviceCameraScreenSpaceToWorldSpace(
+            deviceCamera,
+            detection.bbox[0],
+            detection.bbox[1],
+            camera.far
+        );
+
+        const results = deviceTracking.raycastWorldMesh(rayStart, rayEnd);
+        if (results.length === 0) {
+            return false;
+        }
+
+        const position = results[0].position;
+        const normal = results[0].normal;
+
+        // Try to add to group
+        for (const [index, group] of detectionGroups.entries()) {
+            // TODO: remove hardcoded distance threshold
+            // if close to group, add it
+            if (position.distance(group.groupPosition) < 10) {
+                addToDetectionGroup(group, detection.label, position, normal, [
+                    detection.bbox[0],
+                    detection.bbox[0],
+                ]);
+
+                // stop parsing this detection
+                continue detections;
+            }
+        }
+
+        // if not added to any group, make a new group
+        newDetectionGroup(detection.label, position, normal, [
+            detection.bbox[0],
+            detection.bbox[0],
+        ]);
+    }
+
+    for (let i = 0; i < detectionGroups.length; i++) {
+        // const group = detectionGroups[index];
+        updateDetectionGroup(index);
     }
 }
 
 /* Gets triggered by MLController when detection results are in */
-function onDetectionsUpdated(detectionsLeft, detectionsRight) {
-    // parse detections
-    const parsedDetections = parseDetections(detectionsLeft, detectionsRight);
+function onDetectionsUpdatedLeft(detectionsLeft) {
+    parseDetections(detectionsLeft, true);
+}
 
-    // update the tracklets with the new detections
-    updateTracklets(parsedDetections);
+function onDetectionsUpdatedRight(detectionsRight) {
+    parseDetections(detectionsRight, false);
 }
 
 /* --- Public API --- */
@@ -245,6 +310,7 @@ function onStart() {
 
     deviceCameraResolution = deviceCameraLeft.resolution;
     // average the focal lengths, since they differ.
+    // TODO: this is mayble logical, since we merge results.
     deviceCameraFocalLength = deviceCameraLeft.focalLength.moveTowards(
         deviceCameraRight.focalLength,
         0.5

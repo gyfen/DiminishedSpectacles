@@ -46,9 +46,6 @@ const debugTextureOverride = script.debugTextureOverride;
 const overrideTexture = script.overrideTexture;
 
 var DetectionHelpers = require("Modules/DetectionHelpersModule");
-var Events = require("Modules/EventModule");
-
-const EventWrapper = Events.EventWrapper;
 
 const anchors = [
     [
@@ -78,22 +75,22 @@ var grids = [];
 /** @type {vec3} */
 var inputShape;
 /** @type {MLComponent} */
-var mlComponent;
+var mlComponentLeft;
 /** @type {MLComponent} */
-var mlComponent2;
+var mlComponentRight;
 /** @type {OutputPlaceholder[]} */
-var outputs;
+var outputsLeft;
 /** @type {InputPlaceholder[]} */
-var inputs;
+var inputsLeft;
 /** @type {OutputPlaceholder[]} */
-var outputs2;
+var outputsRight;
 /** @type {InputPlaceholder[]} */
-var inputs2;
+var inputsRight;
 /** @type {number} */
 var classCount = classSettings.length;
 
-/** @type {EventWrapper} List of callbacks to call once detections were processed */
-var onDetectionsUpdated = new EventWrapper();
+let onDetectionsUpdatedLeft;
+let onDetectionsUpdatedRight;
 
 // cam
 let cameraModule = require("LensStudio:CameraModule");
@@ -108,28 +105,28 @@ function onAwake() {
     }
 
     // 1
-    mlComponent = script.sceneObject.createComponent("MLComponent");
-    mlComponent.model = model;
-    mlComponent.onLoadingFinished = onLoadingFinished;
-    mlComponent.onRunningFinished = onRunningFinished;
-    mlComponent.inferenceMode = MachineLearning.InferenceMode.Accelerator;
-    mlComponent.build([]);
+    mlComponentLeft = script.sceneObject.createComponent("MLComponent");
+    mlComponentLeft.model = model;
+    mlComponentLeft.onLoadingFinished = onLoadingFinishedLeft;
+    mlComponentLeft.onRunningFinished = onRunningFinishedLeft;
+    mlComponentLeft.inferenceMode = MachineLearning.InferenceMode.Accelerator;
+    mlComponentLeft.build([]);
 
     // 2
-    mlComponent2 = script.sceneObject.createComponent("MLComponent");
-    mlComponent2.model = model;
-    mlComponent2.onLoadingFinished = onLoadingFinished2;
-    mlComponent2.onRunningFinished = onRunningFinished2;
-    mlComponent2.inferenceMode = MachineLearning.InferenceMode.Accelerator;
-    mlComponent2.build([]);
+    mlComponentRight = script.sceneObject.createComponent("MLComponent");
+    mlComponentRight.model = model;
+    mlComponentRight.onLoadingFinished = onLoadingFinishedRight;
+    mlComponentRight.onRunningFinished = onRunningFinishedRight;
+    mlComponentRight.inferenceMode = MachineLearning.InferenceMode.Accelerator;
+    mlComponentRight.build([]);
 }
 
 /**
  * configures inputs and outputs, starts running ml component
  */
-function onLoadingFinished() {
-    outputs = mlComponent.getOutputs();
-    inputs = mlComponent.getInputs();
+function onLoadingFinishedLeft() {
+    outputsLeft = mlComponentLeft.getOutputs();
+    inputsLeft = mlComponentLeft.getInputs();
 
     // build grids
     for (var i = 0; i < outputs.length; i++) {
@@ -143,33 +140,33 @@ function onLoadingFinished() {
     cameraRequestLeft.cameraId = CameraModule.CameraId.Left_Color;
     let cameraTexLeft = cameraModule.requestCamera(cameraRequestLeft);
 
-    inputs[0].texture = debugTextureOverride ? overrideTexture : cameraTexLeft;
+    inputsLeft[0].texture = debugTextureOverride ? overrideTexture : cameraTexLeft;
 }
 
-function onLoadingFinished2() {
-    outputs2 = mlComponent2.getOutputs();
-    inputs2 = mlComponent2.getInputs();
+function onLoadingFinishedRight() {
+    outputsRight = mlComponentRight.getOutputs();
+    inputsRight = mlComponentRight.getInputs();
 
     // set camera texture
     let cameraRequestRight = CameraModule.createCameraRequest();
     cameraRequestRight.cameraId = CameraModule.CameraId.Right_Color;
     let cameraTexRight = cameraModule.requestCamera(cameraRequestRight);
 
-    inputs2[0].texture = debugTextureOverride ? overrideTexture : cameraTexRight;
+    inputsRight[0].texture = debugTextureOverride ? overrideTexture : cameraTexRight;
 }
 
-function onRunningFinished() {
-    parseResults(outputs, true);
+function onRunningFinishedLeft() {
+    parseResults(outputsLeft, true);
 }
 
-function onRunningFinished2() {
-    parseResults(outputs2, false);
+function onRunningFinishedRight() {
+    parseResults(outputsRight, false);
 }
 
-let detectionsLeft;
-let detectionsRight;
+// let detectionsLeft;
+// let detectionsRight;
 
-function parseResults(outputs, isLeftCamera) {
+function parseResults(outputs, isLeft) {
     [boxes, scores] = parseYolo7Outputs(outputs);
 
     // Get results
@@ -179,31 +176,39 @@ function parseResults(outputs, isLeftCamera) {
 
     // Convert all results to a detection in the format {label: {...data}}
     // This is used to request the label data more efficiently
-    const detections = {};
+    let detections = [];
 
     for (var i = 0; i < results.length; i++) {
         const result = results[i]; // model output
         const classSetting = classSettings[result.index]; // user defined data
 
-        detections[classSetting.label] = {
+        detections.push({
+            label: classSetting.label,
             confidence: result.score,
             bbox: result.bbox,
             nutriScore: classSetting.nutriScore,
-        };
+        });
     }
 
-    if (isLeftCamera) {
-        detectionsLeft = detections;
+    if (isLeft) {
+        onDetectionsUpdatedLeft(detections);
     } else {
-        detectionsRight = detections;
+        onDetectionsUpdatedRight(detections);
     }
+
+    // if (isLeftCamera) {
+    //     detectionsLeft = detections;
+    // } else {
+    //     detectionsRight = detections;
+    // }
 
     // Only trigger when both camera frames are processed
-    if (detectionsLeft && detectionsRight) {
-        onDetectionsUpdated.trigger(detectionsLeft, detectionsRight);
-        detectionsLeft = null; // Reset buffer
-        detectionsRight = null; // Reset buffer
-    }
+    // if (detectionsLeft && detectionsRight) {
+    // onDetectionsUpdatedLeft(detectionsLeft);
+    // onDetectionsUpdatedRight(detectionsRight);
+    // detectionsLeft = null; // Reset buffer
+    // detectionsRight = null; // Reset buffer
+    // }
 }
 
 // The following code is based on:
@@ -293,21 +298,21 @@ function parseYolo7Outputs(outputs) {
 /* Run both detections asynchronously */
 function runOnce() {
     try {
-        mlComponent.runImmediate(false);
-        mlComponent2.runImmediate(false);
+        mlComponenLeft.runImmediate(false);
+        mlComponentRight.runImmediate(false);
     } catch (error) {
         print(error);
     }
 }
 
 function startContinuous() {
-    mlComponent.runScheduled(
+    mlComponentLeft.runScheduled(
         true,
         MachineLearning.FrameTiming.Update,
-        // MachineLearning.FrameTiming.Update
+        // MachineLearning.FrameTiming.Update // This results in incredible amounts of stuffer
         MachineLearning.FrameTiming.None
     );
-    mlComponent2.runScheduled(
+    mlComponentRight.runScheduled(
         true,
         MachineLearning.FrameTiming.Update,
         // MachineLearning.FrameTiming.Update
@@ -317,7 +322,7 @@ function startContinuous() {
 
 function stopContinuous() {
     mlComponent.stop();
-    mlComponent2.stop();
+    mlComponentRight.stop();
 }
 
 /**

@@ -9,7 +9,6 @@
     - !<own> 753f75da-8772-4efc-8c06-a373b0ca721d
     - !<own> 0de113bc-5eaa-4471-b88e-36f7d78027fe
     - !<own> 3a230059-7056-4cb9-b451-959305adbc6c
-    - !<own> f385c5ce-1dc0-45cd-bf9d-c971644843bc
   layers: !<Layers/267ee9a7-aff2-4f9d-9a49-f71214747d03>
     userLayers:
       []
@@ -1118,7 +1117,6 @@
     itemSnapping: true
     worldSnapping: true
     showFollowButton: true
-    isFollowing: true
   ScriptTypesDefault:
     {}
   ScriptInputs:
@@ -1145,7 +1143,7 @@
       worldSnapping: false
       showFollowButton: false
       useFOVFollow: true
-      isFollowing: false
+      isFollowing: true
       showCloseButton: false
       _enableInteractionPlane: true
   ScriptTypes:
@@ -2593,7 +2591,6 @@
   ScriptInputsDefault:
     distanceToHand: true
     minLostFrames: true
-    debugDisableTracking: true
   ScriptTypesDefault:
     {}
   ScriptInputs:
@@ -2602,7 +2599,7 @@
       SIKCursors: !<reference.SceneObject> 4c4e6eb9-1438-4e19-9fab-6564eba34e36
       distanceToHand: !<float> 5.000000
       minLostFrames: !<float> 10.000000
-      debugDisableTracking: false
+      debugDisableTracking: true
   ScriptTypes:
     "":
       {}
@@ -2874,7 +2871,7 @@
 - !<SceneObject/53b9fd8e-91a5-4db8-a28b-749f2976164e>
   PrefabRemaps:
     []
-  Name: DetectionController
+  Name: TrackletController
   Enabled: true
   Layers: 1
   LocalTransform:
@@ -4566,6 +4563,7 @@
     hasSegmentScaleCompensation: false
   Children:
     - !<own> 7bd8f16e-a8fb-4cb2-acbc-6390d4fdf130
+    - !<own> f385c5ce-1dc0-45cd-bf9d-c971644843bc
   Components:
     - !<own> b92515e3-40e0-4197-9259-f77d39a79937
 - !<Canvas/8de90600-30da-4514-9bbb-c9161d3a88a8>
@@ -5931,7 +5929,7 @@
     {}
   ScriptInputs:
     "":
-      instanceController: !<reference.ScriptComponent> f9969d3f-f8f9-4937-993e-692b25033f86
+      trackletController: !<reference.ScriptComponent> f9969d3f-f8f9-4937-993e-692b25033f86
       nutriScoreSlider: !<reference.ScriptComponent> 73dbccc9-01b6-47c4-9b22-dcea7e38126f
       labelToggle: !<reference.ScriptComponent> 4aa0ec1c-2e3d-471b-b2ef-0dea6fdd2027
       runToggle: !<reference.ScriptComponent> b6fc7730-b709-42ef-a963-19c9896069aa
@@ -7623,7 +7621,7 @@
   Enabled: true
   ScriptAsset: !<reference> 48e5c1f6-f787-4966-9221-e96663802d34
   ScriptInputsDefault:
-    debugLocally: true
+    {}
   ScriptTypesDefault:
     {}
   ScriptInputs:
@@ -7631,7 +7629,7 @@
       mlController: !<reference.ScriptComponent> 314815c0-16ca-408d-a7c8-956e8cade03e
       cameraObject: !<reference.SceneObject> 00000000-0000-0065-0000-000000000064
       trackletPrefab: !<reference.ObjectPrefab> 1f853962-2648-40ba-a5f1-ff313713f28f
-      debugLocally: false
+      debugLocally: true
   ScriptTypes:
     "":
       {}
