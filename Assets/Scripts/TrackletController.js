@@ -40,9 +40,13 @@ let detectionGroups = [];
 // const tracklets = {};
 let trackletPool = [];
 
-function avgAdd(avg, num) {}
+function avgAdd(avg, count, val) {
+    return (avg * count + val) / (count - 1);
+}
 
-function avgRemove(avg, num) {}
+function avgRemove(avg, count, val) {
+    return (avg * count - val) / (count + 1);
+}
 
 function deviceCameraScreenSpaceToWorldSpace(deviceCamera, xNorm, yNorm, absoluteDepth) {
     const cameraWorldTransform = cameraObject.getTransform().getWorldTransform();
@@ -76,7 +80,7 @@ function normHeightToAbsolute(height, depth) {
 }
 
 /* update a tracklet */
-function updateTracklet(tracklet, position, normal, width, height, label, nutriScore) {
+function updateTracklet(tracklet, position, normal, dimensions, label, nutriScore) {
     tracklet.enabled = true;
 
     // Instantiate the object we want to place
@@ -91,6 +95,8 @@ function updateTracklet(tracklet, position, normal, width, height, label, nutriS
 
     // compute the camera space depth from the world space point
     const depth = worldSpaceToCameraSpace(position).z;
+
+    const [width, height] = dimensions;
     const absoluteWidth = normWidthToAbsolute(width, depth);
     const absoluteHeight = normHeightToAbsolute(height, depth);
 
@@ -118,30 +124,18 @@ function retireTracklet(tracklet) {
     trackletPool.push(tracklet);
 }
 
-/* update all tracklets using new detections */
-// function updateTracklets(parsedDetections) {
-// for (const label of mergedLabels) {
-//     // if this label has a detection: enable and update it
-//     if (parsedDetections[label] !== undefined) {
-//         const { rayStart, rayEnd, width, height, nutriScore } = parsedDetections[label];
-//         updateTracklet(rayStart, rayEnd, width, height, label, nutriScore);
-//     }
-//     // if this label is not detected: disable
-//     else {
-//         disableTracklet(label);
-//     }
-// }
-// }
-
+/* creates new group and adds it to registry */
 function newDetectionGroup(label, position, normal, dimensions) {
     const group = {
         length: 1,
         tracklet: null,
         allLabels: [label],
+        allLabelCounts: { [label]: 1 },
         allPositions: [position],
         allNormals: [normal],
         allDimensions: [dimensions],
         groupLabel: label,
+        groupLabelCount: 1,
         groupPosition: position,
         groupNormal: normal,
         groupDimensions: dimensions,
@@ -151,8 +145,98 @@ function newDetectionGroup(label, position, normal, dimensions) {
     detectionGroups.push(group);
 }
 
+function maxCount(obj) {
+    let maxKeyCount = 0;
+    let maxKey = null;
+
+    for (const [key, count] of Object.entries(obj)) {
+        if (count > maxKeyCount) {
+            maxKeyCount = count;
+            maxKey = key;
+        }
+    }
+
+    return [maxKey, maxKeyCount];
+}
+
 function addToDetectionGroup(group, label, position, normal, dimensions) {
     group.updated = true;
+
+    group.allLabels.push(label);
+    group.allPositions.push(position);
+    group.allNormals.push(normal);
+    group.allDimensions.push(dimensions);
+
+    const len = group.length;
+
+    group.groupPosition = new vec3(
+        avgAdd(group.groupPosition.x, len, position),
+        avgAdd(group.groupPosition.y, len, position),
+        avgAdd(group.groupPosition.z, len, position)
+    );
+
+    group.groupNormal = new vec3(
+        avgAdd(group.groupNormal.x, len, normal),
+        avgAdd(group.groupNormal.y, len, normal),
+        avgAdd(group.groupNormal.z, len, normal)
+    );
+
+    group.groupDimensions = new vec2(
+        avgAdd(group.groupDimensions.x, len, dimensions.x),
+        avgAdd(group.groupDimensions.y, len, dimensions.y)
+    );
+
+    group.allLabelsCounts[label] = group.allLabelsCounts[label]
+        ? group.allLabelsCounts[label] + 1
+        : 1;
+    const [maxLabelCount, maxLabel] = maxCount(group.allLabelCounts);
+    group.groupLabel = maxLabel;
+    group.groupLabelCount = maxLabelCount;
+
+    group.length++;
+}
+
+function removeOldFromDetectionGroup(group, index) {
+    if (group.length === 1) {
+        deleteDetectionGroup(index);
+        return;
+    }
+
+    const label = group.allLabels.shift();
+    const position = group.allPositions.shift();
+    const normal = group.allNormals.shift();
+    const dimensions = group.allDimensions.shift();
+
+    const len = group.length;
+
+    group.groupPosition = new vec3(
+        avgRemove(group.groupPosition.x, len, position),
+        avgRemove(group.groupPosition.y, len, position),
+        avgRemove(group.groupPosition.z, len, position)
+    );
+
+    group.groupNormal = new vec3(
+        avgRemove(group.groupNormal.x, len, normal),
+        avgRemove(group.groupNormal.y, len, normal),
+        avgRemove(group.groupNormal.z, len, normal)
+    );
+
+    group.groupDimensions = new vec2(
+        avgRemove(group.groupDimensions.x, len, dimensions.x),
+        avgRemove(group.groupDimensions.y, len, dimensions.y)
+    );
+
+    if (group.allLabelsCounts[label] === 1) {
+        delete group.allLabelsCounts[label];
+    } else {
+        group.allLabelsCounts[label]--;
+    }
+
+    const [maxLabelCount, maxLabel] = maxCount(group.allLabelCounts);
+    group.groupLabel = maxLabel;
+    group.groupLabelCount = maxLabelCount;
+
+    group.length--;
 }
 
 /* Remove the entire group */
@@ -170,44 +254,32 @@ Update detection groups:
 function updateDetectionGroup(index) {
     const group = detectionGroups[index];
 
-    // if group wasnt updated and only one left, remove it
-    if (!group.updated && group.length === 1) {
-        deleteDetectionGroup(index);
-    }
     // if group wasnt updated or if group is full, delete the oldest entry
     // TODO: remove hardcode
-    else if (!group.updated || group.length > 10) {
-        // remove old
-
-        // reset update status
-        group.updated = false;
+    if (!group.updated || group.length > 10) {
+        removeOldFromDetectionGroup(group, index);
     }
+
+    // reset update status
+    group.updated = false;
 
     // check if tracklet is to be enabled.:
     // count all labels, and if the max label count is > treshold (50% of window?)
-    let maxLabel;
-    let maxLabelCount = 0;
-
-    // count the labels
-    const counts = {};
-    for (const label of group.allLabels) {
-        const count = counts[label] ? counts[label] + 1 : 1;
-        counts[label] = count;
-
-        if (count > maxLabelCount) {
-            maxLabelCount = count;
-            maxLabel = label;
-        }
-    }
 
     // if enough detections with the same label, assign it a tracklet
     // TODO: treshold not hardcoded
-    if (maxLabelCount > 0.7 * 10) {
+    if (group.groupLabelCount >= 0.7 * 10) {
         if (!group.tracklet) {
             group.tracklet = requestTracklet();
         }
 
-        updateTracklet(group.tracklet);
+        updateTracklet(
+            group.tracklet,
+            group.position,
+            group.normal,
+            group.dimensions,
+            group.label
+        );
     }
     // remove that tracklet, if applicable
     else if (group.tracklet) {
@@ -215,15 +287,10 @@ function updateDetectionGroup(index) {
         retireTracklet(group.tracklet);
         group.tracklet = null;
     }
-
-    // group.tracklet.enabled = true;
-    // else group.tracklet.enabled = false
 }
 
 function parseDetections(detections, isLeft) {
     const deviceCamera = isLeft ? deviceCameraLeft : deviceCameraRight;
-
-    let updatedGroups = [];
 
     // try to add every detection to a group
     detections: for (const detection of detections) {
@@ -251,14 +318,17 @@ function parseDetections(detections, isLeft) {
         const normal = results[0].normal;
 
         // Try to add to group
-        for (const [index, group] of detectionGroups.entries()) {
+        for (const group of detectionGroups) {
             // TODO: remove hardcoded distance threshold
             // if close to group, add it
             if (position.distance(group.groupPosition) < 10) {
-                addToDetectionGroup(group, detection.label, position, normal, [
-                    detection.bbox[0],
-                    detection.bbox[0],
-                ]);
+                addToDetectionGroup(
+                    group,
+                    detection.label,
+                    position,
+                    normal,
+                    new vec2(detection.bbox[0], detection.bbox[1])
+                );
 
                 // stop parsing this detection
                 continue detections;
@@ -266,10 +336,12 @@ function parseDetections(detections, isLeft) {
         }
 
         // if not added to any group, make a new group
-        newDetectionGroup(detection.label, position, normal, [
-            detection.bbox[0],
-            detection.bbox[0],
-        ]);
+        newDetectionGroup(
+            detection.label,
+            position,
+            normal,
+            new vec2(detection.bbox[0], detection.bbox[1])
+        );
     }
 
     for (let i = 0; i < detectionGroups.length; i++) {

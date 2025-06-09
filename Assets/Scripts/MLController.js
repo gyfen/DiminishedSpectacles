@@ -174,12 +174,9 @@ function parseResults(outputs, isLeft) {
         DetectionHelpers.compareByScoreReversed
     );
 
-    // Convert all results to a detection in the format {label: {...data}}
-    // This is used to request the label data more efficiently
     let detections = [];
-
-    for (var i = 0; i < results.length; i++) {
-        const result = results[i]; // model output
+    // TODO: mayb doesnt need extra array.
+    for (const result of results) {
         const classSetting = classSettings[result.index]; // user defined data
 
         detections.push({
