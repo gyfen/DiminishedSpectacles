@@ -14,17 +14,17 @@ viewConfig:
     cameraFov: nan
     fullFrameAspect: 0.666660
     resolutionScale: 1.000000
-    viewport: Normal
+    viewport: Maximized
     output: Live
     stereoOutputEye: Center
     deviceTypeOverride: Spectacles
-  cameraType: Front
+  cameraType: Back
 metaInfo:
   hints:
     []
   tags:
     []
-  lensName: DiminishReality
+  lensName: DiminishedSpecs
   lensDescriptors:
     - EXPERIMENTAL_API
   lensApplicability:

@@ -21,7 +21,7 @@
   Enabled: true
   ScriptAsset: !<reference> be0cc6c2-af06-4ea6-b2c2-229cf4153a5d
   ScriptInputsDefault:
-    cameraTexture: true
+    {}
   ScriptTypesDefault:
     {}
   ScriptInputs:
@@ -34,7 +34,6 @@
       boxMeshObject: !<reference.SceneObject> 61831fca-e695-482a-9458-fe588a589525
       planeMeshObject: !<reference.SceneObject> cbe1339a-3df3-4e34-9023-b8f4a1fbbd22
       textComponent: !<reference.Text> f77d261b-0c8e-4788-ae0f-351758aef9a5
-      cameraTexture: !<reference.Texture> 00000000-0000-0000-0000-000000000000
   ScriptTypes:
     "":
       {}

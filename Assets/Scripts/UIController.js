@@ -1,5 +1,9 @@
-// @input Component.ScriptComponent instanceController
-const instanceController = script.instanceController;
+/*
+UIController
+*/
+
+// @input Component.ScriptComponent trackletController
+const trackletController = script.trackletController;
 
 // @input Component.ScriptComponent nutriScoreSlider
 const nutriScoreSlider = script.nutriScoreSlider;
@@ -47,16 +51,16 @@ function onStart() {
 
 function runContinuous() {
     if (runToggle.isToggledOn) {
-        instanceController.startContinuous();
+        trackletController.startContinuous();
     } else {
-        instanceController.stopContinuous();
+        trackletController.stopContinuous();
     }
 }
 
 function updateNutriScore() {
     const newNutriScore = nutriScoreSlider.currentValue | 0;
     store.putInt("nutriScore", newNutriScore);
-    instanceController.updateTrackletsMaterial();
+    trackletController.updateTrackletsMaterial();
 }
 
 function setRadioButton(button, enabled) {
@@ -93,7 +97,7 @@ function updateEffect3(data) {
 // radio buttons
 function updateEffect(effectType) {
     store.putInt("effectType", effectType);
-    instanceController.updateTrackletsMaterial();
+    trackletController.updateTrackletsMaterial();
 
     setRadioButton(effectType0, false);
     setRadioButton(effectType1, false);
@@ -103,12 +107,12 @@ function updateEffect(effectType) {
 
 function updateLabelVisibility() {
     store.putInt("showLabels", labelToggle.isToggledOn ? 1 : 0);
-    instanceController.updateTrackletsMaterial();
+    trackletController.updateTrackletsMaterial();
 }
 
 script.createEvent("OnStartEvent").bind(onStart);
 
-script.runOnce = instanceController.runOnce;
+script.runOnce = trackletController.runOnce;
 script.runContinuous = runContinuous;
 
 script.updateNutriScore = updateNutriScore;

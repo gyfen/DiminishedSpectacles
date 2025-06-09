@@ -32,16 +32,16 @@
     effectType1: false
     effectType2: false
     effectType3: false
-    instanceController: false
     labelToggle: false
     nutriScoreSlider: false
     runToggle: false
+    trackletController: false
   ScriptTypesHidden:
     {}
   ReadMe: !<reference> 00000000-0000-0000-0000-000000000000
   DeclarationFile: !<reference> 00000000-0000-0000-0000-000000000000
   DefaultScriptInputs:
-    - instanceController: !<reference.ScriptComponent> 00000000-0000-0000-0000-000000000000
+    - trackletController: !<reference.ScriptComponent> 00000000-0000-0000-0000-000000000000
       nutriScoreSlider: !<reference.ScriptComponent> 00000000-0000-0000-0000-000000000000
       labelToggle: !<reference.ScriptComponent> 00000000-0000-0000-0000-000000000000
       runToggle: !<reference.ScriptComponent> 00000000-0000-0000-0000-000000000000
