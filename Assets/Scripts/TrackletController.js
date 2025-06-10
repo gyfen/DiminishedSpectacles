@@ -6,20 +6,29 @@ Tracklet controller
 // @input Component.ScriptComponent mlController
 const mlController = script.mlController;
 
-// @ui {"widget" : "separator"}
+//@ui {"widget":"group_start", "label":"Links"}
 // @input SceneObject cameraObject
 const cameraObject = script.cameraObject;
 
 const camera = cameraObject.getComponent("Component.Camera");
 const deviceTracking = cameraObject.getComponent("Component.DeviceTracking");
 
-// @ui {"widget" : "separator"}
 // @input Asset.ObjectPrefab trackletPrefab
 const trackletPrefab = script.trackletPrefab;
+//@ui {"widget":"group_end"}
 
 // @ui {"widget" : "separator"}
-// @input bool debugLocally
-const debugLocally = script.debugLocally;
+//@ui {"widget":"group_start", "label":"Detection settings"}
+// @input int detectionWindow = 10 {"widget" : "slider", "min" : 0, "max" : 50, "step" : 1}
+const detectionWindow = script.detectionWindow;
+
+// @input float detectionWindowThreshold = 0.5 {"widget" : "slider", "min" : 0, "max" : 1, "step" : 0.05}
+const detectionWindowThreshold = script.detectionWindowThreshold * detectionWindow;
+
+// @input int groupingDistance = 10 {"widget" : "slider", "min" : 0, "max" : 30, "step" : 1}
+const groupingDistance = script.groupingDistance;
+//@ui {"widget":"group_end"}
+// @ui {"widget" : "separator"}
 
 // Additional scaling factor applied to the scaling formula.
 const depthScalingCorrection = 0.85;
@@ -37,19 +46,14 @@ mlController.onDetectionsUpdatedRight = onDetectionsUpdatedRight;
 // Object to keep track of all detection instances
 
 let detectionGroups = [];
-// const tracklets = {};
 let trackletPool = [];
 
-function getLabelData(label) {
-    return;
-}
-
 function avgAdd(avg, count, val) {
-    return (avg * count + val) / (count - 1);
+    return (avg * count + val) / (count + 1);
 }
 
 function avgRemove(avg, count, val) {
-    return (avg * count - val) / (count + 1);
+    return (avg * count - val) / (count - 1);
 }
 
 function deviceCameraScreenSpaceToWorldSpace(deviceCamera, xNorm, yNorm, absoluteDepth) {
@@ -95,18 +99,17 @@ function updateTracklet(tracklet, position, normal, dimensions, label, data) {
     // Rotate the object based on World Mesh Surface
     const up = vec3.up();
     const forwardDir = up.projectOnPlane(normal);
-    const rot = quat.lookAt(forwardDir, normal);
+    const rotation = quat.lookAt(forwardDir, normal);
 
     // compute the camera space depth from the world space point
     const depth = worldSpaceToCameraSpace(position).z;
 
-    const [width, height] = dimensions;
-    const absoluteWidth = normWidthToAbsolute(width, depth);
-    const absoluteHeight = normHeightToAbsolute(height, depth);
+    const absoluteWidth = normWidthToAbsolute(dimensions.x, depth);
+    const absoluteHeight = normHeightToAbsolute(dimensions.y, depth);
 
     // Update the tracklet data
     trackletScript.setData(label, data);
-    trackletScript.setTransform(point, rot, absoluteWidth, absoluteHeight);
+    trackletScript.setTransform(position, rotation, absoluteWidth, absoluteHeight);
     trackletScript.updateAppearance();
 
     return true;
@@ -133,17 +136,18 @@ function newDetectionGroup(label, position, normal, dimensions) {
     const group = {
         length: 1,
         tracklet: null,
+        updated: true,
+        label: label,
+        labelCount: 1,
+        position: position,
+        normal: normal,
+        dimensions: dimensions,
+        // individual properties
         allLabels: [label],
         allLabelCounts: { [label]: 1 },
         allPositions: [position],
         allNormals: [normal],
         allDimensions: [dimensions],
-        groupLabel: label,
-        groupLabelCount: 1,
-        groupPosition: position,
-        groupNormal: normal,
-        groupDimensions: dimensions,
-        updated: true,
     };
 
     detectionGroups.push(group);
@@ -173,29 +177,29 @@ function addToDetectionGroup(group, label, position, normal, dimensions) {
 
     const len = group.length;
 
-    group.groupPosition = new vec3(
-        avgAdd(group.groupPosition.x, len, position),
-        avgAdd(group.groupPosition.y, len, position),
-        avgAdd(group.groupPosition.z, len, position)
+    group.position = new vec3(
+        avgAdd(group.position.x, len, position.x),
+        avgAdd(group.position.y, len, position.y),
+        avgAdd(group.position.z, len, position.z)
     );
 
-    group.groupNormal = new vec3(
-        avgAdd(group.groupNormal.x, len, normal),
-        avgAdd(group.groupNormal.y, len, normal),
-        avgAdd(group.groupNormal.z, len, normal)
+    group.normal = new vec3(
+        avgAdd(group.normal.x, len, normal.x),
+        avgAdd(group.normal.y, len, normal.y),
+        avgAdd(group.normal.z, len, normal.z)
     );
 
-    group.groupDimensions = new vec2(
-        avgAdd(group.groupDimensions.x, len, dimensions.x),
-        avgAdd(group.groupDimensions.y, len, dimensions.y)
+    group.dimensions = new vec2(
+        avgAdd(group.dimensions.x, len, dimensions.x),
+        avgAdd(group.dimensions.y, len, dimensions.y)
     );
 
-    group.allLabelsCounts[label] = group.allLabelsCounts[label]
-        ? group.allLabelsCounts[label] + 1
+    group.allLabelCounts[label] = group.allLabelCounts[label]
+        ? group.allLabelCounts[label] + 1
         : 1;
-    const [maxLabelCount, maxLabel] = maxCount(group.allLabelCounts);
-    group.groupLabel = maxLabel;
-    group.groupLabelCount = maxLabelCount;
+    const [maxLabel, maxLabelCount] = maxCount(group.allLabelCounts);
+    group.label = maxLabel;
+    group.labelCount = maxLabelCount;
 
     group.length++;
 }
@@ -213,32 +217,32 @@ function removeOldFromDetectionGroup(group, index) {
 
     const len = group.length;
 
-    group.groupPosition = new vec3(
-        avgRemove(group.groupPosition.x, len, position),
-        avgRemove(group.groupPosition.y, len, position),
-        avgRemove(group.groupPosition.z, len, position)
+    group.position = new vec3(
+        avgRemove(group.position.x, len, position.x),
+        avgRemove(group.position.y, len, position.y),
+        avgRemove(group.position.z, len, position.z)
     );
 
-    group.groupNormal = new vec3(
-        avgRemove(group.groupNormal.x, len, normal),
-        avgRemove(group.groupNormal.y, len, normal),
-        avgRemove(group.groupNormal.z, len, normal)
+    group.normal = new vec3(
+        avgRemove(group.normal.x, len, normal.x),
+        avgRemove(group.normal.y, len, normal.y),
+        avgRemove(group.normal.z, len, normal.z)
     );
 
-    group.groupDimensions = new vec2(
-        avgRemove(group.groupDimensions.x, len, dimensions.x),
-        avgRemove(group.groupDimensions.y, len, dimensions.y)
+    group.dimensions = new vec2(
+        avgRemove(group.dimensions.x, len, dimensions.x),
+        avgRemove(group.dimensions.y, len, dimensions.y)
     );
 
-    if (group.allLabelsCounts[label] === 1) {
-        delete group.allLabelsCounts[label];
+    if (group.allLabelCounts[label] === 1) {
+        delete group.allLabelCounts[label];
     } else {
-        group.allLabelsCounts[label]--;
+        group.allLabelCounts[label]--;
     }
 
-    const [maxLabelCount, maxLabel] = maxCount(group.allLabelCounts);
-    group.groupLabel = maxLabel;
-    group.groupLabelCount = maxLabelCount;
+    const [maxLabel, maxLabelCount] = maxCount(group.allLabelCounts);
+    group.label = maxLabel;
+    group.labelCount = maxLabelCount;
 
     group.length--;
 }
@@ -259,7 +263,7 @@ function updateDetectionGroup(index) {
 
     // if group wasnt updated or if group is full, delete the oldest entry
     // TODO: remove hardcode
-    if (!group.updated || group.length > 10) {
+    if (!group.updated || group.length > detectionWindow) {
         removeOldFromDetectionGroup(group, index);
     }
 
@@ -271,9 +275,9 @@ function updateDetectionGroup(index) {
 
     // if enough detections with the same label, assign it a tracklet
     // TODO: treshold not hardcoded
-    if (group.groupLabelCount >= 0.7 * 10) {
+    if (group.labelCount >= detectionWindowThreshold) {
         if (!group.tracklet) {
-            group.tracklet = requestTracklet();
+            group.tracklet = getTracklet();
         }
 
         updateTracklet(
@@ -282,7 +286,7 @@ function updateDetectionGroup(index) {
             group.normal,
             group.dimensions,
             group.label,
-            mlController.getLabelData(label)
+            mlController.getLabelData(group.label)
         );
     }
     // remove that tracklet, if applicable
@@ -324,7 +328,7 @@ function parseDetections(detections, isLeft) {
         for (const group of detectionGroups) {
             // TODO: remove hardcoded distance threshold
             // if close to group, add it
-            if (position.distance(group.groupPosition) < 10) {
+            if (position.distance(group.position) < groupingDistance) {
                 addToDetectionGroup(
                     group,
                     detection.label,
@@ -347,6 +351,7 @@ function parseDetections(detections, isLeft) {
         );
     }
 
+    // update all groups, removing old entries and purging empty groups
     for (let i = 0; i < detectionGroups.length; i++) {
         updateDetectionGroup(i);
     }

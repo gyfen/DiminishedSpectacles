@@ -71,7 +71,7 @@ function updateAppearance() {
         case 3:
             boxMeshObject.enabled = false;
 
-            planeMeshObject.enabled = Boolean(nutriScore <= nutriScoreThreshold);
+            planeMeshObject.enabled = Boolean(data.nutriScore <= nutriScoreThreshold);
             break;
     }
 

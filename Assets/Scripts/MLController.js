@@ -94,9 +94,6 @@ var outputsRight;
 /** @type {InputPlaceholder[]} */
 var inputsRight;
 
-let onDetectionsUpdatedLeft;
-let onDetectionsUpdatedRight;
-
 // cam
 let cameraModule = require("LensStudio:CameraModule");
 
@@ -134,11 +131,11 @@ function onLoadingFinishedLeft() {
     inputsLeft = mlComponentLeft.getInputs();
 
     // build grids
-    for (var i = 0; i < outputs.length; i++) {
-        var shape = outputs[i].shape;
+    for (var i = 0; i < outputsLeft.length; i++) {
+        var shape = outputsLeft[i].shape;
         grids.push(makeGrid(shape.x, shape.y));
     }
-    inputShape = inputs[0].shape;
+    inputShape = inputsLeft[0].shape;
 
     // set camera texture
     let cameraRequestLeft = CameraModule.createCameraRequest();
@@ -193,9 +190,9 @@ function parseResults(outputs, isLeft) {
     }
 
     if (isLeft) {
-        onDetectionsUpdatedLeft(detections);
+        script.onDetectionsUpdatedLeft(detections);
     } else {
-        onDetectionsUpdatedRight(detections);
+        script.onDetectionsUpdatedRight(detections);
     }
 
     // if (isLeftCamera) {
@@ -323,7 +320,7 @@ function startContinuous() {
 }
 
 function stopContinuous() {
-    mlComponent.stop();
+    mlComponentLeft.stop();
     mlComponentRight.stop();
 }
 
@@ -350,7 +347,11 @@ function getLabelData(label) {
 onAwake();
 
 //public api functions
-script.onDetectionsUpdated = onDetectionsUpdated;
+
+// these are set by some other script
+script.onDetectionsUpdatedLeft;
+script.onDetectionsUpdatedRight;
+
 // script.getClassCount = getClassCount;
 // script.getClassLabel = getClassLabel;
 // script.getLabels = getLabels;

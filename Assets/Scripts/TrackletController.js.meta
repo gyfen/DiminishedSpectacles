@@ -29,7 +29,9 @@
   MaxVisibility: Editable
   ScriptInputsHidden:
     cameraObject: false
-    debugLocally: false
+    detectionWindow: false
+    detectionWindowThreshold: false
+    groupingDistance: false
     mlController: false
     trackletPrefab: false
   ScriptTypesHidden:
@@ -40,7 +42,9 @@
     - mlController: !<reference.ScriptComponent> 00000000-0000-0000-0000-000000000000
       cameraObject: !<reference.SceneObject> 00000000-0000-0000-0000-000000000000
       trackletPrefab: !<reference.ObjectPrefab> 00000000-0000-0000-0000-000000000000
-      debugLocally: false
+      detectionWindow: 0
+      detectionWindowThreshold: 0.500000
+      groupingDistance: 0
   ScriptTypes:
     -
       {}
