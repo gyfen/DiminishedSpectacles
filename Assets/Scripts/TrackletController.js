@@ -19,7 +19,7 @@ const trackletPrefab = script.trackletPrefab;
 
 // @ui {"widget" : "separator"}
 //@ui {"widget":"group_start", "label":"Detection settings"}
-// @input int detectionWindow = 10 {"widget" : "slider", "min" : 2, "max" : 50, "step" : 1}
+// @input int detectionWindow = 20 {"widget" : "slider", "min" : 2, "max" : 50, "step" : 1}
 const detectionWindow = script.detectionWindow;
 
 // @input float detectionWindowThreshold = 0.5 {"widget" : "slider", "min" : 0, "max" : 1, "step" : 0.05}
@@ -28,13 +28,17 @@ const detectionWindowThreshold = script.detectionWindowThreshold * detectionWind
 // @input int groupingDistance = 10 {"widget" : "slider", "min" : 0, "max" : 30, "step" : 1}
 const groupingDistance = script.groupingDistance;
 //@ui {"widget":"group_end"}
-// @ui {"widget" : "separator"}
 
+// @ui {"widget" : "separator"}
+// Additional scaling factor applied to the scaling formula.
+// @input float depthScalingCorrection = 0.85 {"widget" : "slider", "min" : 0, "max" : 1, "step" : 0.01}
+const depthScalingCorrection = script.depthScalingCorrection;
+
+// @ui {"widget" : "separator"}
+// Debug option to disable the right camera when testing in LensStudio,
+// since there the right camera gives no (model) output.
 // @input bool debugDisableRightCamera = false
 const debugDisableRightCamera = script.debugDisableRightCamera;
-
-// Additional scaling factor applied to the scaling formula.
-const depthScalingCorrection = 0.85;
 
 // Define camera left and right
 let deviceCameraLeft;
@@ -43,12 +47,11 @@ let deviceCameraResolution;
 let deviceCameraFocalLength;
 
 // Register ML callback
-mlController.onDetectionsUpdatedLeft = onDetectionsUpdatedLeft;
-mlController.onDetectionsUpdatedRight = onDetectionsUpdatedRight;
+mlController.onDetectionsUpdated = onDetectionsUpdated;
 
-// Object to keep track of all detection instances
-
+// keep track of groups
 let detectionGroups = [];
+// available tracklets
 let trackletPool = [];
 
 /* add a value to an existing average.
@@ -362,16 +365,14 @@ function parseDetections(detections, isLeft) {
     }
 }
 
-/* Gets triggered by MLController when detection results are in from the left side */
-function onDetectionsUpdatedLeft(detectionsLeft) {
-    parseDetections(detectionsLeft, true);
-}
-
-/* Gets triggered by MLController when detection results are in from the right side*/
-function onDetectionsUpdatedRight(detectionsRight) {
-    if (!debugDisableRightCamera) {
-        parseDetections(detectionsRight, false);
+/* Gets triggered by MLController when detection results are in from either side */
+function onDetectionsUpdated(detections, isLeft) {
+    // dont parse the right detections if in debug mode
+    if (debugDisableRightCamera && !isLeft) {
+        return;
     }
+
+    parseDetections(detections, isLeft);
 }
 
 /* --- Public API --- */
@@ -400,7 +401,7 @@ function onStart() {
 
     deviceCameraResolution = deviceCameraLeft.resolution;
     // average the focal lengths, since they differ.
-    // TODO: this is maybe logical, since we merge results.
+    // TODO: this seems logical enough, since we merge results.
     deviceCameraFocalLength = deviceCameraLeft.focalLength.moveTowards(
         deviceCameraRight.focalLength,
         0.5
@@ -409,8 +410,7 @@ function onStart() {
 
 script.createEvent("OnStartEvent").bind(onStart);
 
-// TODO: revamp runOnce
-script.runOnce = mlController.runOnce;
+script.runOnce = () => mlController.runOnce(detectionWindow);
 script.startContinuous = mlController.startContinuous;
 script.stopContinuous = mlController.stopContinuous;
 

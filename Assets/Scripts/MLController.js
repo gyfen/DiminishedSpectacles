@@ -106,7 +106,7 @@ function onAwake() {
         return;
     }
 
-    // 1
+    // left camera
     mlComponentLeft = script.sceneObject.createComponent("MLComponent");
     mlComponentLeft.model = model;
     mlComponentLeft.onLoadingFinished = onLoadingFinishedLeft;
@@ -114,7 +114,7 @@ function onAwake() {
     mlComponentLeft.inferenceMode = MachineLearning.InferenceMode.Accelerator;
     mlComponentLeft.build([]);
 
-    // 2
+    // right camera
     mlComponentRight = script.sceneObject.createComponent("MLComponent");
     mlComponentRight.model = model;
     mlComponentRight.onLoadingFinished = onLoadingFinishedRight;
@@ -165,10 +165,21 @@ function onRunningFinishedRight() {
     parseResults(outputsRight, false);
 }
 
-// let detectionsLeft;
-// let detectionsRight;
+// keep track of how many times an inference has been performed.
+// if it's -1, then the count is ignored entirely.
+// if it's > 0, the counter counts down
+// if it's exactly 0, inference will stop.
+let runCount = -1;
 
 function parseResults(outputs, isLeft) {
+    if (runCount > 0) {
+        runCount--;
+    } else if (runCount === 0) {
+        runCount = -1;
+        stopContinuous();
+        return;
+    }
+
     [boxes, scores] = parseYolo7Outputs(outputs);
 
     // Get results
@@ -189,25 +200,7 @@ function parseResults(outputs, isLeft) {
         });
     }
 
-    if (isLeft) {
-        script.onDetectionsUpdatedLeft(detections);
-    } else {
-        script.onDetectionsUpdatedRight(detections);
-    }
-
-    // if (isLeftCamera) {
-    //     detectionsLeft = detections;
-    // } else {
-    //     detectionsRight = detections;
-    // }
-
-    // Only trigger when both camera frames are processed
-    // if (detectionsLeft && detectionsRight) {
-    // onDetectionsUpdatedLeft(detectionsLeft);
-    // onDetectionsUpdatedRight(detectionsRight);
-    // detectionsLeft = null; // Reset buffer
-    // detectionsRight = null; // Reset buffer
-    // }
+    script.onDetectionsUpdated(detections, isLeft);
 }
 
 // The following code is based on:
@@ -294,29 +287,43 @@ function parseYolo7Outputs(outputs) {
     return [boxes, scores];
 }
 
-/* Run both detections asynchronously */
-function runOnce() {
-    try {
-        mlComponenLeft.runImmediate(false);
-        mlComponentRight.runImmediate(false);
-    } catch (error) {
-        print(error);
+/* Run a detection of n frames once */
+function runOnce(count) {
+    if (
+        mlComponentLeft.state === MachineLearning.ModelState.Idle &&
+        mlComponentRight.state === MachineLearning.ModelState.Idle
+    ) {
+        // set how many inferences should happen for a "single run"
+        runCount = count;
+        startContinuous();
     }
+
+    // try {
+    //     mlComponenLeft.runImmediate(false);
+    //     mlComponentRight.runImmediate(false);
+    // } catch (error) {
+    //     print(error);
+    // }
 }
 
 function startContinuous() {
-    mlComponentLeft.runScheduled(
-        true,
-        MachineLearning.FrameTiming.Update,
-        // MachineLearning.FrameTiming.Update // This results in incredible amounts of stuffer
-        MachineLearning.FrameTiming.None
-    );
-    mlComponentRight.runScheduled(
-        true,
-        MachineLearning.FrameTiming.Update,
-        // MachineLearning.FrameTiming.Update
-        MachineLearning.FrameTiming.None
-    );
+    if (
+        mlComponentLeft.state === MachineLearning.ModelState.Idle &&
+        mlComponentRight.state === MachineLearning.ModelState.Idle
+    ) {
+        mlComponentLeft.runScheduled(
+            true,
+            MachineLearning.FrameTiming.Update,
+            // MachineLearning.FrameTiming.Update // This results in incredible amounts of stuffer
+            MachineLearning.FrameTiming.None
+        );
+        mlComponentRight.runScheduled(
+            true,
+            MachineLearning.FrameTiming.Update,
+            // MachineLearning.FrameTiming.Update
+            MachineLearning.FrameTiming.None
+        );
+    }
 }
 
 function stopContinuous() {
@@ -349,8 +356,9 @@ onAwake();
 //public api functions
 
 // these are set by some other script
-script.onDetectionsUpdatedLeft;
-script.onDetectionsUpdatedRight;
+script.onDetectionsUpdated;
+// script.onDetectionsUpdatedLeft;
+// script.onDetectionsUpdatedRight;
 
 // script.getClassCount = getClassCount;
 // script.getClassLabel = getClassLabel;

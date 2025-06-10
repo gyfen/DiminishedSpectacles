@@ -30,6 +30,7 @@
   ScriptInputsHidden:
     cameraObject: false
     debugDisableRightCamera: false
+    depthScalingCorrection: false
     detectionWindow: false
     detectionWindowThreshold: false
     groupingDistance: false
@@ -46,6 +47,7 @@
       detectionWindow: 0
       detectionWindowThreshold: 0.500000
       groupingDistance: 0
+      depthScalingCorrection: 0.850000
       debugDisableRightCamera: false
   ScriptTypes:
     -

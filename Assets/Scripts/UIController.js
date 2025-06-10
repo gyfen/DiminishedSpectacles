@@ -45,7 +45,7 @@ function onStart() {
             break;
     }
 
-    // set toggle button
+    // set toggle button, without triggering the callback function.
     labelToggle.setStateSilently(store.getInt("showLabels"));
 }
 
@@ -68,6 +68,9 @@ function setRadioButton(button, enabled) {
     // button.getChild(1).enabled = !enabled;
 }
 
+/* This code can be improved by using something like updateEffect(value) as the callback function,
+where value indicates what button was pressed, instead of having 1 function per button.
+*/
 function updateEffect0(data) {
     updateEffect(0);
 
@@ -81,12 +84,14 @@ function updateEffect1(data) {
     const obj = data.target.getSceneObject();
     setRadioButton(obj, true);
 }
+
 function updateEffect2(data) {
     updateEffect(2);
 
     const obj = data.target.getSceneObject();
     setRadioButton(obj, true);
 }
+
 function updateEffect3(data) {
     updateEffect(3);
 
