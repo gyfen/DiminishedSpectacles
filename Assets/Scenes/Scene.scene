@@ -1117,6 +1117,7 @@
     itemSnapping: true
     worldSnapping: true
     showFollowButton: true
+    isFollowing: true
   ScriptTypesDefault:
     {}
   ScriptInputs:
@@ -1143,7 +1144,7 @@
       worldSnapping: false
       showFollowButton: false
       useFOVFollow: true
-      isFollowing: true
+      isFollowing: false
       showCloseButton: false
       _enableInteractionPlane: true
   ScriptTypes:
@@ -2591,6 +2592,7 @@
   ScriptInputsDefault:
     distanceToHand: true
     minLostFrames: true
+    debugDisableTracking: true
   ScriptTypesDefault:
     {}
   ScriptInputs:
@@ -2599,7 +2601,7 @@
       SIKCursors: !<reference.SceneObject> 4c4e6eb9-1438-4e19-9fab-6564eba34e36
       distanceToHand: !<float> 5.000000
       minLostFrames: !<float> 10.000000
-      debugDisableTracking: true
+      debugDisableTracking: false
   ScriptTypes:
     "":
       {}
@@ -7621,7 +7623,7 @@
   Enabled: true
   ScriptAsset: !<reference> 48e5c1f6-f787-4966-9221-e96663802d34
   ScriptInputsDefault:
-    {}
+    debugDisableRightCamera: true
   ScriptTypesDefault:
     {}
   ScriptInputs:
@@ -7632,7 +7634,7 @@
       detectionWindow: 10
       detectionWindowThreshold: 0.700000
       groupingDistance: 5
-      debugDisableRightCamera: true
+      debugDisableRightCamera: false
   ScriptTypes:
     "":
       {}
