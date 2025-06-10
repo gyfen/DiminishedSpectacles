@@ -19,7 +19,7 @@ const trackletPrefab = script.trackletPrefab;
 
 // @ui {"widget" : "separator"}
 //@ui {"widget":"group_start", "label":"Detection settings"}
-// @input int detectionWindow = 10 {"widget" : "slider", "min" : 0, "max" : 50, "step" : 1}
+// @input int detectionWindow = 10 {"widget" : "slider", "min" : 2, "max" : 50, "step" : 1}
 const detectionWindow = script.detectionWindow;
 
 // @input float detectionWindowThreshold = 0.5 {"widget" : "slider", "min" : 0, "max" : 1, "step" : 0.05}
@@ -29,6 +29,9 @@ const detectionWindowThreshold = script.detectionWindowThreshold * detectionWind
 const groupingDistance = script.groupingDistance;
 //@ui {"widget":"group_end"}
 // @ui {"widget" : "separator"}
+
+// @input bool debugDisableRightCamera = false
+const debugDisableRightCamera = script.debugDisableRightCamera;
 
 // Additional scaling factor applied to the scaling formula.
 const depthScalingCorrection = 0.85;
@@ -48,14 +51,20 @@ mlController.onDetectionsUpdatedRight = onDetectionsUpdatedRight;
 let detectionGroups = [];
 let trackletPool = [];
 
+/* add a value to an existing average.
+this should be more efficient than re-computing the total average
+every time
+*/
 function avgAdd(avg, count, val) {
     return (avg * count + val) / (count + 1);
 }
 
+/* remove a value from an existing average. */
 function avgRemove(avg, count, val) {
     return (avg * count - val) / (count - 1);
 }
 
+/* converts a coordinate from device camera screen space to world space */
 function deviceCameraScreenSpaceToWorldSpace(deviceCamera, xNorm, yNorm, absoluteDepth) {
     const cameraWorldTransform = cameraObject.getTransform().getWorldTransform();
 
@@ -262,7 +271,6 @@ function updateDetectionGroup(index) {
     const group = detectionGroups[index];
 
     // if group wasnt updated or if group is full, delete the oldest entry
-    // TODO: remove hardcode
     if (!group.updated || group.length > detectionWindow) {
         removeOldFromDetectionGroup(group, index);
     }
@@ -271,10 +279,8 @@ function updateDetectionGroup(index) {
     group.updated = false;
 
     // check if tracklet is to be enabled.:
-    // count all labels, and if the max label count is > treshold (50% of window?)
-
+    // count all labels, and if the max label count is > treshold
     // if enough detections with the same label, assign it a tracklet
-    // TODO: treshold not hardcoded
     if (group.labelCount >= detectionWindowThreshold) {
         if (!group.tracklet) {
             group.tracklet = getTracklet();
@@ -326,7 +332,6 @@ function parseDetections(detections, isLeft) {
 
         // Try to add to group
         for (const group of detectionGroups) {
-            // TODO: remove hardcoded distance threshold
             // if close to group, add it
             if (position.distance(group.position) < groupingDistance) {
                 addToDetectionGroup(
@@ -334,7 +339,7 @@ function parseDetections(detections, isLeft) {
                     detection.label,
                     position,
                     normal,
-                    new vec2(detection.bbox[0], detection.bbox[1])
+                    new vec2(detection.bbox[2], detection.bbox[3])
                 );
 
                 // stop parsing this detection
@@ -364,7 +369,9 @@ function onDetectionsUpdatedLeft(detectionsLeft) {
 
 /* Gets triggered by MLController when detection results are in from the right side*/
 function onDetectionsUpdatedRight(detectionsRight) {
-    parseDetections(detectionsRight, false);
+    if (!debugDisableRightCamera) {
+        parseDetections(detectionsRight, false);
+    }
 }
 
 /* --- Public API --- */
@@ -393,7 +400,7 @@ function onStart() {
 
     deviceCameraResolution = deviceCameraLeft.resolution;
     // average the focal lengths, since they differ.
-    // TODO: this is mayble logical, since we merge results.
+    // TODO: this is maybe logical, since we merge results.
     deviceCameraFocalLength = deviceCameraLeft.focalLength.moveTowards(
         deviceCameraRight.focalLength,
         0.5

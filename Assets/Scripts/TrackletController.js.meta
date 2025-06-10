@@ -29,6 +29,7 @@
   MaxVisibility: Editable
   ScriptInputsHidden:
     cameraObject: false
+    debugDisableRightCamera: false
     detectionWindow: false
     detectionWindowThreshold: false
     groupingDistance: false
@@ -45,6 +46,7 @@
       detectionWindow: 0
       detectionWindowThreshold: 0.500000
       groupingDistance: 0
+      debugDisableRightCamera: false
   ScriptTypes:
     -
       {}
