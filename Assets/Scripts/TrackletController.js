@@ -319,7 +319,7 @@ async function parseDetections(detections, isLeft) {
 
     // try to add every detection to a group
     detections: for (const detection of detections) {
-        // Hittest
+        // world mesh Hittest
         const rayStart = deviceCameraScreenSpaceToWorldSpace(
             deviceCamera,
             detection.bbox[0],
