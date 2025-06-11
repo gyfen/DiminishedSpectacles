@@ -121,7 +121,7 @@ function updateLabelVisibility() {
 
 function updateDetectionMemory() {
     store.putInt("memorizeDetections", memoryToggle.isToggledOn ? 1 : 0);
-    trackletController.toggleDetectionMemory();
+    trackletController.toggleDetectionMemory(memoryToggle.isToggledOn);
 }
 
 script.createEvent("OnStartEvent").bind(onStart);

@@ -2,6 +2,8 @@
 Tracklet controller
 */
 
+const store = global.persistentStorageSystem.store;
+
 /* Inputs */
 // @input Component.ScriptComponent mlController
 const mlController = script.mlController;
@@ -19,8 +21,9 @@ const trackletPrefab = script.trackletPrefab;
 
 // @ui {"widget" : "separator"}
 //@ui {"widget":"group_start", "label":"Detection settings"}
-// @input int detectionWindow = 20 {"widget" : "slider", "min" : 2, "max" : 50, "step" : 1}
-const detectionWindow = script.detectionWindow;
+// @input int detectionWindow = 4 {"widget" : "slider", "min" : 1, "max" : 50, "step" : 1}
+
+let detectionWindow = script.detectionWindow;
 
 // @input float detectionWindowThreshold = 0.5 {"widget" : "slider", "min" : 0, "max" : 1, "step" : 0.05}
 const detectionWindowThreshold = script.detectionWindowThreshold * detectionWindow;
@@ -35,10 +38,8 @@ const groupingDistance = script.groupingDistance;
 const depthScalingCorrection = script.depthScalingCorrection;
 
 // @ui {"widget" : "separator"}
-// Debug option to disable the right camera when testing in LensStudio,
-// since there the right camera gives no (model) output.
-// @input bool debugDisableRightCamera = false
-const debugDisableRightCamera = script.debugDisableRightCamera;
+// @input bool enableRightCamera;
+const enableRightCamera = script.enableRightCamera;
 
 // Define camera left and right
 let deviceCameraLeft;
@@ -55,7 +56,6 @@ let detectionGroups = [];
 let trackletPool = [];
 
 // determines if old detections should be memorized or forgotten.
-const store = global.persistentStorageSystem.store;
 let memorizeDetections = store.getInt("memorizeDetections");
 
 /* add a value to an existing average.
@@ -293,7 +293,7 @@ function updateDetectionGroup(index) {
     // check if tracklet is to be enabled.:
     // count all labels, and if the max label count is > treshold * window
     // if enough detections with the same label, assign it a tracklet
-    if (group.labelCount >= detectionWindowThreshold) {
+    if (group.labelCount > detectionWindowThreshold) {
         if (!group.tracklet) {
             group.tracklet = getTracklet();
         }
@@ -392,7 +392,7 @@ async function parseDetections(detections, isLeft) {
             detection.label,
             position,
             normal,
-            new vec2(detection.bbox[0], detection.bbox[1])
+            new vec2(detection.bbox[2], detection.bbox[3])
         );
     }
 
@@ -405,9 +405,9 @@ async function parseDetections(detections, isLeft) {
 /* Gets triggered by MLController when detection results are in from either side */
 function onDetectionsUpdated(detections, isLeft) {
     // dont parse the right detections if in debug mode
-    if (debugDisableRightCamera && !isLeft) {
-        return;
-    }
+    // if (debugDisableRightCamera && !isLeft) {
+    //     return;
+    // }
 
     parseDetections(detections, isLeft);
 }
@@ -427,8 +427,9 @@ function updateTrackletsMaterial() {
     }
 }
 
-function toggleDetectionMemory() {
-    memorizeDetections = store.getInt("memorizeDetections");
+function toggleDetectionMemory(enabled) {
+    // memorizeDetections = store.getInt("memorizeDetections");
+    memorizeDetections = enabled;
 
     // if memory is turned off, delete all groups.
     if (!memorizeDetections) {
@@ -446,6 +447,11 @@ function toggleDetectionMemory() {
 }
 
 function onStart() {
+    // Double the window if we use the right camera, because we run two inference at the same time.
+    if (enableRightCamera) {
+        detectionWindow *= 2;
+    }
+
     deviceCameraLeft = global.deviceInfoSystem.getTrackingCameraForId(
         CameraModule.CameraId.Left_Color
     );
@@ -465,9 +471,9 @@ function onStart() {
 
 script.createEvent("OnStartEvent").bind(onStart);
 
-script.runOnce = () => mlController.runOnce(detectionWindow);
-script.startContinuous = mlController.startContinuous;
-script.stopContinuous = mlController.stopContinuous;
+script.runOnce = () => mlController.runOnce(enableRightCamera, detectionWindow);
+script.startContinuous = () => mlController.startContinuous(enableRightCamera);
+script.stopContinuous = () => mlController.stopContinuous(enableRightCamera);
 
 script.toggleDetectionMemory = toggleDetectionMemory;
 script.updateTrackletsMaterial = updateTrackletsMaterial;

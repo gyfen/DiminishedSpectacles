@@ -29,10 +29,10 @@
   MaxVisibility: Editable
   ScriptInputsHidden:
     cameraObject: false
-    debugDisableRightCamera: false
     depthScalingCorrection: false
     detectionWindow: false
     detectionWindowThreshold: false
+    enableRightCamera: false
     groupingDistance: false
     mlController: false
     trackletPrefab: false
@@ -48,7 +48,7 @@
       detectionWindowThreshold: 0.500000
       groupingDistance: 0
       depthScalingCorrection: 0.850000
-      debugDisableRightCamera: false
+      enableRightCamera: false
   ScriptTypes:
     -
       {}

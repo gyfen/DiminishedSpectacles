@@ -94,8 +94,11 @@ var outputsRight;
 /** @type {InputPlaceholder[]} */
 var inputsRight;
 
-// cam
+// device camera
 let cameraModule = require("LensStudio:CameraModule");
+
+// const store = global.persistentStorageSystem.store;
+// let enableRightCamera = store.getInt("improveDetections");
 
 /**
  * create ml component
@@ -288,14 +291,14 @@ function parseYolo7Outputs(outputs) {
 }
 
 /* Run a detection of n frames once */
-function runOnce(count) {
+function runOnce(enableRightCamera, count) {
     if (
         mlComponentLeft.state === MachineLearning.ModelState.Idle &&
-        mlComponentRight.state === MachineLearning.ModelState.Idle
+        (!enableRightCamera || mlComponentRight.state === MachineLearning.ModelState.Idle)
     ) {
         // set how many inferences should happen for a "single run"
         runCount = count;
-        startContinuous();
+        startContinuous(enableRightCamera);
     }
 
     // try {
@@ -306,10 +309,10 @@ function runOnce(count) {
     // }
 }
 
-function startContinuous() {
+function startContinuous(enableRightCamera) {
     if (
         mlComponentLeft.state === MachineLearning.ModelState.Idle &&
-        mlComponentRight.state === MachineLearning.ModelState.Idle
+        (!enableRightCamera || mlComponentRight.state === MachineLearning.ModelState.Idle)
     ) {
         mlComponentLeft.runScheduled(
             true,
@@ -317,18 +320,22 @@ function startContinuous() {
             // MachineLearning.FrameTiming.Update // This results in incredible amounts of stuffer
             MachineLearning.FrameTiming.None
         );
-        mlComponentRight.runScheduled(
-            true,
-            MachineLearning.FrameTiming.Update,
-            // MachineLearning.FrameTiming.Update
-            MachineLearning.FrameTiming.None
-        );
+        if (enableRightCamera) {
+            mlComponentRight.runScheduled(
+                true,
+                MachineLearning.FrameTiming.Update,
+                // MachineLearning.FrameTiming.Update
+                MachineLearning.FrameTiming.None
+            );
+        }
     }
 }
 
-function stopContinuous() {
+function stopContinuous(enableRightCamera) {
     mlComponentLeft.stop();
-    mlComponentRight.stop();
+    if (enableRightCamera) {
+        mlComponentRight.stop();
+    }
 }
 
 /**
