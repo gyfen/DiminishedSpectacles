@@ -54,6 +54,10 @@ let detectionGroups = [];
 // available tracklets
 let trackletPool = [];
 
+// determines if old detections should be memorized or forgotten.
+const store = global.persistentStorageSystem.store;
+let memorizeDetections = store.getInt("memorizeDetections");
+
 /* add a value to an existing average.
 this should be more efficient than re-computing the total average
 every time
@@ -273,8 +277,8 @@ Update detection groups:
 function updateDetectionGroup(index) {
     const group = detectionGroups[index];
 
-    // if group wasnt updated or if group is full, delete the oldest entry
-    if (!group.updated || group.length > detectionWindow) {
+    // if we dont memorize and group wasnt updated, or if group is full, delete the oldest entry
+    if ((!memorizeDetections && !group.updated) || group.length > detectionWindow) {
         removeOldFromDetectionGroup(group, index);
     }
 
@@ -282,7 +286,7 @@ function updateDetectionGroup(index) {
     group.updated = false;
 
     // check if tracklet is to be enabled.:
-    // count all labels, and if the max label count is > treshold
+    // count all labels, and if the max label count is > treshold * window
     // if enough detections with the same label, assign it a tracklet
     if (group.labelCount >= detectionWindowThreshold) {
         if (!group.tracklet) {
@@ -390,6 +394,24 @@ function updateTrackletsMaterial() {
     }
 }
 
+function toggleDetectionMemory() {
+    memorizeDetections = store.getInt("memorizeDetections");
+
+    // if memory is turned off, delete all groups.
+    if (!memorizeDetections) {
+        // retire tracklets
+        for (let i = 0; i < detectionGroups.length; i++) {
+            const group = detectionGroups[i];
+            if (group.tracklet) {
+                retireTracklet(group.tracklet);
+            }
+        }
+
+        // reset the group list
+        detectionGroups.length = 0;
+    }
+}
+
 function onStart() {
     deviceCameraLeft = global.deviceInfoSystem.getTrackingCameraForId(
         CameraModule.CameraId.Left_Color
@@ -414,4 +436,5 @@ script.runOnce = () => mlController.runOnce(detectionWindow);
 script.startContinuous = mlController.startContinuous;
 script.stopContinuous = mlController.stopContinuous;
 
+script.toggleDetectionMemory = toggleDetectionMemory;
 script.updateTrackletsMaterial = updateTrackletsMaterial;

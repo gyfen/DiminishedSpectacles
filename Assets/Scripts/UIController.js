@@ -14,6 +14,9 @@ const labelToggle = script.labelToggle;
 // @input Component.ScriptComponent runToggle
 const runToggle = script.runToggle;
 
+// @input Component.ScriptComponent memoryToggle
+const memoryToggle = script.memoryToggle;
+
 // @input SceneObject effectType0;
 const effectType0 = script.effectType0;
 // @input SceneObject effectType1;
@@ -47,6 +50,7 @@ function onStart() {
 
     // set toggle button, without triggering the callback function.
     labelToggle.setStateSilently(store.getInt("showLabels"));
+    memoryToggle.setStateSilently(store.getInt("memorizeDetections"));
 }
 
 function runContinuous() {
@@ -115,6 +119,11 @@ function updateLabelVisibility() {
     trackletController.updateTrackletsMaterial();
 }
 
+function updateDetectionMemory() {
+    store.putInt("memorizeDetections", memoryToggle.isToggledOn ? 1 : 0);
+    trackletController.toggleDetectionMemory();
+}
+
 script.createEvent("OnStartEvent").bind(onStart);
 
 script.runOnce = trackletController.runOnce;
@@ -126,3 +135,4 @@ script.updateEffect1 = updateEffect1;
 script.updateEffect2 = updateEffect2;
 script.updateEffect3 = updateEffect3;
 script.updateLabelVisibility = updateLabelVisibility;
+script.updateDetectionMemory = updateDetectionMemory;

@@ -33,6 +33,7 @@
     effectType2: false
     effectType3: false
     labelToggle: false
+    memoryToggle: false
     nutriScoreSlider: false
     runToggle: false
     trackletController: false
@@ -45,6 +46,7 @@
       nutriScoreSlider: !<reference.ScriptComponent> 00000000-0000-0000-0000-000000000000
       labelToggle: !<reference.ScriptComponent> 00000000-0000-0000-0000-000000000000
       runToggle: !<reference.ScriptComponent> 00000000-0000-0000-0000-000000000000
+      memoryToggle: !<reference.ScriptComponent> 00000000-0000-0000-0000-000000000000
       effectType0: !<reference.SceneObject> 00000000-0000-0000-0000-000000000000
       effectType1: !<reference.SceneObject> 00000000-0000-0000-0000-000000000000
       effectType2: !<reference.SceneObject> 00000000-0000-0000-0000-000000000000
