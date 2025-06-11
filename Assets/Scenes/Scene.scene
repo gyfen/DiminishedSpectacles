@@ -7545,6 +7545,7 @@
   Enabled: true
   ScriptAsset: !<reference> 652e631a-22d0-4941-9f74-2943df59f34c
   ScriptInputsDefault:
+    targetingMode: true
     enableInstantDrag: true
     allowMultipleInteractors: true
     enablePokeDirectionality: true
@@ -7557,7 +7558,7 @@
     {}
   ScriptInputs:
     "":
-      targetingMode: !<float> 7.000000
+      targetingMode: !<float> 3.000000
       enableInstantDrag: false
       allowMultipleInteractors: true
       enablePokeDirectionality: false
