@@ -314,7 +314,7 @@ function updateDetectionGroup(index) {
     }
 }
 
-async function parseDetections(detections, isLeft) {
+function parseDetections(detections, isLeft) {
     const deviceCamera = isLeft ? deviceCameraLeft : deviceCameraRight;
 
     // try to add every detection to a group
