@@ -277,8 +277,13 @@ Update detection groups:
 function updateDetectionGroup(index) {
     const group = detectionGroups[index];
 
-    // if we dont memorize and group wasnt updated, or if group is full, delete the oldest entry
-    if ((!memorizeDetections && !group.updated) || group.length > detectionWindow) {
+    // if group wasnt updated, or if group is full, delete the oldest entry
+    // if memorize, only delete if group has never surpassed the treshold
+    if (
+        ((memorizeDetections ? group.labelCount < detectionWindowThreshold : true) &&
+            !group.updated) ||
+        group.length > detectionWindow
+    ) {
         removeOldFromDetectionGroup(group, index);
     }
 
@@ -309,7 +314,7 @@ function updateDetectionGroup(index) {
     }
 }
 
-function parseDetections(detections, isLeft) {
+async function parseDetections(detections, isLeft) {
     const deviceCamera = isLeft ? deviceCameraLeft : deviceCameraRight;
 
     // try to add every detection to a group
@@ -329,13 +334,41 @@ function parseDetections(detections, isLeft) {
             camera.far
         );
 
+        // world mesh hit test
         const results = deviceTracking.raycastWorldMesh(rayStart, rayEnd);
         if (results.length === 0) {
-            return false;
+            continue;
         }
 
         const position = results[0].position;
         const normal = results[0].normal;
+
+        // world query hit test; doesnt work
+        // const WorldQueryModule = require("LensStudio:WorldQueryModule")
+        // const hitTestSession = worldQueryModule.createHitTestSession();
+        // hitTestSession.start();
+
+        // function hitTestAsync(rayStart, rayEnd) {
+        //     return new Promise((resolve, reject) => {
+        //         hitTestSession.hitTest(rayStart, rayEnd, function (hit) {
+        //             if (hit !== undefined) {
+        //                 resolve(hit);
+        //             } else {
+        //                 reject(new Error("No hit detected"));
+        //             }
+        //         });
+        //     });
+        // }
+
+        // const result = await hitTestAsync(rayStart, rayEnd);
+        // print(result);
+
+        // if (!result) {
+        //     continue;
+        // }
+
+        // const position = result.position;
+        // const normal = result.normal;
 
         // Try to add to group
         for (const group of detectionGroups) {
