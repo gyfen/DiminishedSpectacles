@@ -31,6 +31,11 @@
     boxMeshObject: false
     materials: false
     meshContainerObject: false
+    nutriScoreAColor: false
+    nutriScoreBColor: false
+    nutriScoreCColor: false
+    nutriScoreDColor: false
+    nutriScoreEColor: false
     planeMeshObject: false
     textComponent: false
   ScriptTypesHidden:
@@ -44,6 +49,11 @@
       boxMeshObject: !<reference.SceneObject> 00000000-0000-0000-0000-000000000000
       planeMeshObject: !<reference.SceneObject> 00000000-0000-0000-0000-000000000000
       textComponent: !<reference.Text> 00000000-0000-0000-0000-000000000000
+      nutriScoreAColor: !<Vec4> {x: 0.000000, y: 0.000000, z: 0.000000, w: 0.000000}
+      nutriScoreBColor: !<Vec4> {x: 0.000000, y: 0.000000, z: 0.000000, w: 0.000000}
+      nutriScoreCColor: !<Vec4> {x: 0.000000, y: 0.000000, z: 0.000000, w: 0.000000}
+      nutriScoreDColor: !<Vec4> {x: 0.000000, y: 0.000000, z: 0.000000, w: 0.000000}
+      nutriScoreEColor: !<Vec4> {x: 0.000000, y: 0.000000, z: 0.000000, w: 0.000000}
   ScriptTypes:
     -
       {}

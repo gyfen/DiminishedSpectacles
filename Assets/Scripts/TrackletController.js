@@ -467,17 +467,14 @@ function onStart() {
 
 function runOnce() {
     mlController.runOnce(enableRightCamera, detectionWindow);
-    // how to we manage reset here?
 }
 
 function startContinuous() {
-    // saveTransforms();
     mlController.startContinuous(enableRightCamera);
 }
 
 function stopContinuous() {
     mlController.stopContinuous();
-    // resetTransforms();
 }
 
 script.createEvent("OnStartEvent").bind(onStart);

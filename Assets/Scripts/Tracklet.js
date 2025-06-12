@@ -20,6 +20,20 @@ const boxRenderMeshVisual = boxMeshObject.getComponent("Component.RenderMeshVisu
 // @input Component.Text textComponent
 const textComponent = script.textComponent;
 
+//@input vec4 nutriScoreAColor {"widget":"color"}
+//@input vec4 nutriScoreBColor {"widget":"color"}
+//@input vec4 nutriScoreCColor {"widget":"color"}
+//@input vec4 nutriScoreDColor {"widget":"color"}
+//@input vec4 nutriScoreEColor {"widget":"color"}
+
+const nutriScoreColors = [
+    script.nutriScoreAColor,
+    script.nutriScoreBColor,
+    script.nutriScoreCColor,
+    script.nutriScoreDColor,
+    script.nutriScoreEColor,
+];
+
 // persistent storage
 const store = global.persistentStorageSystem.store;
 
@@ -94,7 +108,8 @@ function setData(newLabel, newData) {
     // data could store more than just the nutri score...
     label = newLabel;
     data = newData;
-    script.textComponent.text = label;
+    textComponent.text = label;
+    textComponent.backgroundSettings.fill.color = nutriScoreColors[data.nutriScore];
 }
 
 script.updateAppearance = updateAppearance;

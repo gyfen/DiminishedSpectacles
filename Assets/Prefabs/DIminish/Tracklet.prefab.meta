@@ -34,6 +34,11 @@
       boxMeshObject: !<reference.SceneObject> 61831fca-e695-482a-9458-fe588a589525
       planeMeshObject: !<reference.SceneObject> cbe1339a-3df3-4e34-9023-b8f4a1fbbd22
       textComponent: !<reference.Text> f77d261b-0c8e-4788-ae0f-351758aef9a5
+      nutriScoreAColor: !<Vec4> {x: 0.066667, y: 1.000000, z: 0.000000, w: 1.000000}
+      nutriScoreBColor: !<Vec4> {x: 0.701961, y: 1.000000, z: 0.000000, w: 1.000000}
+      nutriScoreCColor: !<Vec4> {x: 0.984314, y: 1.000000, z: 0.000000, w: 1.000000}
+      nutriScoreDColor: !<Vec4> {x: 1.000000, y: 0.701961, z: 0.000000, w: 1.000000}
+      nutriScoreEColor: !<Vec4> {x: 1.000000, y: 0.000000, z: 0.000000, w: 1.000000}
   ScriptTypes:
     "":
       {}
@@ -198,7 +203,7 @@
     right: 5.000000
     top: 2.250000
   OverflowVertical: Overflow
-  OverflowHorizontal: Overflow
+  OverflowHorizontal: Wrap
   Fill: !<TextFill>
     Mode: Solid
     Color: {x: 1.000000, y: 1.000000, z: 1.000000, w: 1.000000}
@@ -207,7 +212,7 @@
     TileZone: Rect
     TextureStretch: FitWidth
   Outline: !<OutlineSettings>
-    Enabled: false
+    Enabled: true
     Fill: !<TextFill>
       Mode: Solid
       Color: {x: 0.000000, y: 0.000000, z: 0.000000, w: 1.000000}
@@ -215,7 +220,7 @@
       TileCount: 5.000000
       TileZone: Rect
       TextureStretch: FitWidth
-    Size: 0.250000
+    Size: 0.400000
   Dropshadow: !<DropshadowSettings>
     Enabled: false
     Fill: !<TextFill>
@@ -237,11 +242,11 @@
       TileZone: Rect
       TextureStretch: FitWidth
     Margins:
-      left: 0.000000
+      left: 1.000000
       bottom: 0.000000
-      right: 0.000000
+      right: 1.000000
       top: 0.000000
-    CornerRadius: 0.000000
+    CornerRadius: 3.000000
   AdvancedLayout: !<TextAdvancedLayout>
     ExtentsTarget: !<reference> 00000000-0000-0000-0000-000000000000
     LetterSpacing: 0.000000

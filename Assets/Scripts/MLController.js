@@ -378,6 +378,7 @@ updateEvent.bind(function () {
 });
 
 function saveTransforms() {
+    transforms.length = 0; // clear upon start, bc when stopping the model might still need the it.
     updateEvent.enabled = true;
 }
 
@@ -391,7 +392,6 @@ function getTransform(shift = true) {
 
 function resetTransforms() {
     updateEvent.enabled = false;
-    transforms.length = 0;
 }
 
 /**
