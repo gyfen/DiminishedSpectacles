@@ -26,16 +26,22 @@
   CurrentVisibility: Editable
   MaxVisibility: Editable
   ScriptInputsHidden:
+    cameraObject: false
     classSettings: false
     debugTextureOverride: false
+    fixLatency: false
     iouThreshold: false
+    latencyWindow: false
     model: false
     overrideTexture: false
     scoreThreshold: false
   ScriptTypesHidden:
     {}
   DefaultScriptInputs:
-    - model: !<reference.MLAsset> 00000000-0000-0000-0000-000000000000
+    - cameraObject: !<reference.SceneObject> 00000000-0000-0000-0000-000000000000
+      model: !<reference.MLAsset> 00000000-0000-0000-0000-000000000000
+      fixLatency: false
+      latencyWindow: 5
       scoreThreshold: 0.400000
       iouThreshold: 0.650000
       classSettings:

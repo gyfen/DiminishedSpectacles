@@ -12,9 +12,22 @@
 // script.getClassLabel(index)
 
 //inputs
+// @input SceneObject cameraObject
+const cameraObject = script.cameraObject;
+//@ui {"widget" : "separator"}
+
 //@input Asset.MLAsset model {"label": "ML Model", "hint": "Object Detection ML Model"}
 /** @type {MLAsset} */
 var model = script.model;
+
+//@ui {"widget" : "separator"}
+//@ui {"widget":"group_start", "label":"Lateny fix"}
+//@input bool fixLatency = true
+const fixLatency = script.fixLatency;
+//@input int latencyWindow = 5 {"widget" : "slider", "min" : 2, "max" : 10, "step" : 1}
+const latencyWindow = script.latencyWindow;
+
+//@ui {"widget":"group_end"}
 
 //@ui {"widget" : "separator"}
 //@ui {"widget":"group_start", "label":"NMS"}
@@ -180,6 +193,8 @@ function parseResults(outputs, isLeft) {
     } else if (runCount === 0) {
         runCount = -1;
         stopContinuous();
+        // this might run a few frames too many, which is not concern but if it is you
+        // can subtract a few frames.
         return;
     }
 
@@ -204,7 +219,8 @@ function parseResults(outputs, isLeft) {
     }
 
     // trigger the callback to another script
-    script.onDetectionsUpdated(detections, isLeft);
+    const transform = getTransform(isLeft);
+    script.onDetectionsUpdated(transform, detections, isLeft);
 }
 
 // The following code is based on:
@@ -315,6 +331,10 @@ function startContinuous(enableRightCamera) {
         mlComponentLeft.state === MachineLearning.ModelState.Idle &&
         (!enableRightCamera || mlComponentRight.state === MachineLearning.ModelState.Idle)
     ) {
+        if (fixLatency) {
+            saveTransforms();
+        }
+
         mlComponentLeft.runScheduled(
             true,
             MachineLearning.FrameTiming.Update,
@@ -332,11 +352,46 @@ function startContinuous(enableRightCamera) {
     }
 }
 
-function stopContinuous(enableRightCamera) {
-    mlComponentLeft.stop();
+function stopContinuous() {
+    // mlComponentLeft.stop(); might run a few frames too many
+    mlComponentLeft.cancel();
     // if (enableRightCamera) {
-    mlComponentRight.stop();
-    // }
+    mlComponentRight.cancel();
+
+    resetTransforms();
+}
+
+/* Fix the Latency between the inference call en model result, by saving the transform upon model
+call. There is, however, no good way of knowing when the model starting an inference. The original
+idea was to save a transform on every update, thinking that the model results will eventually keep
+up with the buffered transforms  */
+let transforms = [];
+let updateEvent = script.createEvent("UpdateEvent");
+updateEvent.enabled = false;
+updateEvent.bind(function () {
+    // this really is just a magic number
+    if (transforms.length > latencyWindow) {
+        transforms.shift();
+    } else {
+        transforms.push(cameraObject.getTransform().getWorldTransform());
+    }
+});
+
+function saveTransforms() {
+    updateEvent.enabled = true;
+}
+
+function getTransform(shift = true) {
+    if (!fixLatency) {
+        return cameraObject.getTransform().getWorldTransform();
+    }
+
+    return shift ? transforms.shift() : transforms[0];
+}
+
+function resetTransforms() {
+    updateEvent.enabled = false;
+    transforms.length = 0;
 }
 
 /**

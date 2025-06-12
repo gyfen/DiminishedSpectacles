@@ -38,7 +38,7 @@ const groupingDistance = script.groupingDistance;
 const depthScalingCorrection = script.depthScalingCorrection;
 
 // @ui {"widget" : "separator"}
-// @input bool enableRightCamera;
+// @input bool enableRightCamera = true;
 const enableRightCamera = script.enableRightCamera;
 
 // Define camera left and right
@@ -58,6 +58,9 @@ let trackletPool = [];
 // determines if old detections should be memorized or forgotten.
 let memorizeDetections = store.getInt("memorizeDetections");
 
+// set later
+let cameraWorldTransform;
+
 /* add a value to an existing average.
 this should be more efficient than re-computing the total average
 every time
@@ -73,8 +76,6 @@ function avgRemove(avg, count, val) {
 
 /* converts a coordinate from device camera screen space to world space */
 function deviceCameraScreenSpaceToWorldSpace(deviceCamera, xNorm, yNorm, absoluteDepth) {
-    const cameraWorldTransform = cameraObject.getTransform().getWorldTransform();
-
     return cameraWorldTransform.multiplyPoint(
         deviceCamera.unproject(new vec2(xNorm, yNorm), absoluteDepth)
     );
@@ -82,8 +83,6 @@ function deviceCameraScreenSpaceToWorldSpace(deviceCamera, xNorm, yNorm, absolut
 
 /* Convert world space point to camera space point */
 function worldSpaceToCameraSpace(point) {
-    const cameraWorldTransform = cameraObject.getTransform().getWorldTransform();
-
     return cameraWorldTransform.inverse().multiplyPoint(point);
 }
 
@@ -403,11 +402,8 @@ function parseDetections(detections, isLeft) {
 }
 
 /* Gets triggered by MLController when detection results are in from either side */
-function onDetectionsUpdated(detections, isLeft) {
-    // dont parse the right detections if in debug mode
-    // if (debugDisableRightCamera && !isLeft) {
-    //     return;
-    // }
+function onDetectionsUpdated(transform, detections, isLeft) {
+    cameraWorldTransform = transform;
 
     parseDetections(detections, isLeft);
 }
@@ -469,11 +465,26 @@ function onStart() {
     );
 }
 
+function runOnce() {
+    mlController.runOnce(enableRightCamera, detectionWindow);
+    // how to we manage reset here?
+}
+
+function startContinuous() {
+    // saveTransforms();
+    mlController.startContinuous(enableRightCamera);
+}
+
+function stopContinuous() {
+    mlController.stopContinuous();
+    // resetTransforms();
+}
+
 script.createEvent("OnStartEvent").bind(onStart);
 
-script.runOnce = () => mlController.runOnce(enableRightCamera, detectionWindow);
-script.startContinuous = () => mlController.startContinuous(enableRightCamera);
-script.stopContinuous = () => mlController.stopContinuous(enableRightCamera);
+script.runOnce = runOnce;
+script.startContinuous = startContinuous;
+script.stopContinuous = stopContinuous;
 
 script.toggleDetectionMemory = toggleDetectionMemory;
 script.updateTrackletsMaterial = updateTrackletsMaterial;
