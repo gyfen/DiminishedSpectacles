@@ -1157,6 +1157,7 @@
     itemSnapping: true
     worldSnapping: true
     showFollowButton: true
+    isFollowing: true
   ScriptTypesDefault:
     {}
   ScriptInputs:
@@ -1183,7 +1184,7 @@
       worldSnapping: false
       showFollowButton: false
       useFOVFollow: true
-      isFollowing: true
+      isFollowing: false
       showCloseButton: false
       _enableInteractionPlane: true
   ScriptTypes:
@@ -2783,6 +2784,7 @@
   ScriptAsset: !<reference> c84fbd50-77eb-46d5-b359-2569f96a07ef
   ScriptInputsDefault:
     minLostFrames: true
+    debugDisableTracking: true
   ScriptTypesDefault:
     {}
   ScriptInputs:
@@ -2791,7 +2793,7 @@
       SIKCursors: !<reference.SceneObject> 4c4e6eb9-1438-4e19-9fab-6564eba34e36
       distanceToHand: !<float> 8.000000
       minLostFrames: !<float> 10.000000
-      debugDisableTracking: true
+      debugDisableTracking: false
   ScriptTypes:
     "":
       {}
@@ -8999,9 +9001,8 @@
   Enabled: true
   ScriptAsset: !<reference> 48e5c1f6-f787-4966-9221-e96663802d34
   ScriptInputsDefault:
-    detectionWindowThreshold: true
+    consensusFraction: true
     depthScalingCorrection: true
-    enableRightCamera: true
   ScriptTypesDefault:
     {}
   ScriptInputs:
@@ -9010,10 +9011,10 @@
       cameraObject: !<reference.SceneObject> 00000000-0000-0065-0000-000000000064
       trackletPrefab: !<reference.ObjectPrefab> 1f853962-2648-40ba-a5f1-ff313713f28f
       detectionWindow: 5
-      detectionWindowThreshold: 0.500000
+      consensusFraction: 0.500000
       groupingDistance: 5
       depthScalingCorrection: 0.850000
-      enableRightCamera: false
+      enableRightCamera: true
   ScriptTypes:
     "":
       {}

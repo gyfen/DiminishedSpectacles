@@ -25,8 +25,8 @@ const trackletPrefab = script.trackletPrefab;
 
 let detectionWindow = script.detectionWindow;
 
-// @input float detectionWindowThreshold = 0.5 {"widget" : "slider", "min" : 0, "max" : 1, "step" : 0.05}
-const detectionWindowThreshold = script.detectionWindowThreshold * detectionWindow;
+// @input float consensusFraction = 0.5 {"widget" : "slider", "min" : 0, "max" : 1, "step" : 0.05}
+const consensusFraction = script.consensusFraction;
 
 // @input int groupingDistance = 10 {"widget" : "slider", "min" : 0, "max" : 30, "step" : 1}
 const groupingDistance = script.groupingDistance;
@@ -280,7 +280,7 @@ function updateDetectionGroup(index) {
     // if group wasnt updated, or if group is full, delete the oldest entry
     // if memorize, only delete if group has never surpassed the treshold
     if (
-        ((memorizeDetections ? group.labelCount < detectionWindowThreshold : true) &&
+        ((memorizeDetections ? group.labelCount < consensusFraction * detectionWindow : true) &&
             !group.updated) ||
         group.length > detectionWindow
     ) {
@@ -293,7 +293,7 @@ function updateDetectionGroup(index) {
     // check if tracklet is to be enabled.:
     // count all labels, and if the max label count is > treshold * window
     // if enough detections with the same label, assign it a tracklet
-    if (group.labelCount > detectionWindowThreshold) {
+    if (group.labelCount > consensusFraction * detectionWindow) {
         if (!group.tracklet) {
             group.tracklet = getTracklet();
         }

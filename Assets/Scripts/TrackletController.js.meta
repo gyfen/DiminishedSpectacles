@@ -29,9 +29,9 @@
   MaxVisibility: Editable
   ScriptInputsHidden:
     cameraObject: false
+    consensusFraction: false
     depthScalingCorrection: false
     detectionWindow: false
-    detectionWindowThreshold: false
     enableRightCamera: false
     groupingDistance: false
     mlController: false
@@ -45,7 +45,7 @@
       cameraObject: !<reference.SceneObject> 00000000-0000-0000-0000-000000000000
       trackletPrefab: !<reference.ObjectPrefab> 00000000-0000-0000-0000-000000000000
       detectionWindow: 0
-      detectionWindowThreshold: 0.500000
+      consensusFraction: 0.500000
       groupingDistance: 0
       depthScalingCorrection: 0.850000
       enableRightCamera: false

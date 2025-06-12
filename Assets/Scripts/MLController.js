@@ -203,6 +203,7 @@ function parseResults(outputs, isLeft) {
         });
     }
 
+    // trigger the callback to another script
     script.onDetectionsUpdated(detections, isLeft);
 }
 
@@ -333,9 +334,9 @@ function startContinuous(enableRightCamera) {
 
 function stopContinuous(enableRightCamera) {
     mlComponentLeft.stop();
-    if (enableRightCamera) {
-        mlComponentRight.stop();
-    }
+    // if (enableRightCamera) {
+    mlComponentRight.stop();
+    // }
 }
 
 /**
