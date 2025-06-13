@@ -17,6 +17,9 @@ const runToggle = script.runToggle;
 // @input Component.ScriptComponent memoryToggle
 const memoryToggle = script.memoryToggle;
 
+// @input Component.ScriptComponent thresholdToggle
+const thresholdToggle = script.thresholdToggle;
+
 // @input SceneObject effectType0;
 const effectType0 = script.effectType0;
 // @input SceneObject effectType1;
@@ -76,6 +79,7 @@ function onStart() {
     // set toggle button, without triggering the callback function.
     labelToggle.setStateSilently(store.getInt("showLabels"));
     memoryToggle.setStateSilently(store.getInt("memorizeDetections"));
+    thresholdToggle.setStateSilently(store.getInt("useThreshold"));
 }
 
 function runContinuous() {
@@ -171,12 +175,17 @@ function updateEffectMode(effectMode) {
     setRadioButton(effectMode2, false);
     setRadioButton(effectMode3, false);
 }
-function updateLabelVisibility() {
+function toggleLabelVisibility() {
     store.putInt("showLabels", labelToggle.isToggledOn ? 1 : 0);
     trackletController.updateTrackletsMaterial();
 }
 
-function updateDetectionMemory() {
+function toggleThresholdUse() {
+    store.putInt("useThreshold", thresholdToggle.isToggledOn ? 1 : 0);
+    trackletController.updateTrackletsMaterial();
+}
+
+function toggleDetectionMemory() {
     store.putInt("memorizeDetections", memoryToggle.isToggledOn ? 1 : 0);
     trackletController.toggleDetectionMemory(memoryToggle.isToggledOn);
 }
@@ -195,5 +204,6 @@ script.updateEffectMode0 = updateEffectMode0;
 script.updateEffectMode1 = updateEffectMode1;
 script.updateEffectMode2 = updateEffectMode2;
 script.updateEffectMode3 = updateEffectMode3;
-script.updateLabelVisibility = updateLabelVisibility;
-script.updateDetectionMemory = updateDetectionMemory;
+script.toggleLabelVisibility = toggleLabelVisibility;
+script.toggleDetectionMemory = toggleDetectionMemory;
+script.toggleThresholdUse = toggleThresholdUse;

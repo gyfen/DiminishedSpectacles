@@ -54,11 +54,8 @@ function updateAppearance() {
     // assign new material
 
     nutriScoreThreshold = store.getInt("nutriScore");
-    // the visual effect
     const newEffectType = store.getInt("effectType");
-    // threshold or linear
     effectMode = store.getInt("effectMode");
-    // label visiblity
     showLabels = Boolean(store.getInt("showLabels"));
 
     let material;
@@ -81,27 +78,32 @@ function updateAppearance() {
         }
     }
 
-    let enabled = true;
+    let enabled = data.nutriScore > nutriScoreThreshold;
+    if (effectType == 3) {
+        enabled = !enabled;
+    }
+    if (!store.getInt("useThreshold")) {
+        enabled = true;
+    }
+
     let alpha = 1;
     let color = baseColor;
-    let disabled = false;
 
     // but always update material properties (could be optimized to only change if nutriscore changes)
+
     switch (effectMode) {
         case 0: // threshold
-            enabled = data.nutriScore > nutriScoreThreshold;
             break;
         case 1: // alpha
             alpha = data.nutriScore / 4;
             break;
         case 2: // nutriscore color
             color = nutriScoreColors[data.nutriScore];
-        case 4:
-            disabled = true;
+            break;
+        case 3:
+            enabled = false;
+            break;
     }
-
-    material.mainPass.alpha = alpha;
-    material.mainPass.baseColor = color;
 
     switch (effectType) {
         // solid overlay
@@ -111,15 +113,21 @@ function updateAppearance() {
         case 1:
         // blur
         case 2:
-            boxMeshObject.enabled = enabled && !disabled;
+            material.mainPass.alpha = alpha;
+            material.mainPass.baseColor = color;
+
+            boxMeshObject.enabled = enabled;
             planeMeshObject.enabled = false;
 
             boxRenderMeshVisual.mainMaterial = material;
             break;
         // outline is a special case
         case 3:
+            material.mainPass.alpha = alpha;
+            material.mainPass.baseColor = color;
+
             boxMeshObject.enabled = false;
-            planeMeshObject.enabled = !enabled && !disabled; // reverse for healthy
+            planeMeshObject.enabled = enabled;
 
             planeRenderMeshVisual.mainMaterial = material;
             break;
