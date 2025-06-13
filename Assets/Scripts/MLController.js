@@ -218,7 +218,7 @@ function parseResults(outputs, isLeft) {
     }
 
     // trigger the callback to another script
-    const transform = getTransform(isLeft);
+    const transform = getTransform();
     script.onDetectionsUpdated(transform, detections, isLeft);
 }
 
@@ -331,7 +331,7 @@ function startContinuous(enableRightCamera) {
         (!enableRightCamera || mlComponentRight.state === MachineLearning.ModelState.Idle)
     ) {
         if (fixLatency) {
-            saveTransforms();
+            saveTransform();
         }
 
         mlComponentLeft.runScheduled(
@@ -356,46 +356,31 @@ function stopContinuous() {
     mlComponentLeft.cancel();
     // if (enableRightCamera) {
     mlComponentRight.cancel();
-
-    resetTransforms();
 }
 
 /* Fix the Latency between the inference call en model result, by saving the transform upon model
-call. There is, however, no good way of knowing when the model starting an inference. The original
-idea was to save a transform on every update, thinking that the model results will eventually keep
-up with the buffered transforms  */
-let transforms = [];
-let updateEvent = script.createEvent("UpdateEvent");
-updateEvent.enabled = false;
-updateEvent.bind(function () {
-    // this really is just a magic number
-    if (transforms.length > latencyWindow) {
-        transforms.shift();
-    } else {
-        transforms.push(cameraObject.getTransform().getWorldTransform());
-    }
-});
+finish. There is, however, possibly a delay between model finish and a new inference.
+That delay might result in some latecy still left. */
 
-function saveTransforms() {
-    transforms.length = 0; // clear upon start, bc when stopping the model might still need the it.
-    updateEvent.enabled = true;
+let transform;
+
+function saveTransform() {
+    transform = cameraObject.getTransform().getWorldTransform();
 }
 
-function getTransform(shift = true) {
+function getTransform() {
     if (!fixLatency) {
         return cameraObject.getTransform().getWorldTransform();
     }
 
-    return shift ? transforms.shift() : transforms[0];
-}
+    const oldTransform = transform;
+    saveTransform();
 
-function resetTransforms() {
-    updateEvent.enabled = false;
+    return oldTransform;
 }
 
 function onStart() {
     fixLatency = trackletController.fixLatency;
-    latencyWindow = trackletController.latencyWindow;
 }
 
 /**

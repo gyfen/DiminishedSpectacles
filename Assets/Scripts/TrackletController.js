@@ -40,9 +40,8 @@ const groupingDistance = script.groupingDistance;
 
 //@ui {"widget" : "separator"}
 //@ui {"widget":"group_start", "label":"Latency fix"}
-//@input bool fixLatency = true {"hint": "Combats the delay between model inference and results. Turning it off might improve performance, but increase latency effects."}
+//@input bool fixLatency = true {"hint": "Combats the delay between model inference and results. Recommended to keep it on."}
 script.fixLatency = script.fixLatency && enableGrouping;
-//@input int latencyWindow = 5 {"widget" : "slider", "min" : 2, "max" : 10, "step" : 1, "hint": "A higher window means older values are used. Recommended value: 5."}
 
 //@ui {"widget":"group_end"}
 

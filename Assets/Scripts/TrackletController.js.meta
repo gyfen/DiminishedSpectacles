@@ -36,7 +36,6 @@
     enableRightCamera: false
     fixLatency: false
     groupingDistance: false
-    latencyWindow: false
     mlController: false
     trackletPrefab: false
   ScriptTypesHidden:
@@ -53,7 +52,6 @@
       consensusFraction: 0.500000
       groupingDistance: 0
       fixLatency: true
-      latencyWindow: 5
       depthScalingCorrection: 0.850000
   ScriptTypes:
     -
