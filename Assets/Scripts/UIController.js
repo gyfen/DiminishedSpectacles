@@ -195,7 +195,7 @@ function toggleDetectionMemory() {
 }
 
 function toggleGrouping() {
-    store.putInt("enableMemory", groupingToggle.isToggledOn ? 1 : 0);
+    store.putInt("enableGrouping", groupingToggle.isToggledOn ? 1 : 0);
     trackletController.toggleGrouping(groupingToggle.isToggledOn);
 }
 

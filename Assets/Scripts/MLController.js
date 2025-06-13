@@ -25,7 +25,7 @@ var model = script.model;
 //@ui {"widget" : "separator"}
 //@ui {"widget":"group_start", "label":"Latency fix"}
 //@input bool fixLatency = true {"hint": "Combats the delay between model inference and results. Turning it off might improve performance, but increase latency effects."}
-const fixLatency = script.fixLatency;
+let fixLatency = script.fixLatency;
 //@input int latencyWindow = 5 {"widget" : "slider", "min" : 2, "max" : 10, "step" : 1, "hint": "A higher window means older values are used. Recommended value: 5."}
 const latencyWindow = script.latencyWindow;
 
@@ -113,9 +113,6 @@ var inputsRight;
 
 // device camera
 let cameraModule = require("LensStudio:CameraModule");
-
-// const store = global.persistentStorageSystem.store;
-// let enableRightCamera = store.getInt("improveDetections");
 
 /**
  * create ml component
@@ -334,7 +331,7 @@ function startContinuous(enableRightCamera) {
         mlComponentLeft.state === MachineLearning.ModelState.Idle &&
         (!enableRightCamera || mlComponentRight.state === MachineLearning.ModelState.Idle)
     ) {
-        if (fixLatency && enableGrouping) {
+        if (fixLatency) {
             saveTransforms();
         }
 
@@ -359,7 +356,9 @@ function stopContinuous() {
     // mlComponentLeft.stop(); might run a few frames too many
     mlComponentLeft.cancel();
     // if (enableRightCamera) {
-    mlComponentRight.cancel();
+    if (mlComponentRight.state === MachineLearning.ModelState.Running) {
+        mlComponentRight.cancel();
+    }
 
     resetTransforms();
 }
@@ -386,7 +385,7 @@ function saveTransforms() {
 }
 
 function getTransform(shift = true) {
-    if (!fixLatency || !enableGrouping) {
+    if (!fixLatency) {
         return cameraObject.getTransform().getWorldTransform();
     }
 
@@ -397,14 +396,31 @@ function resetTransforms() {
     updateEvent.enabled = false;
 }
 
-function toggleGrouping(enabled) {
+function toggleGrouping(enableRightCamera, enabled) {
     enableGrouping = enabled;
+    // disable fixlatency if not grouping
+    fixLatency = script.fixLatency && enableGrouping;
 
     if (enableGrouping) {
         if (mlComponentLeft.state === MachineLearning.ModelState.Running) {
             // restore the fixlatency functionaly if enabling grouping mid run
             saveTransforms();
             transforms.push(cameraObject.getTransform().getWorldTransform());
+
+            // restore right camera usage
+            if (enableRightCamera) {
+                mlComponentRight.runScheduled(
+                    true,
+                    MachineLearning.FrameTiming.Update,
+                    // MachineLearning.FrameTiming.Update
+                    MachineLearning.FrameTiming.None
+                );
+            }
+        }
+    } else {
+        // disable right camera if disabling grouping
+        if (mlComponentRight.state === MachineLearning.ModelState.Running) {
+            mlComponentRight.cancel();
         }
     }
 }

@@ -409,9 +409,7 @@ let activeTracklets = [];
 
 function parseDetections(detections) {
     // reset all tracklets
-    for (const tracklet of activeTracklets) {
-        retireTracklet(tracklet);
-    }
+    retireTracklets();
 
     for (const detection of detections) {
         // world mesh Hittest
@@ -454,7 +452,7 @@ function parseDetections(detections) {
 
 /* Gets triggered by MLController when detection results are in from either side */
 function onDetectionsUpdated(transform, detections, isLeft) {
-    cameraWorldTransform = transform;
+    cameraWorldTransform = transform || cameraObject.getTransform().getWorldTransform();
 
     if (enableGrouping) {
         parseDetectionsGrouping(detections, isLeft);
@@ -493,19 +491,18 @@ function toggleDetectionMemory(enabled) {
     if (!enableMemory) {
         // retire tracklets
         retireTracklets();
-
-        // reset the group list
-        detectionGroups.length = 0;
     }
 }
 
 function toggleGrouping(enabled) {
+    retireTracklets();
+
     enableGrouping = enabled;
-    mlController.toggleGrouping(enabled);
 
     enableRightCamera = script.enableRightCamera && enableGrouping;
-    detectionGroups.length = 0;
-    retireTracklets();
+    detectionWindow = script.detectionWindow * enableRightCamera ? 2 : 1;
+
+    mlController.toggleGrouping(enableRightCamera, enabled);
 }
 
 function retireTracklets() {
@@ -516,10 +513,14 @@ function retireTracklets() {
                 retireTracklet(group.tracklet);
             }
         }
+
+        detectionGroups.length = 0;
     } else {
         for (const tracklet of activeTracklets) {
             retireTracklet(tracklet);
         }
+
+        activeTracklets.length = 0;
     }
 }
 

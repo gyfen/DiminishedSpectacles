@@ -8682,7 +8682,7 @@
       nutriScoreSlider: !<reference.ScriptComponent> 73dbccc9-01b6-47c4-9b22-dcea7e38126f
       labelToggle: !<reference.ScriptComponent> 4aa0ec1c-2e3d-471b-b2ef-0dea6fdd2027
       runToggle: !<reference.ScriptComponent> b6fc7730-b709-42ef-a963-19c9896069aa
-      memoryToggle: !<reference.ScriptComponent> cb439a38-9298-4895-9e41-8526c96e8e28
+      memoryToggle: !<reference.ScriptComponent> eb3cccd0-69da-4ce8-adc7-28154435f834
       thresholdToggle: !<reference.ScriptComponent> 5e61c180-10ba-4aa6-bc68-93654605d7b8
       groupingToggle: !<reference.ScriptComponent> cb439a38-9298-4895-9e41-8526c96e8e28
       effectType0: !<reference.SceneObject> 7bc38cf2-1606-43f9-a782-0c683a0c1553
