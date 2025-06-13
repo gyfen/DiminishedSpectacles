@@ -12,6 +12,10 @@
 // script.getClassLabel(index)
 
 //inputs
+
+// @input Component.ScriptComponent trackletController
+const trackletController = script.trackletController;
+
 // @input SceneObject cameraObject
 const cameraObject = script.cameraObject;
 //@ui {"widget" : "separator"}
@@ -19,15 +23,6 @@ const cameraObject = script.cameraObject;
 //@input Asset.MLAsset model {"label": "ML Model", "hint": "Select your YOLOv7 Object Detection ML Model"}
 /** @type {MLAsset} */
 var model = script.model;
-
-//@ui {"widget" : "separator"}
-//@ui {"widget":"group_start", "label":"Latency fix"}
-//@input bool fixLatency = true {"hint": "Combats the delay between model inference and results. Turning it off might improve performance, but increase latency effects."}
-let fixLatency = script.fixLatency;
-//@input int latencyWindow = 5 {"widget" : "slider", "min" : 2, "max" : 10, "step" : 1, "hint": "A higher window means older values are used. Recommended value: 5."}
-const latencyWindow = script.latencyWindow;
-
-//@ui {"widget":"group_end"}
 
 //@ui {"widget" : "separator"}
 //@ui {"widget":"group_start", "label":"NMS"}
@@ -63,6 +58,10 @@ const classSettingsObj = Object.fromEntries(
 // @input bool debugTextureOverride = false
 const debugTextureOverride = script.debugTextureOverride;
 // @input Asset.Texture overrideTexture {"showIf": "debugTextureOverride"}
+
+let fixLatency;
+let latencyWindow;
+
 const overrideTexture = script.overrideTexture;
 
 var DetectionHelpers = require("Modules/DetectionHelpersModule");
@@ -394,6 +393,11 @@ function resetTransforms() {
     updateEvent.enabled = false;
 }
 
+function onStart() {
+    fixLatency = trackletController.fixLatency;
+    latencyWindow = trackletController.latencyWindow;
+}
+
 /**
  * returns a number of classes that model detects
  * @returns {number}
@@ -415,6 +419,7 @@ function getLabelData(label) {
 // }
 // Initialize
 onAwake();
+script.createEvent("OnStartEvent").bind(onStart);
 
 //public api functions
 

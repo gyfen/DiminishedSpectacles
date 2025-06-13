@@ -20,7 +20,13 @@ const trackletPrefab = script.trackletPrefab;
 //@ui {"widget":"group_end"}
 
 // @ui {"widget" : "separator"}
-//@ui {"widget":"group_start", "label":"Detection settings"}
+//@ui {"widget":"group_start", "label":"Grouping settings"}
+// @input bool enableGrouping = true {"hint": "Use the grouping algorithm to group detections. This might improve detection accuracy but decrease performance."}
+const enableGrouping = script.enableGrouping;
+
+// @input bool enableRightCamera = true {"showIf": "enableGrouping", "hint": "Use both the left and right camera to run inference. This might improve detection accuracy but decrease performance."}
+const enableRightCamera = script.enableRightCamera && enableGrouping;
+
 // @input int detectionWindow = 4 {"widget" : "slider", "min" : 1, "max" : 50, "step" : 1}
 
 let detectionWindow = script.detectionWindow;
@@ -32,18 +38,20 @@ const consensusFraction = script.consensusFraction;
 const groupingDistance = script.groupingDistance;
 //@ui {"widget":"group_end"}
 
+//@ui {"widget" : "separator"}
+//@ui {"widget":"group_start", "label":"Latency fix"}
+//@input bool fixLatency = true {"hint": "Combats the delay between model inference and results. Turning it off might improve performance, but increase latency effects."}
+script.fixLatency = script.fixLatency && enableGrouping;
+//@input int latencyWindow = 5 {"widget" : "slider", "min" : 2, "max" : 10, "step" : 1, "hint": "A higher window means older values are used. Recommended value: 5."}
+
+//@ui {"widget":"group_end"}
+
 // @ui {"widget" : "separator"}
 // Additional scaling factor applied to the scaling formula.
 // @input float depthScalingCorrection = 0.85 {"widget" : "slider", "min" : 0, "max" : 1, "step" : 0.01}
 const depthScalingCorrection = script.depthScalingCorrection;
 
 // @ui {"widget" : "separator"}
-
-// @input bool groupDetections = true {"hint": "Use the grouping algorithm to group detections. This might improve detection accuracy but decrease performance."}
-const groupDetections = script.groupDetections;
-
-// @input bool enableRightCamera = true {"showIf": "groupDetections", "hint": "Use both the left and right camera to run inference. This might improve detection accuracy but decrease performance."}
-const enableRightCamera = script.enableRightCamera && script.groupDetections;
 
 // Define camera left and right
 let deviceCameraLeft;
@@ -413,6 +421,7 @@ function parseDetections(detections) {
     for (const tracklet of activeTracklets) {
         retireTracklet(tracklet);
     }
+    activeTracklets.length = 0;
 
     for (const detection of detections) {
         // world mesh Hittest
@@ -455,9 +464,9 @@ function parseDetections(detections) {
 
 /* Gets triggered by MLController when detection results are in from either side */
 function onDetectionsUpdated(transform, detections, isLeft) {
-    cameraWorldTransform = transform;
+    cameraWorldTransform = transform || cameraObject.getTransform().getWorldTransform();
 
-    if (groupDetections) {
+    if (enableGrouping) {
         parseDetectionsGrouping(detections, isLeft);
     } else {
         parseDetections(detections);
@@ -468,7 +477,7 @@ function onDetectionsUpdated(transform, detections, isLeft) {
 
 /* Update the material of all instances */
 function updateTrackletsMaterial() {
-    if (groupDetections) {
+    if (enableGrouping) {
         for (const group of detectionGroups) {
             const tracklet = group.tracklet;
             if (!tracklet) {
@@ -491,7 +500,7 @@ function toggleDetectionMemory(enabled) {
     memorizeDetections = enabled;
 
     // if memory is turned off, delete all groups.
-    if (!memorizeDetections) {
+    if (!memorizeDetections && enableGrouping) {
         // retire tracklets
         for (let i = 0; i < detectionGroups.length; i++) {
             const group = detectionGroups[i];
@@ -529,7 +538,7 @@ function onStart() {
 }
 
 function runOnce() {
-    mlController.runOnce(enableRightCamera, groupDetections ? detectionWindow : 1);
+    mlController.runOnce(enableRightCamera, enableGrouping ? detectionWindow : 1);
 }
 
 function startContinuous() {

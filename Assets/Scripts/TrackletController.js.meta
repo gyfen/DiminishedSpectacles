@@ -32,9 +32,11 @@
     consensusFraction: false
     depthScalingCorrection: false
     detectionWindow: false
+    enableGrouping: false
     enableRightCamera: false
-    groupDetections: false
+    fixLatency: false
     groupingDistance: false
+    latencyWindow: false
     mlController: false
     trackletPrefab: false
   ScriptTypesHidden:
@@ -45,12 +47,14 @@
     - mlController: !<reference.ScriptComponent> 00000000-0000-0000-0000-000000000000
       cameraObject: !<reference.SceneObject> 00000000-0000-0000-0000-000000000000
       trackletPrefab: !<reference.ObjectPrefab> 00000000-0000-0000-0000-000000000000
+      enableGrouping: false
+      enableRightCamera: false
       detectionWindow: 0
       consensusFraction: 0.500000
       groupingDistance: 0
+      fixLatency: true
+      latencyWindow: 5
       depthScalingCorrection: 0.850000
-      groupDetections: false
-      enableRightCamera: false
   ScriptTypes:
     -
       {}

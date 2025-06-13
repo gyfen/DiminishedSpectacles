@@ -2212,7 +2212,6 @@
   Enabled: true
   ScriptAsset: !<reference> 710a93d2-4119-46ad-94eb-5998561661b1
   ScriptInputsDefault:
-    latencyWindow: true
     scoreThreshold: true
     iouThreshold: true
     debugTextureOverride: true
@@ -2220,10 +2219,9 @@
     {}
   ScriptInputs:
     "":
+      trackletController: !<reference.ScriptComponent> f9969d3f-f8f9-4937-993e-692b25033f86
       cameraObject: !<reference.SceneObject> 00000000-0000-0065-0000-000000000064
       model: !<reference.MLAsset> 64cad88c-e6f3-42a5-bfc0-ee8c586c90eb
-      fixLatency: true
-      latencyWindow: 5
       scoreThreshold: 0.400000
       iouThreshold: 0.650000
       classSettings:
@@ -10664,10 +10662,11 @@
   Enabled: true
   ScriptAsset: !<reference> 48e5c1f6-f787-4966-9221-e96663802d34
   ScriptInputsDefault:
-    consensusFraction: true
-    depthScalingCorrection: true
-    groupDetections: true
     enableRightCamera: true
+    consensusFraction: true
+    fixLatency: true
+    latencyWindow: true
+    depthScalingCorrection: true
   ScriptTypesDefault:
     {}
   ScriptInputs:
@@ -10675,12 +10674,14 @@
       mlController: !<reference.ScriptComponent> 314815c0-16ca-408d-a7c8-956e8cade03e
       cameraObject: !<reference.SceneObject> 00000000-0000-0065-0000-000000000064
       trackletPrefab: !<reference.ObjectPrefab> 1f853962-2648-40ba-a5f1-ff313713f28f
+      enableGrouping: true
+      enableRightCamera: false
       detectionWindow: 5
       consensusFraction: 0.500000
       groupingDistance: 5
+      fixLatency: true
+      latencyWindow: 5
       depthScalingCorrection: 0.850000
-      groupDetections: false
-      enableRightCamera: false
   ScriptTypes:
     "":
       {}
