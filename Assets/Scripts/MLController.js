@@ -16,15 +16,15 @@
 const cameraObject = script.cameraObject;
 //@ui {"widget" : "separator"}
 
-//@input Asset.MLAsset model {"label": "ML Model", "hint": "Object Detection ML Model"}
+//@input Asset.MLAsset model {"label": "ML Model", "hint": "Select your YOLOv7 Object Detection ML Model"}
 /** @type {MLAsset} */
 var model = script.model;
 
 //@ui {"widget" : "separator"}
-//@ui {"widget":"group_start", "label":"Lateny fix"}
-//@input bool fixLatency = true
+//@ui {"widget":"group_start", "label":"Latency fix"}
+//@input bool fixLatency = true {"hint": "Combats the delay between model inference and results. Turning it off might improve performance, but increase latency effects."}
 const fixLatency = script.fixLatency;
-//@input int latencyWindow = 5 {"widget" : "slider", "min" : 2, "max" : 10, "step" : 1}
+//@input int latencyWindow = 5 {"widget" : "slider", "min" : 2, "max" : 10, "step" : 1, "hint": "A higher window means older values are used. Recommended value: 5."}
 const latencyWindow = script.latencyWindow;
 
 //@ui {"widget":"group_end"}

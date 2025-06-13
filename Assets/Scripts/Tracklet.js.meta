@@ -28,6 +28,7 @@
   CurrentVisibility: Editable
   MaxVisibility: Editable
   ScriptInputsHidden:
+    baseColor: false
     boxMeshObject: false
     materials: false
     meshContainerObject: false
@@ -54,6 +55,7 @@
       nutriScoreCColor: !<Vec4> {x: 0.000000, y: 0.000000, z: 0.000000, w: 0.000000}
       nutriScoreDColor: !<Vec4> {x: 0.000000, y: 0.000000, z: 0.000000, w: 0.000000}
       nutriScoreEColor: !<Vec4> {x: 0.000000, y: 0.000000, z: 0.000000, w: 0.000000}
+      baseColor: !<Vec4> {x: 0.000000, y: 0.000000, z: 0.000000, w: 0.000000}
   ScriptTypes:
     -
       {}

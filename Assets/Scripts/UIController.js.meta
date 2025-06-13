@@ -28,6 +28,10 @@
   CurrentVisibility: Editable
   MaxVisibility: Editable
   ScriptInputsHidden:
+    effectMode0: false
+    effectMode1: false
+    effectMode2: false
+    effectMode3: false
     effectType0: false
     effectType1: false
     effectType2: false
@@ -51,6 +55,10 @@
       effectType1: !<reference.SceneObject> 00000000-0000-0000-0000-000000000000
       effectType2: !<reference.SceneObject> 00000000-0000-0000-0000-000000000000
       effectType3: !<reference.SceneObject> 00000000-0000-0000-0000-000000000000
+      effectMode0: !<reference.SceneObject> 00000000-0000-0000-0000-000000000000
+      effectMode1: !<reference.SceneObject> 00000000-0000-0000-0000-000000000000
+      effectMode2: !<reference.SceneObject> 00000000-0000-0000-0000-000000000000
+      effectMode3: !<reference.SceneObject> 00000000-0000-0000-0000-000000000000
   ScriptTypes:
     -
       {}
