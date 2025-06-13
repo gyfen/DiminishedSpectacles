@@ -38,8 +38,12 @@ const groupingDistance = script.groupingDistance;
 const depthScalingCorrection = script.depthScalingCorrection;
 
 // @ui {"widget" : "separator"}
-// @input bool enableRightCamera = true;
-const enableRightCamera = script.enableRightCamera;
+
+// @input bool groupDetections = true {"hint": "Use the grouping algorithm to group detections. This might improve detection accuracy but decrease performance."}
+const groupDetections = script.groupDetections;
+
+// @input bool enableRightCamera = true {"showIf": "groupDetections", "hint": "Use both the left and right camera to run inference. This might improve detection accuracy but decrease performance."}
+const enableRightCamera = script.enableRightCamera && script.groupDetections;
 
 // Define camera left and right
 let deviceCameraLeft;
@@ -313,7 +317,7 @@ function updateDetectionGroup(index) {
     }
 }
 
-function parseDetections(detections, isLeft) {
+function parseDetectionsGrouping(detections, isLeft) {
     const deviceCamera = isLeft ? deviceCameraLeft : deviceCameraRight;
 
     // try to add every detection to a group
@@ -401,25 +405,84 @@ function parseDetections(detections, isLeft) {
     }
 }
 
+// only used for normal detections, not for grouping algo
+let activeTracklets = [];
+
+function parseDetections(detections) {
+    // reset all tracklets
+    for (const tracklet of activeTracklets) {
+        retireTracklet(tracklet);
+    }
+
+    for (const detection of detections) {
+        // world mesh Hittest
+        const rayStart = deviceCameraScreenSpaceToWorldSpace(
+            deviceCameraLeft,
+            detection.bbox[0],
+            detection.bbox[1],
+            camera.near
+        );
+
+        const rayEnd = deviceCameraScreenSpaceToWorldSpace(
+            deviceCameraLeft,
+            detection.bbox[0],
+            detection.bbox[1],
+            camera.far
+        );
+
+        // world mesh hit test
+        const results = deviceTracking.raycastWorldMesh(rayStart, rayEnd);
+        if (results.length === 0) {
+            continue;
+        }
+
+        const position = results[0].position;
+        const normal = results[0].normal;
+
+        const tracklet = getTracklet();
+        activeTracklets.push(tracklet);
+
+        updateTracklet(
+            tracklet,
+            position,
+            normal,
+            new vec2(detection.bbox[2], detection.bbox[3]),
+            detection.label,
+            mlController.getLabelData(detection.label)
+        );
+    }
+}
+
 /* Gets triggered by MLController when detection results are in from either side */
 function onDetectionsUpdated(transform, detections, isLeft) {
     cameraWorldTransform = transform;
 
-    parseDetections(detections, isLeft);
+    if (groupDetections) {
+        parseDetectionsGrouping(detections, isLeft);
+    } else {
+        parseDetections(detections);
+    }
 }
 
 /* --- Public API --- */
 
 /* Update the material of all instances */
 function updateTrackletsMaterial() {
-    for (const group of detectionGroups) {
-        const tracklet = group.tracklet;
-        if (!tracklet) {
-            continue;
-        }
+    if (groupDetections) {
+        for (const group of detectionGroups) {
+            const tracklet = group.tracklet;
+            if (!tracklet) {
+                continue;
+            }
 
-        const trackletScript = tracklet.getComponent("Component.ScriptComponent");
-        trackletScript.updateAppearance();
+            const trackletScript = tracklet.getComponent("Component.ScriptComponent");
+            trackletScript.updateAppearance();
+        }
+    } else {
+        for (const tracklet of activeTracklets) {
+            const trackletScript = tracklet.getComponent("Component.ScriptComponent");
+            trackletScript.updateAppearance();
+        }
     }
 }
 
@@ -466,7 +529,7 @@ function onStart() {
 }
 
 function runOnce() {
-    mlController.runOnce(enableRightCamera, detectionWindow);
+    mlController.runOnce(enableRightCamera, groupDetections ? detectionWindow : 1);
 }
 
 function startContinuous() {

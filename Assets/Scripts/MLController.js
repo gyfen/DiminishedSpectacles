@@ -23,7 +23,7 @@ var model = script.model;
 //@ui {"widget" : "separator"}
 //@ui {"widget":"group_start", "label":"Latency fix"}
 //@input bool fixLatency = true {"hint": "Combats the delay between model inference and results. Turning it off might improve performance, but increase latency effects."}
-const fixLatency = script.fixLatency;
+let fixLatency = script.fixLatency;
 //@input int latencyWindow = 5 {"widget" : "slider", "min" : 2, "max" : 10, "step" : 1, "hint": "A higher window means older values are used. Recommended value: 5."}
 const latencyWindow = script.latencyWindow;
 
