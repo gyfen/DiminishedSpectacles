@@ -20,6 +20,9 @@ const memoryToggle = script.memoryToggle;
 // @input Component.ScriptComponent thresholdToggle
 const thresholdToggle = script.thresholdToggle;
 
+// @input Component.ScriptComponent groupingToggle
+const groupingToggle = script.groupingToggle;
+
 // @input SceneObject effectType0;
 const effectType0 = script.effectType0;
 // @input SceneObject effectType1;
@@ -77,9 +80,10 @@ function onStart() {
     }
 
     // set toggle button, without triggering the callback function.
-    labelToggle.setStateSilently(store.getInt("showLabels"));
-    memoryToggle.setStateSilently(store.getInt("memorizeDetections"));
-    thresholdToggle.setStateSilently(store.getInt("useThreshold"));
+    labelToggle.setStateSilently(store.getInt("enableLabels"));
+    memoryToggle.setStateSilently(store.getInt("enableMemory"));
+    thresholdToggle.setStateSilently(store.getInt("enableThreshold"));
+    groupingToggle.setStateSilently(store.getInt("enableGrouping"));
 }
 
 function runContinuous() {
@@ -176,18 +180,23 @@ function updateEffectMode(effectMode) {
     setRadioButton(effectMode3, false);
 }
 function toggleLabelVisibility() {
-    store.putInt("showLabels", labelToggle.isToggledOn ? 1 : 0);
+    store.putInt("enableLabels", labelToggle.isToggledOn ? 1 : 0);
     trackletController.updateTrackletsMaterial();
 }
 
 function toggleThresholdUse() {
-    store.putInt("useThreshold", thresholdToggle.isToggledOn ? 1 : 0);
+    store.putInt("enableThreshold", thresholdToggle.isToggledOn ? 1 : 0);
     trackletController.updateTrackletsMaterial();
 }
 
 function toggleDetectionMemory() {
-    store.putInt("memorizeDetections", memoryToggle.isToggledOn ? 1 : 0);
+    store.putInt("enableMemory", memoryToggle.isToggledOn ? 1 : 0);
     trackletController.toggleDetectionMemory(memoryToggle.isToggledOn);
+}
+
+function toggleGrouping() {
+    store.putInt("enableMemory", groupingToggle.isToggledOn ? 1 : 0);
+    trackletController.toggleGrouping(groupingToggle.isToggledOn);
 }
 
 script.createEvent("OnStartEvent").bind(onStart);
@@ -207,3 +216,4 @@ script.updateEffectMode3 = updateEffectMode3;
 script.toggleLabelVisibility = toggleLabelVisibility;
 script.toggleDetectionMemory = toggleDetectionMemory;
 script.toggleThresholdUse = toggleThresholdUse;
+script.toggleGrouping = toggleGrouping;

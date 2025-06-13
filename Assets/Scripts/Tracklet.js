@@ -46,7 +46,7 @@ let data;
 let nutriScoreThreshold = -1;
 let effectType = -1;
 let effectMode = -1;
-let showLabels = -1;
+let enableLabels = -1;
 
 /* Public API */
 function updateAppearance() {
@@ -56,7 +56,7 @@ function updateAppearance() {
     nutriScoreThreshold = store.getInt("nutriScore");
     const newEffectType = store.getInt("effectType");
     effectMode = store.getInt("effectMode");
-    showLabels = Boolean(store.getInt("showLabels"));
+    enableLabels = Boolean(store.getInt("enableLabels"));
 
     let material;
 
@@ -82,7 +82,7 @@ function updateAppearance() {
     if (effectType == 3) {
         enabled = !enabled;
     }
-    if (!store.getInt("useThreshold")) {
+    if (!store.getInt("enableThreshold")) {
         enabled = true;
     }
 
@@ -133,7 +133,7 @@ function updateAppearance() {
             break;
     }
 
-    textComponent.enabled = showLabels;
+    textComponent.enabled = enableLabels;
 }
 
 function setTransform(position, rotation, absoluteWidth, absoluteHeight) {

@@ -36,6 +36,7 @@
     effectType1: false
     effectType2: false
     effectType3: false
+    groupingToggle: false
     labelToggle: false
     memoryToggle: false
     nutriScoreSlider: false
@@ -53,6 +54,7 @@
       runToggle: !<reference.ScriptComponent> 00000000-0000-0000-0000-000000000000
       memoryToggle: !<reference.ScriptComponent> 00000000-0000-0000-0000-000000000000
       thresholdToggle: !<reference.ScriptComponent> 00000000-0000-0000-0000-000000000000
+      groupingToggle: !<reference.ScriptComponent> 00000000-0000-0000-0000-000000000000
       effectType0: !<reference.SceneObject> 00000000-0000-0000-0000-000000000000
       effectType1: !<reference.SceneObject> 00000000-0000-0000-0000-000000000000
       effectType2: !<reference.SceneObject> 00000000-0000-0000-0000-000000000000

@@ -39,11 +39,10 @@ const depthScalingCorrection = script.depthScalingCorrection;
 
 // @ui {"widget" : "separator"}
 
-// @input bool groupDetections = true {"hint": "Use the grouping algorithm to group detections. This might improve detection accuracy but decrease performance."}
-const groupDetections = script.groupDetections;
+let enableGrouping = store.getInt("enableGrouping");
 
-// @input bool enableRightCamera = true {"showIf": "groupDetections", "hint": "Use both the left and right camera to run inference. This might improve detection accuracy but decrease performance."}
-const enableRightCamera = script.enableRightCamera && script.groupDetections;
+// @input bool enableRightCamera = true {"showIf": "enableGrouping", "hint": "Use both the left and right camera to run inference. This might improve detection accuracy but decrease performance."}
+let enableRightCamera = script.enableRightCamera && enableGrouping;
 
 // Define camera left and right
 let deviceCameraLeft;
@@ -60,7 +59,7 @@ let detectionGroups = [];
 let trackletPool = [];
 
 // determines if old detections should be memorized or forgotten.
-let memorizeDetections = store.getInt("memorizeDetections");
+let enableMemory = store.getInt("enableMemory");
 
 // set later
 let cameraWorldTransform;
@@ -283,7 +282,7 @@ function updateDetectionGroup(index) {
     // if group wasnt updated, or if group is full, delete the oldest entry
     // if memorize, only delete if group has never surpassed the treshold
     if (
-        ((memorizeDetections ? group.labelCount < consensusFraction * detectionWindow : true) &&
+        ((enableMemory ? group.labelCount < consensusFraction * detectionWindow : true) &&
             !group.updated) ||
         group.length > detectionWindow
     ) {
@@ -457,7 +456,7 @@ function parseDetections(detections) {
 function onDetectionsUpdated(transform, detections, isLeft) {
     cameraWorldTransform = transform;
 
-    if (groupDetections) {
+    if (enableGrouping) {
         parseDetectionsGrouping(detections, isLeft);
     } else {
         parseDetections(detections);
@@ -468,7 +467,7 @@ function onDetectionsUpdated(transform, detections, isLeft) {
 
 /* Update the material of all instances */
 function updateTrackletsMaterial() {
-    if (groupDetections) {
+    if (enableGrouping) {
         for (const group of detectionGroups) {
             const tracklet = group.tracklet;
             if (!tracklet) {
@@ -487,21 +486,40 @@ function updateTrackletsMaterial() {
 }
 
 function toggleDetectionMemory(enabled) {
-    // memorizeDetections = store.getInt("memorizeDetections");
-    memorizeDetections = enabled;
+    // enableMemory = store.getInt("enableMemory");
+    enableMemory = enabled;
 
     // if memory is turned off, delete all groups.
-    if (!memorizeDetections) {
+    if (!enableMemory) {
         // retire tracklets
+        retireTracklets();
+
+        // reset the group list
+        detectionGroups.length = 0;
+    }
+}
+
+function toggleGrouping(enabled) {
+    enableGrouping = enabled;
+    mlController.toggleGrouping(enabled);
+
+    enableRightCamera = script.enableRightCamera && enableGrouping;
+    detectionGroups.length = 0;
+    retireTracklets();
+}
+
+function retireTracklets() {
+    if (enableGrouping) {
         for (let i = 0; i < detectionGroups.length; i++) {
             const group = detectionGroups[i];
             if (group.tracklet) {
                 retireTracklet(group.tracklet);
             }
         }
-
-        // reset the group list
-        detectionGroups.length = 0;
+    } else {
+        for (const tracklet of activeTracklets) {
+            retireTracklet(tracklet);
+        }
     }
 }
 
@@ -529,7 +547,7 @@ function onStart() {
 }
 
 function runOnce() {
-    mlController.runOnce(enableRightCamera, groupDetections ? detectionWindow : 1);
+    mlController.runOnce(enableRightCamera, detectionWindow);
 }
 
 function startContinuous() {
@@ -547,4 +565,6 @@ script.startContinuous = startContinuous;
 script.stopContinuous = stopContinuous;
 
 script.toggleDetectionMemory = toggleDetectionMemory;
+script.toggleGrouping = toggleGrouping;
+
 script.updateTrackletsMaterial = updateTrackletsMaterial;

@@ -11,6 +11,8 @@
 // get class name by index
 // script.getClassLabel(index)
 
+const store = global.persistentStorageSystem.store;
+
 //inputs
 // @input SceneObject cameraObject
 const cameraObject = script.cameraObject;
@@ -23,7 +25,7 @@ var model = script.model;
 //@ui {"widget" : "separator"}
 //@ui {"widget":"group_start", "label":"Latency fix"}
 //@input bool fixLatency = true {"hint": "Combats the delay between model inference and results. Turning it off might improve performance, but increase latency effects."}
-let fixLatency = script.fixLatency;
+const fixLatency = script.fixLatency;
 //@input int latencyWindow = 5 {"widget" : "slider", "min" : 2, "max" : 10, "step" : 1, "hint": "A higher window means older values are used. Recommended value: 5."}
 const latencyWindow = script.latencyWindow;
 
@@ -64,6 +66,8 @@ const classSettingsObj = Object.fromEntries(
 const debugTextureOverride = script.debugTextureOverride;
 // @input Asset.Texture overrideTexture {"showIf": "debugTextureOverride"}
 const overrideTexture = script.overrideTexture;
+
+let enableGrouping = store.getInt("enableGrouping");
 
 var DetectionHelpers = require("Modules/DetectionHelpersModule");
 
@@ -309,21 +313,20 @@ function parseYolo7Outputs(outputs) {
 
 /* Run a detection of n frames once */
 function runOnce(enableRightCamera, count) {
-    if (
-        mlComponentLeft.state === MachineLearning.ModelState.Idle &&
-        (!enableRightCamera || mlComponentRight.state === MachineLearning.ModelState.Idle)
-    ) {
-        // set how many inferences should happen for a "single run"
-        runCount = count;
-        startContinuous(enableRightCamera);
+    if (enableGrouping) {
+        if (
+            mlComponentLeft.state === MachineLearning.ModelState.Idle &&
+            (!enableRightCamera || mlComponentRight.state === MachineLearning.ModelState.Idle)
+        ) {
+            // set how many inferences should happen for a "single run"
+            runCount = count;
+            startContinuous(enableRightCamera);
+        }
+    } else {
+        if (mlComponentLeft.state === MachineLearning.ModelState.Idle) {
+            mlComponentLeft.runImmediate(false);
+        }
     }
-
-    // try {
-    //     mlComponenLeft.runImmediate(false);
-    //     mlComponentRight.runImmediate(false);
-    // } catch (error) {
-    //     print(error);
-    // }
 }
 
 function startContinuous(enableRightCamera) {
@@ -331,7 +334,7 @@ function startContinuous(enableRightCamera) {
         mlComponentLeft.state === MachineLearning.ModelState.Idle &&
         (!enableRightCamera || mlComponentRight.state === MachineLearning.ModelState.Idle)
     ) {
-        if (fixLatency) {
+        if (fixLatency && enableGrouping) {
             saveTransforms();
         }
 
@@ -383,7 +386,7 @@ function saveTransforms() {
 }
 
 function getTransform(shift = true) {
-    if (!fixLatency) {
+    if (!fixLatency || !enableGrouping) {
         return cameraObject.getTransform().getWorldTransform();
     }
 
@@ -392,6 +395,18 @@ function getTransform(shift = true) {
 
 function resetTransforms() {
     updateEvent.enabled = false;
+}
+
+function toggleGrouping(enabled) {
+    enableGrouping = enabled;
+
+    if (enableGrouping) {
+        if (mlComponentLeft.state === MachineLearning.ModelState.Running) {
+            // restore the fixlatency functionaly if enabling grouping mid run
+            saveTransforms();
+            transforms.push(cameraObject.getTransform().getWorldTransform());
+        }
+    }
 }
 
 /**
@@ -430,3 +445,5 @@ script.getLabelData = getLabelData;
 script.runOnce = runOnce;
 script.startContinuous = startContinuous;
 script.stopContinuous = stopContinuous;
+
+script.toggleGrouping = toggleGrouping;
