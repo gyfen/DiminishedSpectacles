@@ -218,7 +218,7 @@ function parseResults(outputs, isLeft) {
     }
 
     // trigger the callback to another script
-    const transform = getTransform();
+    const transform = getTransform(isLeft);
     script.onDetectionsUpdated(transform, detections, isLeft);
 }
 
@@ -331,7 +331,7 @@ function startContinuous(enableRightCamera) {
         (!enableRightCamera || mlComponentRight.state === MachineLearning.ModelState.Idle)
     ) {
         if (fixLatency) {
-            saveTransform();
+            saveTransform(true);
         }
 
         mlComponentLeft.runScheduled(
@@ -341,6 +341,10 @@ function startContinuous(enableRightCamera) {
             MachineLearning.FrameTiming.None
         );
         if (enableRightCamera) {
+            if (fixLatency) {
+                saveTransform(false);
+            }
+
             mlComponentRight.runScheduled(
                 true,
                 MachineLearning.FrameTiming.Update,
@@ -362,19 +366,24 @@ function stopContinuous() {
 finish. There is, however, possibly a delay between model finish and a new inference.
 That delay might result in some latecy still left. */
 
-let transform;
+let transformLeft;
+let transformRight;
 
-function saveTransform() {
-    transform = cameraObject.getTransform().getWorldTransform();
+function saveTransform(isLeft) {
+    if (isLeft) {
+        transformLeft = cameraObject.getTransform().getWorldTransform();
+    } else {
+        transformRight = cameraObject.getTransform().getWorldTransform();
+    }
 }
 
-function getTransform() {
+function getTransform(isLeft) {
     if (!fixLatency) {
         return cameraObject.getTransform().getWorldTransform();
     }
 
-    const oldTransform = transform;
-    saveTransform();
+    const oldTransform = isLeft ? transformLeft : transformRight;
+    saveTransform(isLeft);
 
     return oldTransform;
 }
