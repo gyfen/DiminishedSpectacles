@@ -123,7 +123,7 @@ function updateAppearance() {
             break;
         // outline is a special case
         case 3:
-            material.mainPass.alpha = alpha;
+            material.mainPass.alpha = 1- alpha;
             material.mainPass.baseColor = color;
 
             boxMeshObject.enabled = false;
