@@ -95,7 +95,7 @@ function updateAppearance() {
         case 0: // threshold
             break;
         case 1: // alpha
-            alpha = data.nutriScore / 4;
+            alpha = effectType == 3 ? 1 - data.nutriScore / 4 : data.nutriScore / 4 ;
             break;
         case 2: // nutriscore color
             color = nutriScoreColors[data.nutriScore];
@@ -108,7 +108,6 @@ function updateAppearance() {
     switch (effectType) {
         // solid overlay
         case 0:
-
         // desaturate
         case 1:
         // blur
@@ -123,7 +122,7 @@ function updateAppearance() {
             break;
         // outline is a special case
         case 3:
-            material.mainPass.alpha = 1- alpha;
+            material.mainPass.alpha = alpha;
             material.mainPass.baseColor = color;
 
             boxMeshObject.enabled = false;
