@@ -10662,7 +10662,7 @@
   Enabled: true
   ScriptAsset: !<reference> 48e5c1f6-f787-4966-9221-e96663802d34
   ScriptInputsDefault:
-    consensusFraction: true
+    clusteringConsensusFraction: true
     fixLatency: true
   ScriptTypesDefault:
     {}
@@ -10671,11 +10671,11 @@
       mlController: !<reference.ScriptComponent> 314815c0-16ca-408d-a7c8-956e8cade03e
       cameraObject: !<reference.SceneObject> 00000000-0000-0065-0000-000000000064
       trackletPrefab: !<reference.ObjectPrefab> 1f853962-2648-40ba-a5f1-ff313713f28f
-      enableGrouping: true
+      enableClustering: true
       enableRightCamera: true
-      detectionWindow: 5
-      consensusFraction: 0.500000
-      groupingDistance: 5
+      clusteringWindow: 5
+      clusteringConsensusFraction: 0.500000
+      clusteringDistance: 5
       fixLatency: true
       depthScalingCorrection: 0.750000
   ScriptTypes:

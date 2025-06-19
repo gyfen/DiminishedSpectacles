@@ -29,13 +29,13 @@
   MaxVisibility: Editable
   ScriptInputsHidden:
     cameraObject: false
-    consensusFraction: false
+    clusteringConsensusFraction: false
+    clusteringDistance: false
+    clusteringWindow: false
     depthScalingCorrection: false
-    detectionWindow: false
-    enableGrouping: false
+    enableClustering: false
     enableRightCamera: false
     fixLatency: false
-    groupingDistance: false
     mlController: false
     trackletPrefab: false
   ScriptTypesHidden:
@@ -46,11 +46,11 @@
     - mlController: !<reference.ScriptComponent> 00000000-0000-0000-0000-000000000000
       cameraObject: !<reference.SceneObject> 00000000-0000-0000-0000-000000000000
       trackletPrefab: !<reference.ObjectPrefab> 00000000-0000-0000-0000-000000000000
-      enableGrouping: false
+      enableClustering: false
       enableRightCamera: false
-      detectionWindow: 0
-      consensusFraction: 0.500000
-      groupingDistance: 0
+      clusteringWindow: 0
+      clusteringConsensusFraction: 0.500000
+      clusteringDistance: 0
       fixLatency: true
       depthScalingCorrection: 0.850000
   ScriptTypes:
